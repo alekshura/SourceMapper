@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Compentio.SourceMapper": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
