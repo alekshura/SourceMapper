@@ -1,5 +1,5 @@
 ﻿using Compentio.SourceMapper.Attributes;
-using Compentio.SourceMapper.Generators.Strategies;
+using Compentio.SourceMapper.Processors;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -11,13 +11,6 @@ namespace Compentio.SourceMapper.Generators
 {
     internal class MappersSyntaxGenerator
     {
-        private readonly CodeGeneratorStrategyFactory _strategyFactory;
-
-        internal MappersSyntaxGenerator()
-        {
-            _strategyFactory = new();
-        }
-
         internal void Execute(GeneratorExecutionContext context)
         {
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
@@ -33,10 +26,10 @@ namespace Compentio.SourceMapper.Generators
                 if (mapperType is null || !IsMapperType(mapperType))
                     continue;
 
-                var codeGenerationStrategy = _strategyFactory.GetStrategy(mapperType);
-                var generatedCode = codeGenerationStrategy.GenerateCode(mapperType);
+                var sourceProcessor = new InterfaceSourceProcessor(mapperType);
+                var generatedCode = sourceProcessor.GenerateCode();
 
-                context.AddSource(codeGenerationStrategy.FileName, SourceText.From(generatedCode, Encoding.UTF8));
+                context.AddSource(sourceProcessor.FileName, SourceText.From(generatedCode, Encoding.UTF8));
             }
         }
 

@@ -5,15 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Compentio.SourceMapper.Generators.Strategies
+namespace Compentio.SourceMapper.Processors
 {
-    internal class InterfaceGeneratorStrategy : AbstractGeneratorStrategy
+    internal class InterfaceSourceProcessor
     {
-        private ITypeSymbol _mapperInterface;
+        private readonly ITypeSymbol _mapperInterface;
+
+        internal InterfaceSourceProcessor(ITypeSymbol mapperInterface)
+        {
+            _mapperInterface = mapperInterface;
+        }
+
+        internal string FileName => $"{TargetClassName}.cs";
 
         private string Namespace => _mapperInterface.ContainingNamespace.ToString();
 
-        protected override string ClassName 
+        private string TargetClassName 
         { 
             get
             {
@@ -27,20 +34,17 @@ namespace Compentio.SourceMapper.Generators.Strategies
         }
         private string InterfaceName => _mapperInterface.Name;
 
-
-        internal override string GenerateCode(ITypeSymbol typeSymbol)
+        internal string GenerateCode()
         {
-            _mapperInterface = typeSymbol;
-
             var result = @$"// <mapper-source-generated />
 
             using System;
 
             {(string.IsNullOrWhiteSpace(Namespace) ? null : $"namespace {Namespace}")}
             {{
-               public class {ClassName} : {InterfaceName}
+               public class {TargetClassName} : {InterfaceName}
                {{
-                  public static {ClassName} Create() => new();
+                  public static {TargetClassName} Create() => new();
                   
                    { GenerateMethods() }                  
                }}
@@ -122,6 +126,6 @@ namespace Compentio.SourceMapper.Generators.Strategies
                     return new KeyValuePair<string, IMethodSymbol>($"{mapperInterfaceMethod?.ReturnType.ToDisplayString()} {method.ToDisplayString(methodFormat)}", mapperInterfaceMethod);
                 })
                 .ToDictionary(x => x.Key, x => x.Value);
-        }      
+        }
     }
 }

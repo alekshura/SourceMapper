@@ -8,11 +8,23 @@ namespace Compentio.ConsoleApp
     {
         static void Main(string[] args)
         {
-            //ISampleObjectMapper mapper = SampleObjectMapper.Create();
-            //mapper.MapToRest();
+            ISampleObjectMapper mapper = SampleObjectMapper.Create();
 
+            var dao = new NoteDao
+            {
+                Id = 5,
+                Created = DateTime.UtcNow,
+                CreatedBy = "Admin",
+                Description = "Description",
+                Modified = DateTime.Now,
+                PageTitle = "This is a title of the page",
+                ValidFrom = DateTime.MinValue,
+                ValidTo = DateTime.MaxValue
+            };
 
-            Console.WriteLine("Hello World!");
+            var dto = mapper.MapToRest(dao);
+
+            Console.WriteLine($"Description: '{dto.Description}', Title '{dto.Title}'");
             Console.ReadKey();
         }
     }
