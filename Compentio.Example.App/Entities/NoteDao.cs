@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Compentio.ConsoleApp
+namespace Compentio.Example.App.Entities
 {
-    public record NoteDao
+    public class NoteDao
     {
         public long Id { get; set; }
-        public string Title { get; set; }
+        public string PageTitle { get; set; }
         public string Description { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace Compentio.ConsoleApp
+﻿namespace Compentio.Example.App.Entities
 {
-    public record NoteDto
+    public class NoteDto
     {
         public long Id { get; set; }
         public string Title { get; set; }

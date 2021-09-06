@@ -1,4 +1,5 @@
-﻿using Compentio.ConsoleApp.Mappers;
+﻿using Compentio.Example.App.Entities;
+using Compentio.Example.App.Mappers;
 using System;
 
 namespace Compentio.ConsoleApp
@@ -7,11 +8,9 @@ namespace Compentio.ConsoleApp
     {
         static void Main(string[] args)
         {
+            //ISampleObjectMapper mapper = SampleObjectMapper.Create();
+            //mapper.MapToRest();
 
-
-            //ISampleObjectMapper mapper = 
-
-            HelloWorldGenerated.HelloWorld.SayHello();
 
             Console.WriteLine("Hello World!");
             Console.ReadKey();

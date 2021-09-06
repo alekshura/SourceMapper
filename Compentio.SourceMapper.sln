@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.SourceMapper", "Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj", "{B66B2628-50B5-4AE5-A88A-5DEB39FFB449}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.ConsoleApp", "Compentio.SourceMapper.Console\Compentio.ConsoleApp.csproj", "{792D18D8-5E2C-4DEC-95C9-44B8F8AF2FAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.Example.App", "Compentio.Example.App\Compentio.Example.App.csproj", "{792D18D8-5E2C-4DEC-95C9-44B8F8AF2FAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

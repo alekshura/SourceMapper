@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj" OutputItemType="Analyzer"/>
+    <ProjectReference Include="..\Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 
 </Project>
