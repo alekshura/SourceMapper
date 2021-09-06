@@ -60,7 +60,7 @@ namespace Compentio.SourceMapper.Processors
         {
             var methods = string.Empty;
 
-            foreach(var method in GetMethodSignatures())
+            foreach(var method in MethodsMap)
             {
                 methods += @$"public {method.Key}
                     {{
@@ -111,21 +111,24 @@ namespace Compentio.SourceMapper.Processors
             return methodBody;
         }
 
-        private IDictionary<string, IMethodSymbol> GetMethodSignatures()
+        private IDictionary<string, IMethodSymbol> MethodsMap
         {
-            var methodFormat = new SymbolDisplayFormat(parameterOptions: SymbolDisplayParameterOptions.IncludeName | SymbolDisplayParameterOptions.IncludeType,
-               memberOptions: SymbolDisplayMemberOptions.IncludeParameters,
-               typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
+            get
+            {
+                var methodFormat = new SymbolDisplayFormat(parameterOptions: SymbolDisplayParameterOptions.IncludeName | SymbolDisplayParameterOptions.IncludeType,
+                   memberOptions: SymbolDisplayMemberOptions.IncludeParameters,
+                   typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
 
-            return _mapperInterface.GetMembers()
-                .Where(field => field.Kind == SymbolKind.Method)
-                .Select(method => 
-                {
-                    method.ToDisplayString(methodFormat);
-                    var mapperInterfaceMethod = method as IMethodSymbol;
-                    return new KeyValuePair<string, IMethodSymbol>($"{mapperInterfaceMethod?.ReturnType.ToDisplayString()} {method.ToDisplayString(methodFormat)}", mapperInterfaceMethod);
-                })
-                .ToDictionary(x => x.Key, x => x.Value);
+                return _mapperInterface.GetMembers()
+                    .Where(field => field.Kind == SymbolKind.Method)
+                    .Select(method =>
+                    {
+                        method.ToDisplayString(methodFormat);
+                        var mapperInterfaceMethod = method as IMethodSymbol;
+                        return new KeyValuePair<string, IMethodSymbol>($"{mapperInterfaceMethod?.ReturnType.ToDisplayString()} {method.ToDisplayString(methodFormat)}", mapperInterfaceMethod);
+                    })
+                    .ToDictionary(x => x.Key, x => x.Value);
+            }
         }
     }
 }
