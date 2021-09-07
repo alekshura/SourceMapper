@@ -16,16 +16,16 @@ namespace Compentio.SourceMapper.Processors
         }
 
         public string FileName => $"{TargetClassName}.cs";
-        public string InterfaceName => _mapperInterface.Name;
+        public string MapperName => _mapperInterface.Name;
         public string Namespace => _mapperInterface.ContainingNamespace.ToString();
         public string TargetClassName
         {
             get
             {
                 var className = _mapperInterface.Name.TrimStart('I', 'i');
-                if (className.Equals(InterfaceName, StringComparison.InvariantCultureIgnoreCase))
+                if (className.Equals(MapperName, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    className = $"{InterfaceName}Impl";
+                    className = $"{MapperName}Impl";
                 }
                 return className;
             }

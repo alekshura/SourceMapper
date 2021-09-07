@@ -8,8 +8,8 @@ namespace Compentio.SourceMapper.Processors
     interface ISourceMetadata
     {
         string FileName { get; }
-        string InterfaceName { get; }
         string Namespace { get; }
+        string MapperName { get; }
         string TargetClassName { get; }
         IDictionary<string, IMethodSymbol> MethodsMap { get; }
     }

@@ -9,9 +9,9 @@ namespace Compentio.SourceMapper.Processors
     {
         private readonly ISourceMetadata _sourceMetadata;
 
-        internal InterfaceSourceProcessor(ITypeSymbol mapperInterface)
+        internal InterfaceSourceProcessor(ISourceMetadata sourceMetadata)
         {
-            _sourceMetadata = new InterfaceSourceMetadata(mapperInterface);
+            _sourceMetadata = sourceMetadata;
         }
 
         public string FileName => _sourceMetadata.FileName;
@@ -24,7 +24,7 @@ namespace Compentio.SourceMapper.Processors
 
             {(string.IsNullOrWhiteSpace(_sourceMetadata.Namespace) ? null : $"namespace {_sourceMetadata.Namespace}")}
             {{
-               public class {_sourceMetadata.TargetClassName} : {_sourceMetadata.InterfaceName}
+               public class {_sourceMetadata.TargetClassName} : {_sourceMetadata.MapperName}
                {{
                   public static {_sourceMetadata.TargetClassName} Create() => new();
                   

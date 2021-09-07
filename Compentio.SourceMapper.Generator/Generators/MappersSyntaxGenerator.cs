@@ -26,7 +26,8 @@ namespace Compentio.SourceMapper.Generators
                 if (mapperType is null || !IsMapperType(mapperType))
                     continue;
 
-                var sourceProcessor = new InterfaceSourceProcessor(mapperType);
+                var metadata = new InterfaceSourceMetadata(mapperType);
+                var sourceProcessor = new InterfaceSourceProcessor(metadata);
                 var generatedCode = sourceProcessor.GenerateCode();
 
                 context.AddSource(sourceProcessor.FileName, SourceText.From(generatedCode, Encoding.UTF8));
