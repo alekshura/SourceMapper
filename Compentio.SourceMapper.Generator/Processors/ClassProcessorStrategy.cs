@@ -5,30 +5,21 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
 {
-    internal class InterfaceSourceProcessor : ISourceProcessor
+    internal class ClassProcessorStrategy : IProcessorStrategy
     {
-        private readonly ISourceMetadata _sourceMetadata;
-
-        internal InterfaceSourceProcessor(ISourceMetadata sourceMetadata)
-        {
-            _sourceMetadata = sourceMetadata;
-        }
-
-        public string FileName => _sourceMetadata.FileName;
-
-        public string GenerateCode()
+        public string GenerateCode(ISourceMetadata sourceMetadata)
         {
             var result = @$"// <mapper-source-generated />
 
             using System;
 
-            {(string.IsNullOrWhiteSpace(_sourceMetadata.Namespace) ? null : $"namespace {_sourceMetadata.Namespace}")}
+            {(string.IsNullOrWhiteSpace(sourceMetadata.Namespace) ? null : $"namespace {sourceMetadata.Namespace}")}
             {{
-               public class {_sourceMetadata.TargetClassName} : {_sourceMetadata.MapperName}
+               public class {sourceMetadata.MapperName}
                {{
-                  public static {_sourceMetadata.TargetClassName} Create() => new();
+                  public static {sourceMetadata.MapperName} Create() => new();
                   
-                   { GenerateMethods() }                  
+                   { GenerateMethods(sourceMetadata) }                  
                }}
             }}
             ";
@@ -38,11 +29,11 @@ namespace Compentio.SourceMapper.Processors
             return root.ToFullString();
         }
 
-        private string GenerateMethods()
+        private string GenerateMethods(ISourceMetadata sourceMetadata)
         {
             var methods = string.Empty;
 
-            foreach(var method in _sourceMetadata.MethodsMap)
+            foreach(var method in sourceMetadata.MethodsMap)
             {
                 methods += @$"public {method.Key}
                     {{

@@ -26,11 +26,11 @@ namespace Compentio.SourceMapper.Generators
                 if (mapperType is null || !IsMapperType(mapperType))
                     continue;
 
-                var metadata = new InterfaceSourceMetadata(mapperType);
-                var sourceProcessor = new InterfaceSourceProcessor(metadata);
-                var generatedCode = sourceProcessor.GenerateCode();
+                var sourceMetadata = new SourceMetadata(mapperType);
+                var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapperType.TypeKind);
+                var generatedCode = processorStrategy.GenerateCode(sourceMetadata);
 
-                context.AddSource(sourceProcessor.FileName, SourceText.From(generatedCode, Encoding.UTF8));
+                context.AddSource(sourceMetadata.FileName, SourceText.From(generatedCode, Encoding.UTF8));
             }
         }
 

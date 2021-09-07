@@ -2,27 +2,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Compentio.SourceMapper.Processors
 {
-    internal class InterfaceSourceMetadata : ISourceMetadata
+    internal class SourceMetadata : ISourceMetadata
     {
-        private readonly ITypeSymbol _mapperInterface;
+        private readonly ITypeSymbol _typeSymbol;
 
-        internal InterfaceSourceMetadata(ITypeSymbol mapperInterface)
+        internal SourceMetadata(ITypeSymbol typeSymbol)
         {
-            _mapperInterface = mapperInterface;
+            _typeSymbol = typeSymbol;
         }
-
         public string FileName => $"{TargetClassName}.cs";
-        public string MapperName => _mapperInterface.Name;
-        public string Namespace => _mapperInterface.ContainingNamespace.ToString();
+        public string MapperName => _typeSymbol.Name;
+        public string Namespace => _typeSymbol.ContainingNamespace.ToString();
+        
         public string TargetClassName
         {
             get
             {
-                var className = _mapperInterface.Name.TrimStart('I', 'i');
+                var className = _typeSymbol.Name.TrimStart('I', 'i');
                 if (className.Equals(MapperName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     className = $"{MapperName}Impl";
@@ -30,6 +29,7 @@ namespace Compentio.SourceMapper.Processors
                 return className;
             }
         }
+
         public IDictionary<string, IMethodSymbol> MethodsMap
         {
             get
@@ -38,7 +38,7 @@ namespace Compentio.SourceMapper.Processors
                    memberOptions: SymbolDisplayMemberOptions.IncludeParameters,
                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
 
-                return _mapperInterface.GetMembers()
+                return _typeSymbol.GetMembers()
                     .Where(field => field.Kind == SymbolKind.Method)
                     .Select(method =>
                     {
