@@ -1,6 +1,6 @@
 ﻿namespace Compentio.SourceMapper.Processors
 {
-    public interface ISourceProcessor
+    interface ISourceProcessor
     {
         string FileName { get; }
         string GenerateCode();           

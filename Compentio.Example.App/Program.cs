@@ -22,6 +22,7 @@ namespace Compentio.ConsoleApp
                 ValidTo = DateTime.MaxValue
             };
 
+
             var dto = mapper.MapToRest(dao);
 
             Console.WriteLine($"Description: '{dto.Description}', Title '{dto.Title}'");

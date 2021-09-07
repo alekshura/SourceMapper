@@ -1,50 +1,32 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
 {
-    internal class InterfaceSourceProcessor
+    internal class InterfaceSourceProcessor : ISourceProcessor
     {
-        private readonly ITypeSymbol _mapperInterface;
+        private readonly ISourceMetadata _sourceMetadata;
 
         internal InterfaceSourceProcessor(ITypeSymbol mapperInterface)
         {
-            _mapperInterface = mapperInterface;
+            _sourceMetadata = new InterfaceSourceMetadata(mapperInterface);
         }
 
-        internal string FileName => $"{TargetClassName}.cs";
+        public string FileName => _sourceMetadata.FileName;
 
-        private string Namespace => _mapperInterface.ContainingNamespace.ToString();
-
-        private string TargetClassName 
-        { 
-            get
-            {
-                var className = _mapperInterface.Name.TrimStart('I', 'i');
-                if (className.Equals(InterfaceName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    className = $"{InterfaceName}Impl";
-                }
-                return className;
-            }
-        }
-        private string InterfaceName => _mapperInterface.Name;
-
-        internal string GenerateCode()
+        public string GenerateCode()
         {
             var result = @$"// <mapper-source-generated />
 
             using System;
 
-            {(string.IsNullOrWhiteSpace(Namespace) ? null : $"namespace {Namespace}")}
+            {(string.IsNullOrWhiteSpace(_sourceMetadata.Namespace) ? null : $"namespace {_sourceMetadata.Namespace}")}
             {{
-               public class {TargetClassName} : {InterfaceName}
+               public class {_sourceMetadata.TargetClassName} : {_sourceMetadata.InterfaceName}
                {{
-                  public static {TargetClassName} Create() => new();
+                  public static {_sourceMetadata.TargetClassName} Create() => new();
                   
                    { GenerateMethods() }                  
                }}
@@ -60,7 +42,7 @@ namespace Compentio.SourceMapper.Processors
         {
             var methods = string.Empty;
 
-            foreach(var method in MethodsMap)
+            foreach(var method in _sourceMetadata.MethodsMap)
             {
                 methods += @$"public {method.Key}
                     {{
@@ -109,26 +91,6 @@ namespace Compentio.SourceMapper.Processors
             methodBody += "\n";
             methodBody += $"return target;";
             return methodBody;
-        }
-
-        private IDictionary<string, IMethodSymbol> MethodsMap
-        {
-            get
-            {
-                var methodFormat = new SymbolDisplayFormat(parameterOptions: SymbolDisplayParameterOptions.IncludeName | SymbolDisplayParameterOptions.IncludeType,
-                   memberOptions: SymbolDisplayMemberOptions.IncludeParameters,
-                   typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
-
-                return _mapperInterface.GetMembers()
-                    .Where(field => field.Kind == SymbolKind.Method)
-                    .Select(method =>
-                    {
-                        method.ToDisplayString(methodFormat);
-                        var mapperInterfaceMethod = method as IMethodSymbol;
-                        return new KeyValuePair<string, IMethodSymbol>($"{mapperInterfaceMethod?.ReturnType.ToDisplayString()} {method.ToDisplayString(methodFormat)}", mapperInterfaceMethod);
-                    })
-                    .ToDictionary(x => x.Key, x => x.Value);
-            }
         }
     }
 }
