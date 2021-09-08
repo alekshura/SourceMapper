@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
@@ -46,6 +47,7 @@ namespace Compentio.SourceMapper.Processors
         private string GenerateMethodBody(MethodMetadata metadata)
         {
             var methodBody = $"var target = new {metadata.ReturnType}();";
+            var alreadyGeneratedFields = new List<string>();
 
             foreach (var targetMember in metadata.ReturnType.GetMembers().Where(member => member.Kind == SymbolKind.Property && !member.IsStatic))
             {

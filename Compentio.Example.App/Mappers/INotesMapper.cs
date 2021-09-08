@@ -4,10 +4,13 @@ using Compentio.SourceMapper.Attributes;
 namespace Compentio.Example.App.Mappers
 {
     [Mapper]
-    interface ISampleObjectMapper
+    public interface INotesMapper
     {
         [Mapping(Source = "PageTitle", Target ="Title")]
-        NoteDto MapToRest(NoteDao source);
+        NoteDto MapToDto(NoteDao source);
+
+        [Mapping(Source = "Title", Target = "PageTitle")]
+        NoteDao MapToDao(NoteDto source);
     }
 }
 
