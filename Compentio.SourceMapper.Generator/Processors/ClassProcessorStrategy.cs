@@ -1,5 +1,4 @@
-﻿using Compentio.SourceMapper.Attributes;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Linq;
 
@@ -16,9 +15,7 @@ namespace Compentio.SourceMapper.Processors
             {(string.IsNullOrWhiteSpace(sourceMetadata.Namespace) ? null : $"namespace {sourceMetadata.Namespace}")}
             {{
                public class {sourceMetadata.MapperName}
-               {{
-                  public static {sourceMetadata.MapperName} Create() => new();
-                  
+               {{                  
                    { GenerateMethods(sourceMetadata) }                  
                }}
             }}
@@ -33,37 +30,24 @@ namespace Compentio.SourceMapper.Processors
         {
             var methods = string.Empty;
 
-            foreach(var method in sourceMetadata.MethodsMap)
+            foreach(var methodMetadata in sourceMetadata.MethodsMetadata)
             {
-                methods += @$"public {method.Key}
+                methods += @$"public virtual {methodMetadata.MethodFullName}
                     {{
-                        {GenerateMethodBody(method.Value)}
+                        {GenerateMethodBody(methodMetadata)}
                     }}";
             }
 
             return methods;
         }
 
-        private string GenerateMethodBody(IMethodSymbol methodSymbol)
+        private string GenerateMethodBody(MethodMetadata metadata)
         {
-            var mapperSourceParameter = methodSymbol.Parameters.First().Type;
-            var mapperTargetParameter = methodSymbol.ReturnType;
+            var methodBody = $"var target = new {metadata.ReturnType}();";
 
-            var methodBody = $"var target = new {mapperTargetParameter}();";
-            var mappingAttributes = methodSymbol.GetAttributes()
-                .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))
-                .Select(attribute =>
-                 {
-                     var mappingAttr = new MappingAttribute();
-                     mappingAttr.Source = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(mappingAttr.Source)).Value.Value.ToString();
-                     mappingAttr.Target = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(mappingAttr.Target)).Value.Value.ToString();
-                     return mappingAttr;
-                 });
-
-
-            foreach (var targetMember in mapperTargetParameter.GetMembers().Where(member => member.Kind == SymbolKind.Property && !member.IsStatic))
+            foreach (var targetMember in metadata.ReturnType.GetMembers().Where(member => member.Kind == SymbolKind.Property && !member.IsStatic))
             {
-                var matchedField = mapperSourceParameter.GetMembers().FirstOrDefault(p => p.Name == targetMember.Name);
+                var matchedField = metadata.Parameters.First().GetMembers().FirstOrDefault(p => p.Name == targetMember.Name);
 
                 if (matchedField is not null)
                 {
@@ -71,7 +55,7 @@ namespace Compentio.SourceMapper.Processors
                     methodBody += $"target.{matchedField.Name} = source.{matchedField.Name};";
                 }
 
-                var matchedAttribute = mappingAttributes.FirstOrDefault(attribute => attribute?.Target == targetMember.Name);
+                var matchedAttribute = metadata.MappingAttributes.FirstOrDefault(attribute => attribute?.Target == targetMember.Name);
                 if (matchedAttribute is not null)
                 {
                     methodBody += "\n";

@@ -5,6 +5,15 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
 {
+    interface ISourceMetadata
+    {
+        string FileName { get; }
+        string Namespace { get; }
+        string MapperName { get; }
+        string TargetClassName { get; }
+        IEnumerable<MethodMetadata> MethodsMetadata { get; }
+    }
+
     internal class SourceMetadata : ISourceMetadata
     {
         private readonly ITypeSymbol _typeSymbol;
@@ -30,24 +39,11 @@ namespace Compentio.SourceMapper.Processors
             }
         }
 
-        public IDictionary<string, IMethodSymbol> MethodsMap
-        {
-            get
-            {
-                var methodFormat = new SymbolDisplayFormat(parameterOptions: SymbolDisplayParameterOptions.IncludeName | SymbolDisplayParameterOptions.IncludeType,
-                   memberOptions: SymbolDisplayMemberOptions.IncludeParameters,
-                   typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
-
-                return _typeSymbol.GetMembers()
+        public IEnumerable<MethodMetadata> MethodsMetadata => _typeSymbol.GetMembers()
                     .Where(field => field.Kind == SymbolKind.Method)
                     .Select(method =>
                     {
-                        method.ToDisplayString(methodFormat);
-                        var mapperInterfaceMethod = method as IMethodSymbol;
-                        return new KeyValuePair<string, IMethodSymbol>($"{mapperInterfaceMethod?.ReturnType.ToDisplayString()} {method.ToDisplayString(methodFormat)}", mapperInterfaceMethod);
-                    })
-                    .ToDictionary(x => x.Key, x => x.Value);
-            }
-        }
+                        return new MethodMetadata(method as IMethodSymbol);
+                    });
     }
 }
