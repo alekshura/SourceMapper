@@ -11,7 +11,7 @@ namespace Compentio.SourceMapper.Processors
         string Namespace { get; }
         string MapperName { get; }
         string TargetClassName { get; }
-        IEnumerable<MethodMetadata> MethodsMetadata { get; }
+        IEnumerable<IMethodMetadata> MethodsMetadata { get; }
     }
 
     internal class SourceMetadata : ISourceMetadata
@@ -39,7 +39,7 @@ namespace Compentio.SourceMapper.Processors
             }
         }
 
-        public IEnumerable<MethodMetadata> MethodsMetadata => _typeSymbol.GetMembers()
+        public IEnumerable<IMethodMetadata> MethodsMetadata => _typeSymbol.GetMembers()
                     .Where(field => field.Kind == SymbolKind.Method)
                     .Select(method =>
                     {

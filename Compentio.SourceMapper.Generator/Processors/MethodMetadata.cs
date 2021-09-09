@@ -6,7 +6,16 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
 {
-    internal class MethodMetadata
+    interface IMethodMetadata
+    {
+        string MethodName { get; }
+        ITypeSymbol ReturnType { get; }
+        IEnumerable<ITypeSymbol> Parameters { get; }
+        string MethodFullName { get; }
+        IEnumerable<MappingAttribute> MappingAttributes { get; }
+    }
+
+    internal class MethodMetadata : IMethodMetadata
     {
         private readonly IMethodSymbol _methodSymbol;
         private readonly SymbolDisplayFormat _methodFormat = 

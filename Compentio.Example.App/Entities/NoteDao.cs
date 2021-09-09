@@ -12,5 +12,6 @@ namespace Compentio.Example.App.Entities
         public string CreatedBy { get; set; }
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
+        public NoteDocumentDao Document { get; set; }
     }
 }
