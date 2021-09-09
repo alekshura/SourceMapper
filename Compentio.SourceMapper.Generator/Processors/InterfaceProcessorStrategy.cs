@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Compentio.SourceMapper.Metadata;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Compentio.SourceMapper.Processors
+namespace Compentio.SourceMapper.Metadata
 {
     interface IMethodMetadata
     {
         string MethodName { get; }
-        ITypeSymbol ReturnType { get; }
-        IEnumerable<ITypeSymbol> Parameters { get; }
+        IParameterMetadata ReturnType { get; }
+        IEnumerable<IParameterMetadata> Parameters { get; }
         string MethodFullName { get; }
         IEnumerable<MappingAttribute> MappingAttributes { get; }
     }
@@ -28,10 +28,10 @@ namespace Compentio.SourceMapper.Processors
             _methodSymbol = methodSymbol;
         }
         public string MethodName => _methodSymbol.ToDisplayString();
-        public ITypeSymbol ReturnType => _methodSymbol.ReturnType;
-        public IEnumerable<ITypeSymbol> Parameters => _methodSymbol.Parameters.Select(p => p.Type);
+        public IParameterMetadata ReturnType => new ReturnParameterMetadata(_methodSymbol.ReturnType);
+        public IEnumerable<IParameterMetadata> Parameters => _methodSymbol.Parameters.Select(p => new ParameterMetadata(p));
 
-        public string MethodFullName => $"{_methodSymbol?.ReturnType.ToDisplayString()} {_methodSymbol?.ToDisplayString(_methodFormat)}";
+        public string MethodFullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFormat)}";
 
         public IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
                     .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))

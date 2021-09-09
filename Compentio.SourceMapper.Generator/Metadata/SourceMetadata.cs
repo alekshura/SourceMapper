@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Compentio.SourceMapper.Processors
+namespace Compentio.SourceMapper.Metadata
 {
     interface ISourceMetadata
     {

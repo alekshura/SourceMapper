@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Compentio.SourceMapper.Metadata;
+using Microsoft.CodeAnalysis;
 using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
@@ -29,32 +30,36 @@ namespace Compentio.SourceMapper.Processors
 
         private string GenerateMappingBody(IMethodMetadata metadata)
         {
-            var methodBody = $"var target = new {metadata.ReturnType}();";
-            var sourceMembers = metadata.Parameters.First().GetMembers().Select(member => member as IPropertySymbol);
-            var targetMemebers = metadata.ReturnType.GetMembers().Where(member => member.Kind == SymbolKind.Property && !member.IsStatic);
+            var methodBody = $"var target = new {metadata.ReturnType.FullName}();";
+            var sourceMembers = metadata.Parameters.First().Properties;
+            var targetMemebers = metadata.ReturnType.Properties;
 
             foreach (var targetMember in targetMemebers)
             {
-                var matchedAttribute = metadata.MappingAttributes.FirstOrDefault(attribute => attribute?.Target == targetMember.Name);
-                if (matchedAttribute is not null && 
-                    sourceMembers.Any(symbol => symbol?.Name == matchedAttribute.Source) && 
-                    targetMemebers.Any(symbol => symbol?.Name == matchedAttribute.Target))
+                var matchedAttribute = metadata.MappingAttributes.FirstOrDefault(attribute => attribute?.Target == targetMember?.Name);                
+                var matchedSourceMember = sourceMembers.FirstOrDefault(symbol => symbol?.Name == matchedAttribute?.Source);
+                var matchedTargetMember = targetMemebers.FirstOrDefault(symbol => symbol?.Name == matchedAttribute?.Target);
+
+                if (matchedSourceMember is null || matchedTargetMember is null)
                 {
-                    methodBody += "\n";
-                    methodBody += $"target.{matchedAttribute.Target} = source.{matchedAttribute.Source};";
-                    continue;
+                    matchedSourceMember = sourceMembers.FirstOrDefault(p => p?.Name == targetMember?.Name);
+                    if (matchedSourceMember is null)
+                    {
+                        continue;                     
+                    }
+
+                    matchedTargetMember = matchedSourceMember;
                 }
 
-                var matchedField = sourceMembers.FirstOrDefault(p => p?.Name == targetMember.Name);
-                if (matchedField is not null)
+                if (!IsClass(matchedSourceMember))
                 {
-                    if (!IsClass(matchedField))
-                    {
-                        methodBody += "\n";
-                        methodBody += $"target.{matchedField.Name} = source.{matchedField.Name};";
-                    } 
-
-                    // TODO Nested types
+                    methodBody += "\n";
+                    methodBody += $"target.{matchedTargetMember?.Name} = source.{matchedSourceMember.Name};";
+                }
+                else
+                {
+                    //methodBody += "\n";
+                    //methodBody += $"target.{matchedTargetMember?.Name} = MapMethodName({matchedSourceMember.Name});";
                 }
             }
 

@@ -1,4 +1,5 @@
 ﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
