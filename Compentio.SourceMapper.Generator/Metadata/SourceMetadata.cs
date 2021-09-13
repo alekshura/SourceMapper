@@ -18,7 +18,7 @@ namespace Compentio.SourceMapper.Metadata
     {
         private readonly ITypeSymbol _typeSymbol;
 
-        internal SourceMetadata(ITypeSymbol typeSymbol)
+        public SourceMetadata(ITypeSymbol typeSymbol)
         {
             _typeSymbol = typeSymbol;
         }
@@ -30,7 +30,7 @@ namespace Compentio.SourceMapper.Metadata
         {
             get
             {
-                var className = _typeSymbol.Name.TrimStart('I', 'i');
+                var className = MapperName.TrimStart('I', 'i');
                 if (className.Equals(MapperName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     className = $"{MapperName}Impl";
