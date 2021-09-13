@@ -15,9 +15,7 @@ namespace Compentio.SourceMapper.Generators
         internal void Execute(GeneratorExecutionContext context)
         {
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
-            {
-                return;
-            }            
+                return;         
 
             foreach (var typeDeclaration in receiver.Candidates)
             {
@@ -29,9 +27,9 @@ namespace Compentio.SourceMapper.Generators
 
                 var sourceMetadata = new SourceMetadata(mapperType);
                 var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapperType.TypeKind);
-                var generatedCode = processorStrategy.GenerateCode(sourceMetadata);
+                processorStrategy.Initialize(sourceMetadata);
 
-                context.AddSource(sourceMetadata.FileName, SourceText.From(generatedCode, Encoding.UTF8));
+                context.AddSource(sourceMetadata.FileName, SourceText.From(processorStrategy.GenerateCode(), Encoding.UTF8));
             }
         }
 

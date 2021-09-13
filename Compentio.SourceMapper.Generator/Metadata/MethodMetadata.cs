@@ -9,8 +9,8 @@ namespace Compentio.SourceMapper.Metadata
     interface IMethodMetadata
     {
         string MethodName { get; }
-        IParameterMetadata ReturnType { get; }
-        IEnumerable<IParameterMetadata> Parameters { get; }
+        ITypeMetadata ReturnType { get; }
+        IEnumerable<ITypeMetadata> Parameters { get; }
         string MethodFullName { get; }
         IEnumerable<MappingAttribute> MappingAttributes { get; }
     }
@@ -18,20 +18,30 @@ namespace Compentio.SourceMapper.Metadata
     internal class MethodMetadata : IMethodMetadata
     {
         private readonly IMethodSymbol _methodSymbol;
-        private readonly SymbolDisplayFormat _methodFormat = 
+        private readonly SymbolDisplayFormat _methodFullNameFormat = 
             new(parameterOptions: SymbolDisplayParameterOptions.IncludeName | SymbolDisplayParameterOptions.IncludeType,
                    memberOptions: SymbolDisplayMemberOptions.IncludeParameters,
                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
+
 
         internal MethodMetadata(IMethodSymbol methodSymbol)
         {
             _methodSymbol = methodSymbol;
         }
-        public string MethodName => _methodSymbol.ToDisplayString();
-        public IParameterMetadata ReturnType => new ReturnParameterMetadata(_methodSymbol.ReturnType);
-        public IEnumerable<IParameterMetadata> Parameters => _methodSymbol.Parameters.Select(p => new ParameterMetadata(p));
+        public string MethodName 
+        {
+            get
+            {
+                var parts = _methodSymbol.ToDisplayParts(SymbolDisplayFormat.CSharpShortErrorMessageFormat)
+                    .Where(s => s.Kind == SymbolDisplayPartKind.MethodName);
+                return $"{string.Join(string.Empty, parts)}";
+            }
+        }
 
-        public string MethodFullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFormat)}";
+        public ITypeMetadata ReturnType => new TypeMetadata(_methodSymbol.ReturnType);
+        public IEnumerable<ITypeMetadata> Parameters => _methodSymbol.Parameters.Select(p => new ParameterTypeMetadata(p));
+
+        public string MethodFullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFullNameFormat)}";
 
         public IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
                     .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))

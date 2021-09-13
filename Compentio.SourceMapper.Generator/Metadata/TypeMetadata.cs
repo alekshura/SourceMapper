@@ -5,18 +5,18 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Metadata
 {
-    interface IParameterMetadata
+    interface ITypeMetadata
     {
         string Name { get; }
         string FullName { get; }
-        IEnumerable<IPropertySymbol?> Properties { get; }
+        IEnumerable<IPropertyMetadata> Properties { get; }
     }
 
-    internal class ParameterMetadata : IParameterMetadata
+    internal class ParameterTypeMetadata : ITypeMetadata
     {
         private readonly IParameterSymbol _parameterSymbol;
 
-        internal ParameterMetadata(IParameterSymbol parameterSymbol)
+        internal ParameterTypeMetadata(IParameterSymbol parameterSymbol)
         {
             _parameterSymbol = parameterSymbol;
         }
@@ -24,16 +24,16 @@ namespace Compentio.SourceMapper.Metadata
         public string Name => _parameterSymbol.Name;
         public string FullName => _parameterSymbol.ToDisplayString();
 
-        public IEnumerable<IPropertySymbol> Properties => _parameterSymbol.Type.GetMembers()
-            .Select(member => member as IPropertySymbol)
-            .Where(member => member is not null);
+        public IEnumerable<IPropertyMetadata> Properties => _parameterSymbol.Type.GetMembers()
+            .Where(member => member as IPropertySymbol is not null)
+            .Select(member => new PropertyMetadata(member as IPropertySymbol));
     }
 
-    internal class ReturnParameterMetadata : IParameterMetadata
+    internal class TypeMetadata : ITypeMetadata
     {
         private readonly ITypeSymbol _typeSymbol;
 
-        internal ReturnParameterMetadata(ITypeSymbol typeSymbol)
+        internal TypeMetadata(ITypeSymbol typeSymbol)
         {
             _typeSymbol = typeSymbol;
         }
@@ -43,10 +43,8 @@ namespace Compentio.SourceMapper.Metadata
 
         public ITypeSymbol Type => _typeSymbol;
 
-        public IEnumerable<IPropertySymbol> Properties => _typeSymbol.GetMembers()
+        public IEnumerable<IPropertyMetadata> Properties => _typeSymbol.GetMembers()
             .Where(member => member.Kind == SymbolKind.Property && !member.IsStatic)
-            .Select(member => member as IPropertySymbol);
-
-        
+            .Select(member => new PropertyMetadata(member as IPropertySymbol));        
     }
 }

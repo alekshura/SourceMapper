@@ -1,23 +1,21 @@
-﻿using Compentio.SourceMapper.Metadata;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
 {
     internal class ClassProcessorStrategy : AbstractProcessorStrategy
     {
-        public override string GenerateCode(ISourceMetadata sourceMetadata)
+        public override string GenerateCode()
         {
             var result = @$"// <mapper-source-generated />
 
             using System;
 
-            {(string.IsNullOrWhiteSpace(sourceMetadata.Namespace) ? null : $"namespace {sourceMetadata.Namespace}")}
+            {(string.IsNullOrWhiteSpace(_sourceMetadata.Namespace) ? null : $"namespace {_sourceMetadata.Namespace}")}
             {{
-               public class {sourceMetadata.MapperName}
+               public class {_sourceMetadata.MapperName}
                {{                  
-                   { GenerateMethods(sourceMetadata) }                  
+                   { GenerateMethods(_sourceMetadata) }                  
                }}
             }}
             ";
