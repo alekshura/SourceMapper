@@ -3,15 +3,11 @@
 namespace Compentio.SourceMapper.Attributes
 {
     /// <summary>
-    /// Attirbute that defines the mapping rules for method first parameter.
+    /// Attirbute that defines the mapping rules for method first parameter using func expression.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class MappingAttribute : Attribute
+    public class MappingWithExpressionAttribute : Attribute
     {
-        /// <summary>
-        /// The name of the source property used for mapping. 
-        /// </summary>
-        public string Source { get; set; } = string.Empty;
         /// <summary>
         /// Te name for target property for mapping. Use it like: nameof(ReturnType.PropertyName)
         /// </summary>
@@ -23,7 +19,7 @@ namespace Compentio.SourceMapper.Attributes
         /// </summary>
         public string Expression { get; set; } = string.Empty;
 
-        public MappingAttribute()
+        public MappingWithExpressionAttribute()
         {
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Compentio.SourceMapper.Metadata;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 
@@ -12,14 +13,14 @@ namespace Compentio.SourceMapper.Processors
             { TypeKind.Class, new ClassProcessorStrategy() }
         };
 
-        internal static IProcessorStrategy GetStrategy(TypeKind typeKind)
+        internal static IProcessorStrategy GetStrategy(ISourceMetadata sourceMetadata)
         {
-            if (!_sourceStrategies.ContainsKey(typeKind))
+            if (!_sourceStrategies.ContainsKey(sourceMetadata.TypeKind))
             {
                 return new InterfaceProcessorStrategy();
             }
 
-            return _sourceStrategies[typeKind];
+            return _sourceStrategies[sourceMetadata.TypeKind];
         }
     }
 }

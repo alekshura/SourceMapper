@@ -10,6 +10,10 @@ using System.Text;
 
 namespace Compentio.SourceMapper.Generators
 {
+    /// <summary>
+    /// Class that setups code generation metadata and code processors.
+    /// Mappers are generated for interfaces and abstract classes.
+    /// </summary>
     internal class MappersSyntaxGenerator
     {
         internal void Execute(GeneratorExecutionContext context)
@@ -26,10 +30,8 @@ namespace Compentio.SourceMapper.Generators
                     continue;
 
                 var sourceMetadata = new SourceMetadata(mapperType);
-                var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapperType.TypeKind);
-                processorStrategy.Initialize(sourceMetadata);
-
-                context.AddSource(sourceMetadata.FileName, SourceText.From(processorStrategy.GenerateCode(), Encoding.UTF8));
+                var processorStrategy = ProcessorStrategyFactory.GetStrategy(sourceMetadata);
+                context.AddSource(sourceMetadata.FileName, SourceText.From(processorStrategy.GenerateCode(sourceMetadata), Encoding.UTF8));
             }
         }
 
@@ -37,7 +39,7 @@ namespace Compentio.SourceMapper.Generators
         private bool IsMapperType(ITypeSymbol type)
         {
             return type.GetAttributes()
-                       .Any(a => a.AttributeClass?.Name == nameof(MapperAttribute));
+                       .Any(a => a.AttributeClass?.Name == nameof(MapperAttribute)) && type.IsAbstract;
         }             
     }
 }

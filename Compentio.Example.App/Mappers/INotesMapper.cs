@@ -1,18 +1,19 @@
 ﻿using Compentio.Example.App.Entities;
 using Compentio.SourceMapper.Attributes;
+using System;
 
 namespace Compentio.Example.App.Mappers
 {
     [Mapper]
     public interface INotesMapper
     {
-        [Mapping(Source = "PageTitle", Target ="Title")]
-        //[Mapping(Source = "BinaryDocument", Target = "Document")]
+        [Mapping(Source = nameof(NoteDao.PageTitle), Target = nameof(NoteDto.Title))]       
         NoteDto MapToDto(NoteDao source);
 
+        [Mapping(Source = nameof(NoteDocumentDao.CreatorFirstName), Target =  nameof(NoteDocumentDto.Autor))]
         NoteDocumentDto MapToDto(NoteDocumentDao source);
 
-        [Mapping(Source = "Title", Target = "PageTitle")]
+        [Mapping(Source = nameof(NoteDto.Title), Target = nameof(NoteDao.PageTitle))]
         NoteDao MapToDao(NoteDto source);
     }
 }

@@ -22,7 +22,8 @@ namespace Compentio.SourceMapper.Tests.Processors
                 .Customize(new SupportMutableValueTypesCustomization());
 
             _sourceMetadataMock = _fixture.Create<Mock<ISourceMetadata>>();
-            _processorStrategy = ProcessorStrategyFactory.GetStrategy(TypeKind.Interface);
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Interface);
+            _processorStrategy = ProcessorStrategyFactory.GetStrategy(_sourceMetadataMock.Object);
             
         }
 
@@ -37,10 +38,8 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TargetClassName).Returns("TargetClassName");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(mathodsMetadata);
 
-            _processorStrategy.Initialize(_sourceMetadataMock.Object);
-
             // Act
-            var generatedCode = _processorStrategy.GenerateCode();
+            var generatedCode = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
             // Assert
             generatedCode.Should().NotBeNullOrEmpty();

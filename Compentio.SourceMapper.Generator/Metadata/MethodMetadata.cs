@@ -47,9 +47,17 @@ namespace Compentio.SourceMapper.Metadata
                     .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))
                     .Select(attribute =>
                     {
-                        var mappingAttr = new MappingAttribute();
-                        mappingAttr.Source = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(mappingAttr.Source)).Value.Value.ToString();
-                        mappingAttr.Target = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(mappingAttr.Target)).Value.Value.ToString();
+
+                        var sourceConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
+                        var targetConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
+                        var expressionConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
+
+                        var mappingAttr = new MappingAttribute
+                        {
+                            Source = sourceConstant.Value as string ?? string.Empty,
+                            Target = targetConstant.Value as string ?? string.Empty,
+                            Expression = expressionConstant.Value as string ?? string.Empty
+                        };
                         return mappingAttr;
                     });
     }
