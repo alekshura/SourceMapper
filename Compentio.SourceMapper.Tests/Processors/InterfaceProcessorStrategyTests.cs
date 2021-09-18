@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Tests.Processors
     {
         private readonly IFixture _fixture;
         private readonly IProcessorStrategy _processorStrategy;
-        private readonly Mock<ISourceMetadata> _sourceMetadataMock;
+        private readonly Mock<IMapperMetadata> _sourceMetadataMock;
 
         public InterfaceProcessorStrategyTests()
         {
@@ -21,7 +21,7 @@ namespace Compentio.SourceMapper.Tests.Processors
                 .Customize(new AutoMoqCustomization { ConfigureMembers = true })
                 .Customize(new SupportMutableValueTypesCustomization());
 
-            _sourceMetadataMock = _fixture.Create<Mock<ISourceMetadata>>();
+            _sourceMetadataMock = _fixture.Create<Mock<IMapperMetadata>>();
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Interface);
             _processorStrategy = ProcessorStrategyFactory.GetStrategy(_sourceMetadataMock.Object);
             

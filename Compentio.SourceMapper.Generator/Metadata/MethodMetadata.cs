@@ -49,8 +49,8 @@ namespace Compentio.SourceMapper.Metadata
                     {
 
                         var sourceConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
-                        var targetConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
-                        var expressionConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
+                        var targetConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Target)).Value;
+                        var expressionConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Expression)).Value;
 
                         var mappingAttr = new MappingAttribute
                         {

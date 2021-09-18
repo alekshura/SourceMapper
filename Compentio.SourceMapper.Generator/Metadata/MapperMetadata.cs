@@ -9,7 +9,7 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Encapsulates all data for one abstract class or interface that define mappings.
     /// </summary>
-    interface ISourceMetadata
+    interface IMapperMetadata
     {
         /// <summary>
         /// Type of the class or interface that defines the mappings. 
@@ -43,11 +43,11 @@ namespace Compentio.SourceMapper.Metadata
         IMethodMetadata FindDefinedMethod(IPropertyMetadata source, IPropertyMetadata target);
     }
 
-    internal class SourceMetadata : ISourceMetadata
+    internal class MapperMetadata : IMapperMetadata
     {
         private readonly ITypeSymbol _typeSymbol;
 
-        public SourceMetadata(ITypeSymbol typeSymbol)
+        public MapperMetadata(ITypeSymbol typeSymbol)
         {
             _typeSymbol = typeSymbol;
         }

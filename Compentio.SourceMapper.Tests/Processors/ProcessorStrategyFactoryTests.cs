@@ -11,13 +11,13 @@ namespace Compentio.SourceMapper.Tests.Processors
 {
     public class ProcessorStrategyFactoryTests
     {
-        private readonly Mock<ISourceMetadata> _sourceMetadataMock;
+        private readonly Mock<IMapperMetadata> _sourceMetadataMock;
         private readonly IFixture _fixture;
 
         public ProcessorStrategyFactoryTests()
         {
             _fixture = new Fixture();
-            _sourceMetadataMock = _fixture.Create<Mock<ISourceMetadata>>();
+            _sourceMetadataMock = _fixture.Create<Mock<IMapperMetadata>>();
         }
 
         [Fact]

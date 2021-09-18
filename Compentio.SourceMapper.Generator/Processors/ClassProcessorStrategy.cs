@@ -9,9 +9,10 @@ namespace Compentio.SourceMapper.Processors
 {
     internal class ClassProcessorStrategy : IProcessorStrategy
     {
-        public string GenerateCode(ISourceMetadata sourceMetadata)
+        public string GenerateCode(IMapperMetadata sourceMetadata)
         {
             var result = @$"// <mapper-source-generated />
+                            // <generated-at '{System.DateTime.UtcNow}' />
 
             using System;
 
@@ -29,21 +30,13 @@ namespace Compentio.SourceMapper.Processors
             return root.ToFullString();
         }
 
-        private string GenerateMethods(ISourceMetadata sourceMetadata)
+        private string GenerateMethods(IMapperMetadata sourceMetadata)
         {
             var methods = string.Empty;
 
             foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
             {
-                methods += @$"{GenerateMethod(sourceMetadata, methodMetadata)}";
-            }
-
-            return methods;
-        }
-
-        private string GenerateMethod(ISourceMetadata sourceMetadata, IMethodMetadata methodMetadata)
-        {
-            return @$"public override {methodMetadata.MethodFullName}
+                methods += @$"public override {methodMetadata.MethodFullName}
                 {{
                     var target = new {methodMetadata.ReturnType.FullName}();
                     
@@ -51,10 +44,12 @@ namespace Compentio.SourceMapper.Processors
                     
                     return target;
                 }}";
+            }
 
+            return methods;
         }
 
-        private string GenerateMappings(ISourceMetadata sourceMetadata, IEnumerable<IPropertyMetadata> sourceMembers, 
+        private string GenerateMappings(IMapperMetadata sourceMetadata, IEnumerable<IPropertyMetadata> sourceMembers, 
             IEnumerable<IPropertyMetadata> targetMemebers, IEnumerable<MappingAttribute> mappingAttributes)
         {
             var mappings = string.Empty;
@@ -71,18 +66,17 @@ namespace Compentio.SourceMapper.Processors
                     matchedSourceMember = sourceMembers.FirstOrDefault(p => p?.Name == targetMember?.Name);
                     if (matchedSourceMember is null)
                     {
+                        if (expressionAttribute is not null)
+                        {
+                            mappings += "\n";
+                            mappings += $"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}(source);";
+                        }
                         continue;
                     }
 
                     matchedTargetMember = targetMember;
                 }
-
-                if (expressionAttribute is not null) 
-                {
-                    mappings += "\n";
-                    //TODO
-                    mappings += $"target.{expressionAttribute?.Target} = ConvertAutor(source);";
-                }
+                
 
                 if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
                 {

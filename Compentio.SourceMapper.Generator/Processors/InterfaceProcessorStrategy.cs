@@ -9,9 +9,10 @@ namespace Compentio.SourceMapper.Processors
 {
     internal class InterfaceProcessorStrategy : IProcessorStrategy
     {
-        public string GenerateCode(ISourceMetadata sourceMetadata)
+        public string GenerateCode(IMapperMetadata sourceMetadata)
         {
             var result = @$"// <mapper-source-generated />
+                            // <generated-at '{System.DateTime.UtcNow}' />
 
             using System;
 
@@ -31,21 +32,13 @@ namespace Compentio.SourceMapper.Processors
             return root.ToFullString();
         }
 
-        private string GenerateMethods(ISourceMetadata sourceMetadata)
+        private string GenerateMethods(IMapperMetadata sourceMetadata)
         {
             var methods = string.Empty;
 
             foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
             {
-                methods += @$"{GenerateMethod(sourceMetadata, methodMetadata)}";
-            }
-
-            return methods;
-        }
-
-        private string GenerateMethod(ISourceMetadata sourceMetadata, IMethodMetadata methodMetadata)
-        {
-            return @$"public virtual {methodMetadata.MethodFullName}
+                methods += @$"public virtual {methodMetadata.MethodFullName}
                 {{
                     var target = new {methodMetadata.ReturnType.FullName}();
                     
@@ -53,10 +46,12 @@ namespace Compentio.SourceMapper.Processors
                     
                     return target;
                 }}";
+            }
 
+            return methods;
         }
 
-        private string GenerateMappings(ISourceMetadata sourceMetadata, IEnumerable<IPropertyMetadata> sourceMembers, 
+        private string GenerateMappings(IMapperMetadata sourceMetadata, IEnumerable<IPropertyMetadata> sourceMembers, 
             IEnumerable<IPropertyMetadata> targetMemebers, IEnumerable<MappingAttribute> mappingAttributes)
         {
             var mappings = string.Empty;

@@ -29,7 +29,7 @@ namespace Compentio.SourceMapper.Generators
                 if (mapperType is null || !IsMapperType(mapperType))
                     continue;
 
-                var sourceMetadata = new SourceMetadata(mapperType);
+                var sourceMetadata = new MapperMetadata(mapperType);
                 var processorStrategy = ProcessorStrategyFactory.GetStrategy(sourceMetadata);
                 context.AddSource(sourceMetadata.FileName, SourceText.From(processorStrategy.GenerateCode(sourceMetadata), Encoding.UTF8));
             }

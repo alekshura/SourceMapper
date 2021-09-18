@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Processors
             { TypeKind.Class, new ClassProcessorStrategy() }
         };
 
-        internal static IProcessorStrategy GetStrategy(ISourceMetadata sourceMetadata)
+        internal static IProcessorStrategy GetStrategy(IMapperMetadata sourceMetadata)
         {
             if (!_sourceStrategies.ContainsKey(sourceMetadata.TypeKind))
             {
