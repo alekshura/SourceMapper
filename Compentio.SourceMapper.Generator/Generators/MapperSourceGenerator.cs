@@ -1,6 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Metadata;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Compentio.SourceMapper.Generators
 {
@@ -14,7 +17,23 @@ namespace Compentio.SourceMapper.Generators
                 throw new ArgumentNullException(nameof(context), "context.SyntaxReceiver could not be null");
             }
 
-            var sourceGenerator = new MappersSyntaxGenerator();
+            if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
+                return;
+
+            var sourcesMetadata = SourcesMetadata.Create();
+
+            foreach (var typeDeclaration in receiver.Candidates)
+            {
+                var model = context.Compilation.GetSemanticModel(typeDeclaration.SyntaxTree, true);
+                var mapperType = model.GetDeclaredSymbol(typeDeclaration) as ITypeSymbol;
+
+                if (mapperType is null || !IsMapperType(mapperType))
+                    continue;
+
+                sourcesMetadata.AddOrUpdate(new MapperMetadata(mapperType));
+            }
+
+            var sourceGenerator = new MappersSyntaxGenerator(sourcesMetadata);
             sourceGenerator.Execute(context);
         }
 
@@ -30,6 +49,12 @@ namespace Compentio.SourceMapper.Generators
 
             Debug.WriteLine("Initalize code generator");
             context.RegisterForSyntaxNotifications(() => new MappersSyntaxReceiver());
-        }             
+        }
+
+        private bool IsMapperType(ITypeSymbol type)
+        {
+            return type.GetAttributes()
+                       .Any(a => a.AttributeClass?.Name == nameof(MapperAttribute)) && type.IsAbstract;
+        }
     }
 }

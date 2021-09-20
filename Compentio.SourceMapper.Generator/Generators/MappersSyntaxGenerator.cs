@@ -1,11 +1,7 @@
-﻿using Compentio.SourceMapper.Attributes;
-using Compentio.SourceMapper.Metadata;
+﻿using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using System;
-using System.Linq;
 using System.Text;
 
 namespace Compentio.SourceMapper.Generators
@@ -16,30 +12,24 @@ namespace Compentio.SourceMapper.Generators
     /// </summary>
     internal class MappersSyntaxGenerator
     {
-        internal void Execute(GeneratorExecutionContext context)
+        private readonly ISourcesMetadata _sourcesMetadata;
+
+        internal MappersSyntaxGenerator (ISourcesMetadata sourcesMetadata)
         {
-            if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
-                return;         
-
-            foreach (var typeDeclaration in receiver.Candidates)
-            {
-                var model = context.Compilation.GetSemanticModel(typeDeclaration.SyntaxTree, true);
-                var mapperType = model.GetDeclaredSymbol(typeDeclaration) as ITypeSymbol;
-
-                if (mapperType is null || !IsMapperType(mapperType))
-                    continue;
-
-                var sourceMetadata = new MapperMetadata(mapperType);
-                var processorStrategy = ProcessorStrategyFactory.GetStrategy(sourceMetadata);
-                context.AddSource(sourceMetadata.FileName, SourceText.From(processorStrategy.GenerateCode(sourceMetadata), Encoding.UTF8));
-            }
+            _sourcesMetadata = sourcesMetadata;
         }
 
-
-        private bool IsMapperType(ITypeSymbol type)
+        internal void Execute(GeneratorExecutionContext context)
         {
-            return type.GetAttributes()
-                       .Any(a => a.AttributeClass?.Name == nameof(MapperAttribute)) && type.IsAbstract;
+            foreach (var mapper in _sourcesMetadata.Mappers)
+            {
+                var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapper);
+
+                var mapperCode = processorStrategy.GenerateCode(mapper);
+
+
+                context.AddSource(mapper.FileName, SourceText.From(mapperCode, Encoding.UTF8));
+            }
         }             
     }
 }
