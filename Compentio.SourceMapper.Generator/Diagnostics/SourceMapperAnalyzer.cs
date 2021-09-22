@@ -11,7 +11,8 @@ namespace Compentio.SourceMapper.Diagnostics
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SourceMapperAnalyzer : DiagnosticAnalyzer
     {
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(SourceMapperDescriptors.EnumerationMustBePartial);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => 
+            ImmutableArray.Create(SourceMapperDescriptors.ExpressionMustBeUsedInClass, SourceMapperDescriptors.ConversionFunctionShouldBePublicOrProtected);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -24,7 +25,6 @@ namespace Compentio.SourceMapper.Diagnostics
         private static void AnalyzeNamedType(SymbolAnalysisContext context)
         {
             //var type = context.Symbol as INamedTypeSymbol;
-
             //if (type?.TypeKind == TypeKind.Class)
             //{
             //    var error = Diagnostic.Create(SourceMapperDescriptors.EnumerationMustBePartial,

@@ -6,12 +6,31 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Metadata
 {
+    /// <summary>
+    /// Encapsulates a method from mapper that is used for mappings
+    /// </summary>
     interface IMethodMetadata
     {
+        /// <summary>
+        /// The name of the method
+        /// </summary>
         string MethodName { get; }
+        /// <summary>
+        /// Method return type
+        /// </summary>
         ITypeMetadata ReturnType { get; }
+        /// <summary>
+        /// Parameters of the method
+        /// </summary>
         IEnumerable<ITypeMetadata> Parameters { get; }
+        /// <summary>
+        /// Method full name with return type and its namespace and parameters.
+        /// This name is ready to be used in code generation.
+        /// </summary>
         string MethodFullName { get; }
+        /// <summary>
+        /// Attributes that used for mappings
+        /// </summary>
         IEnumerable<MappingAttribute> MappingAttributes { get; }
     }
 

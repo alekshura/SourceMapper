@@ -7,14 +7,16 @@ namespace Compentio.Example.App.Mappers
     [Mapper]
     public interface INotesMapper
     {
-        [Mapping(Source = nameof(NoteDao.PageTitle), Target = nameof(NoteDto.Title))]       
+        [Mapping(Source = nameof(NoteDao.PageTitle), Target = nameof(NoteDto.Title))]
         NoteDto MapToDto(NoteDao source);
 
-        [Mapping(Source = nameof(NoteDocumentDao.CreatorFirstName), Target =  nameof(NoteDocumentDto.Autor))]
+        [Mapping(Source = nameof(NoteDocumentDao.Metadata.CreatorFirstName), Target = nameof(NoteDocumentDto.Autor))]
         NoteDocumentDto MapToDto(NoteDocumentDao source);
 
         [Mapping(Source = nameof(NoteDto.Title), Target = nameof(NoteDao.PageTitle))]
         NoteDao MapToDao(NoteDto source);
+
+        NoteDocumentMetadataDto MapDocumentToDto(NoteDocumentMetadataDao source);
     }
 }
 

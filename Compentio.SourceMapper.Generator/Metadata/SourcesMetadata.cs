@@ -4,9 +4,19 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Metadata
 {
+    /// <summary>
+    /// Encapsulates all defined mappers in assembly
+    /// </summary>
     interface ISourcesMetadata
     {
+        /// <summary>
+        /// Upsert method for mapper metadata. Used during mappers setup.
+        /// </summary>
+        /// <param name="mapperMetadata">mapper metadata object</param>
         void AddOrUpdate(IMapperMetadata mapperMetadata);
+        /// <summary>
+        /// List of defined mappers
+        /// </summary>
         IReadOnlyCollection<IMapperMetadata> Mappers { get; }
     }
 

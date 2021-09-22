@@ -49,7 +49,7 @@ namespace Compentio.SourceMapper.Processors
             return methods;
         }
 
-        private string GenerateMappings(IMapperMetadata sourceMetadata, IEnumerable<IPropertyMetadata> sourceMembers, 
+        private string GenerateMappings(IMapperMetadata sourceMetadata, IEnumerable<IPropertyMetadata> sourceMembers,
             IEnumerable<IPropertyMetadata> targetMemebers, IEnumerable<MappingAttribute> mappingAttributes)
         {
             var mappings = string.Empty;
@@ -64,38 +64,42 @@ namespace Compentio.SourceMapper.Processors
                 if (matchedSourceMember is null || matchedTargetMember is null)
                 {
                     matchedSourceMember = sourceMembers.FirstOrDefault(p => p?.Name == targetMember?.Name);
-                    if (matchedSourceMember is null)
+                    if (matchedSourceMember is null && expressionAttribute is not null)
                     {
-                        if (expressionAttribute is not null)
-                        {
-                            mappings += "\n";
-                            mappings += $"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}(source);";
-                        }
+                        mappings += "\n";
+                        mappings += $"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}(source);";
                         continue;
                     }
 
                     matchedTargetMember = targetMember;
                 }
-                
 
-                if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
-                {
-                    mappings += "\n";
-                    mappings += $"target.{matchedTargetMember?.Name} = source.{matchedSourceMember?.Name};";
-                }
-
-                if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
-                {
-                    var method = sourceMetadata.FindDefinedMethod(matchedSourceMember, matchedTargetMember);
-                    if (method is not null)
-                    {
-                        mappings += "\n";
-                        mappings += $"target.{matchedTargetMember?.Name} = {method.MethodName}(source.{matchedSourceMember.Name});";
-                    }
-                }
+                mappings += GenerateMapping(sourceMetadata, matchedSourceMember, matchedTargetMember);
             }
 
             return mappings;
+        }
+
+        private string GenerateMapping(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
+        {
+            if (matchedSourceMember is null || matchedTargetMember is null)
+                return string.Empty;
+
+            var mapping = "\n";
+            if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
+            {
+                mapping += $"target.{matchedTargetMember?.Name} = source.{matchedSourceMember?.Name};";
+            }
+
+            if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
+            {
+                var method = sourceMetadata.FindDefinedMethod(matchedSourceMember, matchedTargetMember);
+                if (method is not null)
+                {
+                    mapping += $"target.{matchedTargetMember?.Name} = {method.MethodName}(source.{matchedSourceMember.Name});";
+                }
+            }
+            return mapping;
         }
     }
 }

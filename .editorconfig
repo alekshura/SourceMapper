@@ -5,3 +5,6 @@ dotnet_diagnostic.CS8604.severity = silent
 
 # CS8619: Nullability of reference types in value doesn't match target type.
 dotnet_diagnostic.CS8619.severity = none
+
+# CS8602: Dereference of a possibly null reference.
+dotnet_diagnostic.CS8602.severity = silent

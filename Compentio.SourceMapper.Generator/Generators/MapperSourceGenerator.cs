@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Generators
 {
+    /// <summary>
+    /// Mappers source generator main class. 
+    /// </summary>
     [Generator]
     public class MapperSourceGenerator : ISourceGenerator
     {
@@ -14,7 +17,7 @@ namespace Compentio.SourceMapper.Generators
         {
             if (context.SyntaxReceiver is null)
             {
-                throw new ArgumentNullException(nameof(context), "context.SyntaxReceiver could not be null");
+                throw new ArgumentNullException(nameof(context), $"{nameof(context.SyntaxReceiver)} could not be null");
             }
 
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)

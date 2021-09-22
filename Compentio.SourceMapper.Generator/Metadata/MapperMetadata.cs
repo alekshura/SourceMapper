@@ -86,7 +86,7 @@ namespace Compentio.SourceMapper.Metadata
         public IMethodMetadata FindDefinedMethod(IPropertyMetadata source, IPropertyMetadata target)
         {
             var method = MethodsMetadata.FirstOrDefault(m =>
-                m.ReturnType.FullName == target.Type.FullName && m.Parameters.FirstOrDefault().FullName == source.Type.FullName);
+                m.ReturnType.FullName == target.FullName && m.Parameters.FirstOrDefault().FullName == source.FullName);
             return method;
         }
     }

@@ -5,11 +5,29 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Metadata
 {
+    /// <summary>
+    /// Object type metadata
+    /// </summary>
     interface ITypeMetadata
     {
+        /// <summary>
+        /// Type name
+        /// </summary>
         string Name { get; }
+        /// <summary>
+        /// Type full name
+        /// </summary>
         string FullName { get; }
+        /// <summary>
+        /// Object lis of properties
+        /// </summary>
         IEnumerable<IPropertyMetadata> Properties { get; }
+        /// <summary>
+        /// Recurrent method that return flatten list of properties tree for the object 
+        /// </summary>
+        /// <param name="propertyMetadata">List of properties</param>
+        /// <returns></returns>
+        IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata);
     }
 
     internal class ParameterTypeMetadata : ITypeMetadata
@@ -27,6 +45,9 @@ namespace Compentio.SourceMapper.Metadata
         public IEnumerable<IPropertyMetadata> Properties => _parameterSymbol.Type.GetMembers()
             .Where(member => member as IPropertySymbol is not null)
             .Select(member => new PropertyMetadata(member as IPropertySymbol));
+
+        public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) => 
+            propertyMetadata.SelectMany(c => FlattenProperties(c.Properties)).Concat(propertyMetadata);
     }
 
     internal class TypeMetadata : ITypeMetadata
@@ -45,6 +66,9 @@ namespace Compentio.SourceMapper.Metadata
 
         public IEnumerable<IPropertyMetadata> Properties => _typeSymbol.GetMembers()
             .Where(member => member.Kind == SymbolKind.Property && !member.IsStatic)
-            .Select(member => new PropertyMetadata(member as IPropertySymbol));        
+            .Select(member => new PropertyMetadata(member as IPropertySymbol));
+
+        public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) =>
+            propertyMetadata.SelectMany(c => FlattenProperties(c.Properties)).Concat(propertyMetadata);
     }
 }

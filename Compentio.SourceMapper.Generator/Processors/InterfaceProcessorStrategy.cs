@@ -73,24 +73,33 @@ namespace Compentio.SourceMapper.Processors
                     matchedTargetMember = targetMember;
                 }
 
-                if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
-                {
-                    mappings += "\n";
-                    mappings += $"target.{matchedTargetMember?.Name} = source.{matchedSourceMember?.Name};";
-                }
-
-                if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
-                {
-                    var method = sourceMetadata.FindDefinedMethod(matchedSourceMember, matchedTargetMember);
-                    if (method is not null)
-                    {
-                        mappings += "\n";
-                        mappings += $"target.{matchedTargetMember?.Name} = {method.MethodName}(source.{matchedSourceMember.Name});";
-                    }
-                }
+                mappings += GenerateMapping(sourceMetadata, matchedSourceMember, matchedTargetMember);
             }
 
             return mappings;
+        }
+
+        private string GenerateMapping(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
+        {
+            if (matchedSourceMember is null || matchedTargetMember is null)
+                return string.Empty;
+
+            var mapping = "\n";
+
+            if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
+            {
+                mapping += $"target.{matchedTargetMember?.Name} = source.{matchedSourceMember?.Name};";
+            }
+
+            if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
+            {
+                var method = sourceMetadata.FindDefinedMethod(matchedSourceMember, matchedTargetMember);
+                if (method is not null)
+                {
+                    mapping += $"target.{matchedTargetMember?.Name} = {method.MethodName}(source.{matchedSourceMember.Name});";
+                }
+            }
+            return mapping;
         }
     }
 }
