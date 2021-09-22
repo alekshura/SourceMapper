@@ -6,12 +6,12 @@ And offten to prepare appropriate data to the service client we need to map this
 For .NET world popular Mapper framework is [Automapper](https://automapper.org/).
 An ispirations for SourceMapper was new .NetCore Source Generators and Java [MapStruct project](https://mapstruct.org/).
 
-#Attributes
+# Attributes
 
 
 
-#How to use
+# How to use
 
 
 
-#Roadmap
+# Roadmap
