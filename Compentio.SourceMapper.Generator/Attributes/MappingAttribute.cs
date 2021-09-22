@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Attributes
         /// </summary>
         public string Source { get; set; } = string.Empty;
         /// <summary>
-        /// Te name for target property for mapping. Use it like: nameof(ReturnType.PropertyName)
+        /// Te name for target property for mapping. Use it like: <c>nameof(ReturnType.PropertyName)</c>
         /// </summary>
         /// <example>nameof(ReturnType.PropertyName)</example>
         public string Target { get; set; } = string.Empty;
@@ -22,7 +22,9 @@ namespace Compentio.SourceMapper.Attributes
         /// Use it in classes. In interface mapping definitions it will be ignored.
         /// </summary>
         public string Expression { get; set; } = string.Empty;
-
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public MappingAttribute()
         {
         }

@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
 {
+    /// <summary>
+    /// Class that generates mapper code, that was defined in abstract class
+    /// </summary>
     internal class ClassProcessorStrategy : IProcessorStrategy
     {
         public string GenerateCode(IMapperMetadata mapperMetadata)
