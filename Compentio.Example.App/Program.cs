@@ -1,11 +1,11 @@
-﻿using Compentio.Example.App.Mappers;
-using Compentio.Example.App.Repositories;
+﻿using Compentio.Example.App.Repositories;
 using Compentio.Example.App.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Compentio.SourceMapper.DependencyInjection;
 
 namespace Compentio.ConsoleApp
 {
@@ -28,6 +28,6 @@ namespace Compentio.ConsoleApp
                 .ConfigureServices((_, services) =>
                     services.AddTransient<INotesService, NotesService>()
                             .AddSingleton<INotesRepository, NotesRepository>()
-                            .AddSingleton<INotesMapper, NotesMapper>());
+                            .AddMappers());
     }
 }

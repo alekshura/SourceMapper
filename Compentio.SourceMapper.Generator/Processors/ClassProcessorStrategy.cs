@@ -9,18 +9,18 @@ namespace Compentio.SourceMapper.Processors
 {
     internal class ClassProcessorStrategy : IProcessorStrategy
     {
-        public string GenerateCode(IMapperMetadata sourceMetadata)
+        public string GenerateCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
 
             using System;
 
-            { $"namespace {sourceMetadata.Namespace}"}
+            { $"namespace {mapperMetadata.Namespace}"}
             {{
-               public class {sourceMetadata.TargetClassName} : {sourceMetadata.MapperName}
+               public class {mapperMetadata.TargetClassName} : {mapperMetadata.MapperName}
                {{                  
-                   { GenerateMethods(sourceMetadata) }                  
+                   { GenerateMethods(mapperMetadata) }                  
                }}
             }}
             ";

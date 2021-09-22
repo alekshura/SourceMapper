@@ -9,20 +9,20 @@ namespace Compentio.SourceMapper.Processors
 {
     internal class InterfaceProcessorStrategy : IProcessorStrategy
     {
-        public string GenerateCode(IMapperMetadata sourceMetadata)
+        public string GenerateCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
 
             using System;
 
-            {(string.IsNullOrWhiteSpace(sourceMetadata?.Namespace) ? null : $"namespace {sourceMetadata?.Namespace}")}
+            {(string.IsNullOrWhiteSpace(mapperMetadata?.Namespace) ? null : $"namespace {mapperMetadata?.Namespace}")}
             {{
-               public class {sourceMetadata?.TargetClassName} : {sourceMetadata?.MapperName}
+               public class {mapperMetadata?.TargetClassName} : {mapperMetadata?.MapperName}
                {{
-                  public static {sourceMetadata?.TargetClassName} Create() => new();
+                  public static {mapperMetadata?.TargetClassName} Create() => new();
                   
-                   { GenerateMethods(sourceMetadata) }                  
+                   { GenerateMethods(mapperMetadata) }                  
                }}
             }}
             ";

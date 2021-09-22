@@ -5,7 +5,7 @@ namespace Compentio.SourceMapper.Diagnostics
     /// <summary>
     /// Source mapper diagnostics descriptors
     /// </summary>
-    public static class SourceMapperDescriptors
+    internal static class SourceMapperDescriptors
     {
         public static readonly DiagnosticDescriptor ExpressionMustBeUsedInClass = 
             new("SMAP0001", "Expression must be used in abstract class", "The Expression '{0}' must be in abstract class",  "SourceMapperAnalyzer", DiagnosticSeverity.Warning, true);

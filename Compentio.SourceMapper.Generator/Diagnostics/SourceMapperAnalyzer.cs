@@ -9,7 +9,7 @@ using System.Text;
 namespace Compentio.SourceMapper.Diagnostics
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class SourceMapperAnalyzer : DiagnosticAnalyzer
+    internal class SourceMapperAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => 
             ImmutableArray.Create(SourceMapperDescriptors.ExpressionMustBeUsedInClass, SourceMapperDescriptors.ConversionFunctionShouldBePublicOrProtected);

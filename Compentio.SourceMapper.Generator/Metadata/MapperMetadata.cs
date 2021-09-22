@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Metadata
     {
         /// <summary>
         /// Type of the class or interface that defines the mappings. 
-        /// For now used: TypeKind.Class and TypeKind.Interface
+        /// For now used: <c>TypeKind.Class</c> and  <c>TypeKind.Interface</c>
         /// </summary>
         TypeKind TypeKind { get; }
         /// <summary>

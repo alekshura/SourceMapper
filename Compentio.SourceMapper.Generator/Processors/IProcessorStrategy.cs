@@ -4,6 +4,6 @@ namespace Compentio.SourceMapper.Processors
 {
     interface IProcessorStrategy
     {
-        string GenerateCode(IMapperMetadata sourceMetadata);           
+        string GenerateCode(IMapperMetadata mapperMetadata);           
     }
 }

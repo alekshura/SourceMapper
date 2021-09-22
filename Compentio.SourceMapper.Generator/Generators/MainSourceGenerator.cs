@@ -11,7 +11,7 @@ namespace Compentio.SourceMapper.Generators
     /// Mappers source generator main class. 
     /// </summary>
     [Generator]
-    public class MapperSourceGenerator : ISourceGenerator
+    public class MainSourceGenerator : ISourceGenerator
     {
         public void Execute(GeneratorExecutionContext context)
         {
@@ -36,8 +36,9 @@ namespace Compentio.SourceMapper.Generators
                 sourcesMetadata.AddOrUpdate(new MapperMetadata(mapperType));
             }
 
-            var sourceGenerator = new MappersSyntaxGenerator(sourcesMetadata);
-            sourceGenerator.Execute(context);
+            var sourceGenerator = new CodeSourceGenerator(sourcesMetadata);
+            sourceGenerator.GenerateMappings(context);
+            sourceGenerator.GenerateDependencyInjectionExtensions(context);
         }
 
         public void Initialize(GeneratorInitializationContext context)
