@@ -1,10 +1,10 @@
 # SourceMapper
-Mapper code generator based on attributes. 
-It is common problem to map data that have beed retreived from different data sources.
-And offten to prepare appropriate data to the service client we need to map this Dto's, Dao's or innee o's to required set.
 
-For .NET world popular Mapper framework is [Automapper](https://automapper.org/).
-An ispirations for SourceMapper was new .NetCore Source Generators and Java [MapStruct project](https://mapstruct.org/).
+# Introduction
+*SourceMapper* is a mappers code generator based on attributes. 
+It is based on .NetCore [Source Generators](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.md) 
+engine and generates classes for mappers during build time of you project.
+That is the main difference between `SourceMapper` and [Automapper](https://automapper.org/): you can see the generated code after app build process.
 
 # Attributes
 
