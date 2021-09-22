@@ -8,7 +8,8 @@ That is the main difference between `SourceMapper` and [Automapper](https://auto
 
 # Attributes
 
-``` namespace Compentio.Example.App.Mappers
+``` 
+namespace Compentio.Example.App.Mappers
 {
     [Mapper]
     public interface INotesMapper
