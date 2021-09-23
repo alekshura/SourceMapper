@@ -8,12 +8,8 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Object type metadata
     /// </summary>
-    interface ITypeMetadata
+    interface ITypeMetadata : IMetadata
     {
-        /// <summary>
-        /// Type name
-        /// </summary>
-        string Name { get; }
         /// <summary>
         /// Type full name
         /// </summary>
@@ -46,6 +42,8 @@ namespace Compentio.SourceMapper.Metadata
             .Where(member => member as IPropertySymbol is not null)
             .Select(member => new PropertyMetadata(member as IPropertySymbol));
 
+        public Location? Location => _parameterSymbol.Locations.FirstOrDefault();
+
         public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) => 
             propertyMetadata.SelectMany(c => FlattenProperties(c.Properties)).Concat(propertyMetadata);
     }
@@ -67,6 +65,8 @@ namespace Compentio.SourceMapper.Metadata
         public IEnumerable<IPropertyMetadata> Properties => _typeSymbol.GetMembers()
             .Where(member => member.Kind == SymbolKind.Property && !member.IsStatic)
             .Select(member => new PropertyMetadata(member as IPropertySymbol));
+
+        public Location? Location => _typeSymbol.Locations.FirstOrDefault();
 
         public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) =>
             propertyMetadata.SelectMany(c => FlattenProperties(c.Properties)).Concat(propertyMetadata);

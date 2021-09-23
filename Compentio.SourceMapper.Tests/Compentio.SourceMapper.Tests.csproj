@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappings\" />
+  </ItemGroup>
+
 </Project>

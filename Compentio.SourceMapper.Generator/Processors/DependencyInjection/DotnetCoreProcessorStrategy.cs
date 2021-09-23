@@ -38,7 +38,7 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 
             foreach (var mapper in sourcesMetadata.Mappers)
             {
-                services += $"services.AddSingleton<{mapper.Namespace}.{mapper.MapperName}, {mapper.Namespace}.{mapper.TargetClassName}>();";
+                services += $"services.AddSingleton<{mapper.Namespace}.{mapper.Name}, {mapper.Namespace}.{mapper.TargetClassName}>();";
             }
 
             return services;

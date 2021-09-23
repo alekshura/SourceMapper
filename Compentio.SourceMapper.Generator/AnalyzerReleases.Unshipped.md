@@ -6,3 +6,4 @@ Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 SMAP0001 | SourceMapperAnalyzer | Warning | SourceMapperDescriptors
 SMAP0002 | SourceMapperAnalyzer | Error | SourceMapperDescriptors
+SMAP0003 | SourceMapperAnalyzer | Warning | SourceMapperDescriptors

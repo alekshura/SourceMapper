@@ -33,7 +33,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Arrange 
             var mathodsMetadata = _fixture.CreateMany<IMethodMetadata>();
 
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MapperName).Returns("MapperName");
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Name).Returns("MapperName");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Namespace).Returns("Namespace");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TargetClassName).Returns("TargetClassName");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(mathodsMetadata);

@@ -20,7 +20,7 @@ namespace Compentio.SourceMapper.Processors
 
             { $"namespace {mapperMetadata.Namespace}"}
             {{
-               public class {mapperMetadata.TargetClassName} : {mapperMetadata.MapperName}
+               public class {mapperMetadata.TargetClassName} : {mapperMetadata.Name}
                {{                  
                    { GenerateMethods(mapperMetadata) }                  
                }}
@@ -36,7 +36,7 @@ namespace Compentio.SourceMapper.Processors
 
             foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
             {
-                methods += @$"public override {methodMetadata.MethodFullName}
+                methods += @$"public override {methodMetadata.FullName}
                 {{
                     var target = new {methodMetadata.ReturnType.FullName}();
                     
@@ -95,11 +95,11 @@ namespace Compentio.SourceMapper.Processors
                 var method = sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
                 if (method is not null)
                 {
-                    mapping += $"target.{matchedTargetMember?.Name} = {method.MethodName}(source.{matchedSourceMember.Name});";
+                    mapping += $"target.{matchedTargetMember?.Name} = {method.Name}(source.{matchedSourceMember.Name});";
                 }
                 else
                 {
-                    Warning();
+                    PropertyMappingWarning(matchedTargetMember);
                 }
             }
             return mapping;

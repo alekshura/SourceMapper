@@ -7,12 +7,8 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Encapsulates a property that is mapped
     /// </summary>
-    interface IPropertyMetadata
+    interface IPropertyMetadata : IMetadata
     {
-        /// <summary>
-        /// Name of the property that is mapped
-        /// </summary>
-        string Name { get; }
         /// <summary>
         /// Full name with namespace of the property
         /// </summary>
@@ -58,5 +54,7 @@ namespace Compentio.SourceMapper.Metadata
                     .Select(member => new PropertyMetadata(member as IPropertySymbol));
             }
         }
+
+        public Location? Location => _propertySymbol.Locations.FirstOrDefault();
     }
 }

@@ -9,12 +9,8 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Encapsulates a method from mapper that is used for mappings
     /// </summary>
-    interface IMethodMetadata
+    interface IMethodMetadata : IMetadata
     {
-        /// <summary>
-        /// The name of the method
-        /// </summary>
-        string MethodName { get; }
         /// <summary>
         /// Method return type
         /// </summary>
@@ -27,7 +23,7 @@ namespace Compentio.SourceMapper.Metadata
         /// Method full name with return type and its namespace and parameters.
         /// This name is ready to be used in code generation.
         /// </summary>
-        string MethodFullName { get; }
+        string FullName { get; }
         /// <summary>
         /// Attributes that used for mappings
         /// </summary>
@@ -47,7 +43,7 @@ namespace Compentio.SourceMapper.Metadata
         {
             _methodSymbol = methodSymbol;
         }
-        public string MethodName 
+        public string Name 
         {
             get
             {
@@ -60,7 +56,7 @@ namespace Compentio.SourceMapper.Metadata
         public ITypeMetadata ReturnType => new TypeMetadata(_methodSymbol.ReturnType);
         public IEnumerable<ITypeMetadata> Parameters => _methodSymbol.Parameters.Select(p => new ParameterTypeMetadata(p));
 
-        public string MethodFullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFullNameFormat)}";
+        public string FullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFullNameFormat)}";
 
         public IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
                     .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))
@@ -79,5 +75,7 @@ namespace Compentio.SourceMapper.Metadata
                         };
                         return mappingAttr;
                     });
+
+        public Location? Location => _methodSymbol.Locations.FirstOrDefault();
     }
 }

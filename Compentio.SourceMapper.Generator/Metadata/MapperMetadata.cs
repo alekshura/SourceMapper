@@ -9,7 +9,7 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Encapsulates all data for one abstract class or interface that define mappings.
     /// </summary>
-    interface IMapperMetadata
+    interface IMapperMetadata : IMetadata
     {
         /// <summary>
         /// Type of the class or interface that defines the mappings. 
@@ -24,10 +24,6 @@ namespace Compentio.SourceMapper.Metadata
         /// Namespace of generated mapping class
         /// </summary>
         string Namespace { get; }
-        /// <summary>
-        /// Name of abstract class or interface that define the mappings
-        /// </summary>
-        string MapperName { get; }
         /// <summary>
         /// The name of the generated class with mappings
         /// </summary>
@@ -45,7 +41,7 @@ namespace Compentio.SourceMapper.Metadata
         }
         public TypeKind TypeKind => _typeSymbol.TypeKind;
         public string FileName => $"{TargetClassName}.cs";
-        public string MapperName => _typeSymbol.Name;
+        public string Name => _typeSymbol.Name;
         public string Namespace => _typeSymbol.ContainingNamespace.ToString();
         
         public string TargetClassName
@@ -59,10 +55,10 @@ namespace Compentio.SourceMapper.Metadata
                 if (!string.IsNullOrWhiteSpace(className))
                     return className;
 
-                className = MapperName.TrimStart('I', 'i');
-                if (className.Equals(MapperName, StringComparison.InvariantCultureIgnoreCase)) 
+                className = Name.TrimStart('I', 'i');
+                if (className.Equals(Name, StringComparison.InvariantCultureIgnoreCase)) 
                 {
-                    className = $"{MapperName}Impl";
+                    className = $"{Name}Impl";
                 }
                 return className;
             }
@@ -74,5 +70,7 @@ namespace Compentio.SourceMapper.Metadata
                     {
                         return new MethodMetadata(method as IMethodSymbol);
                     });
+
+        public Location? Location => _typeSymbol.Locations.FirstOrDefault();
     }
 }

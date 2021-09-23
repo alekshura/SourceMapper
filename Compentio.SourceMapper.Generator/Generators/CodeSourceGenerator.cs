@@ -4,6 +4,8 @@ using Compentio.SourceMapper.Processors;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
+using System.Collections.Generic;
+using Compentio.SourceMapper.Diagnostics;
 
 namespace Compentio.SourceMapper.Generators
 {
@@ -27,6 +29,8 @@ namespace Compentio.SourceMapper.Generators
                 var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapper);
 
                 var mapperCode = processorStrategy.GenerateCode(mapper);
+                
+                ReportDiagnostics(context, processorStrategy.Diagnostics);
 
                 context.AddSource(mapper.FileName, SourceText.From(mapperCode, Encoding.UTF8));
             }
@@ -39,6 +43,14 @@ namespace Compentio.SourceMapper.Generators
             var extensionCode = processorStrategy.GenerateCode(_sourcesMetadata);
 
             context.AddSource($"{_sourcesMetadata.DependencyInjection.DependencyInjectionClassName}.cs", SourceText.From(extensionCode, Encoding.UTF8));
+        }
+
+        private void ReportDiagnostics(GeneratorExecutionContext context, IEnumerable<DiagnosticsInfo> diagnostics)
+        {
+            foreach (var diagnosticInfo in diagnostics)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.DiagnosticDescriptor, diagnosticInfo.Metadata.Location, diagnosticInfo.Metadata.Name));
+            }            
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Compentio.SourceMapper.Metadata
 
         public void AddOrUpdate(IMapperMetadata mapperMetadata)
         {
-            var mapper = _mappers.FirstOrDefault(m => m.MapperName == mapperMetadata.MapperName);
+            var mapper = _mappers.FirstOrDefault(m => m.Name == mapperMetadata.Name);
             if (mapper is not null)
             {
                 mapper = mapperMetadata;
