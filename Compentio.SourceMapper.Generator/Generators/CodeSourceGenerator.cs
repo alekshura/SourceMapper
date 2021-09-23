@@ -28,11 +28,11 @@ namespace Compentio.SourceMapper.Generators
             {
                 var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapper);
 
-                var mapperCode = processorStrategy.GenerateCode(mapper);
+                var result = processorStrategy.GenerateCode(mapper);
                 
-                ReportDiagnostics(context, processorStrategy.Diagnostics);
+                ReportDiagnostics(context, result.Diagnostics);
 
-                context.AddSource(mapper.FileName, SourceText.From(mapperCode, Encoding.UTF8));
+                context.AddSource(mapper.FileName, SourceText.From(result.GeneratedCode, Encoding.UTF8));
             }
         }
 

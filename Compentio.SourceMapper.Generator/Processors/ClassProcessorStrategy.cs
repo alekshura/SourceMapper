@@ -11,7 +11,7 @@ namespace Compentio.SourceMapper.Processors
     /// </summary>
     internal class ClassProcessorStrategy : AbstractProcessorStrategy
     {
-        public override string GenerateCode(IMapperMetadata mapperMetadata)
+        public override IProcessingResult GenerateCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
@@ -26,8 +26,8 @@ namespace Compentio.SourceMapper.Processors
                }}
             }}
             ";
-           
-            return FormatCode(result);
+
+            return ProcessingResult.Return(result, _diagnostics);
         }
 
         private string GenerateMethods(IMapperMetadata sourceMetadata)

@@ -39,10 +39,10 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(mathodsMetadata);
 
             // Act
-            var generatedCode = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
             // Assert
-            generatedCode.Should().NotBeNullOrEmpty();
+            result.GeneratedCode.Should().NotBeNullOrEmpty();
             
         }
     }
