@@ -33,14 +33,6 @@ namespace Compentio.SourceMapper.Metadata
         /// </summary>
         string TargetClassName { get; }
         IEnumerable<IMethodMetadata> MethodsMetadata { get; }
-        /// <summary>
-        /// Returns method data that defined in mapping corresponds to source and target types.
-        /// This method can be used in mappings od nested types.
-        /// </summary>
-        /// <param name="source">Source property metadata</param>
-        /// <param name="target">Target property metadata</param>
-        /// <returns></returns>
-        IMethodMetadata FindDefinedMethod(IPropertyMetadata source, IPropertyMetadata target);
     }
 
     internal class MapperMetadata : IMapperMetadata
@@ -82,12 +74,5 @@ namespace Compentio.SourceMapper.Metadata
                     {
                         return new MethodMetadata(method as IMethodSymbol);
                     });
-
-        public IMethodMetadata FindDefinedMethod(IPropertyMetadata source, IPropertyMetadata target)
-        {
-            var method = MethodsMetadata.FirstOrDefault(m =>
-                m.ReturnType.FullName == target.FullName && m.Parameters.FirstOrDefault().FullName == source.FullName);
-            return method;
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Compentio.SourceMapper.DependencyInjection;
+﻿using Compentio.SourceMapper.Processors.DependencyInjection;
 using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors;
 using Microsoft.CodeAnalysis;

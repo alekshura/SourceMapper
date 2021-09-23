@@ -1,7 +1,7 @@
 ﻿using Compentio.SourceMapper.Metadata;
 using System.Collections.Generic;
 
-namespace Compentio.SourceMapper.DependencyInjection
+namespace Compentio.SourceMapper.Processors.DependencyInjection
 {    
     internal class DependencyInjectionStrategyFactory
     {

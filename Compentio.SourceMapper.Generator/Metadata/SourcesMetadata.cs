@@ -1,4 +1,4 @@
-﻿using Compentio.SourceMapper.DependencyInjection;
+﻿using Compentio.SourceMapper.Processors.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +11,10 @@ namespace Compentio.SourceMapper.Metadata
     interface ISourcesMetadata
     {
         /// <summary>
-        /// TODO: Dependency injection container type used in source project
+        /// Dependency injection container type used in source project
+        /// TODO: get DI used in target project
         /// </summary>
-        DependencyInjection.DependencyInjection DependencyInjection { get; }
+        DependencyInjection DependencyInjection { get; }
 
         /// <summary>
         /// Upsert method for mapper metadata. Used during mappers setup.
@@ -39,7 +40,7 @@ namespace Compentio.SourceMapper.Metadata
 
         public IReadOnlyCollection<IMapperMetadata> Mappers => _mappers.AsReadOnly();
 
-        public DependencyInjection.DependencyInjection DependencyInjection => new() 
+        public DependencyInjection DependencyInjection => new() 
         {
             DependencyInjectionType = DependencyInjectionType.DotNetCore
         };

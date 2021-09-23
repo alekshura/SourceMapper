@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace Compentio.SourceMapper.DependencyInjection
+namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
     internal class DotnetCoreProcessorStrategy : IDependencyInjectionStrategy
     {
@@ -14,7 +14,7 @@ namespace Compentio.SourceMapper.DependencyInjection
             using System;
             using Microsoft.Extensions.DependencyInjection;
 
-            { $"namespace {typeof(DependencyInjection).Namespace}"}
+            { $"namespace Compentio.SourceMapper.DependencyInjection"}
             {{
                public static class {sourcesMetadata.DependencyInjection.DependencyInjectionClassName}
                {{                  

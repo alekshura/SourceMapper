@@ -1,4 +1,4 @@
-﻿namespace Compentio.SourceMapper.DependencyInjection
+﻿namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
     internal class DependencyInjection
     {

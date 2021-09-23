@@ -1,7 +1,6 @@
 ﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,9 +9,9 @@ namespace Compentio.SourceMapper.Processors
     /// <summary>
     /// Class that generates mapper code, that was defined in interface
     /// </summary>
-    internal class InterfaceProcessorStrategy : IProcessorStrategy
+    internal class InterfaceProcessorStrategy : AbstractProcessorStrategy
     {
-        public string GenerateCode(IMapperMetadata mapperMetadata)
+        public override string GenerateCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
@@ -30,9 +29,7 @@ namespace Compentio.SourceMapper.Processors
             }}
             ";
 
-            var tree = CSharpSyntaxTree.ParseText(result);
-            var root = tree.GetRoot().NormalizeWhitespace();
-            return root.ToFullString();
+            return FormatCode(result);
         }
 
         private string GenerateMethods(IMapperMetadata sourceMetadata)
@@ -61,15 +58,15 @@ namespace Compentio.SourceMapper.Processors
 
             foreach (var targetMember in targetMemebers)
             {
-                var matchedAttribute = mappingAttributes.FirstOrDefault(attribute => attribute?.Target == targetMember?.Name);
-                var matchedSourceMember = sourceMembers.FirstOrDefault(symbol => symbol?.Name == matchedAttribute?.Source);
-                var matchedTargetMember = targetMemebers.FirstOrDefault(symbol => symbol?.Name == matchedAttribute?.Target);
+                var matchedSourceMember = sourceMembers.MatchSourceMember(mappingAttributes, targetMember);
+                var matchedTargetMember = targetMemebers.MatchTargetMember(mappingAttributes, targetMember);
 
                 if (matchedSourceMember is null || matchedTargetMember is null)
                 {
-                    matchedSourceMember = sourceMembers.FirstOrDefault(p => p?.Name == targetMember?.Name);
+                    matchedSourceMember = sourceMembers.MatchSourceMember(targetMember);
                     if (matchedSourceMember is null)
                     {
+                        Warning();
                         continue;
                     }
 
@@ -96,10 +93,14 @@ namespace Compentio.SourceMapper.Processors
 
             if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
             {
-                var method = sourceMetadata.FindDefinedMethod(matchedSourceMember, matchedTargetMember);
+                var method = sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
                 if (method is not null)
                 {
                     mapping += $"target.{matchedTargetMember?.Name} = {method.MethodName}(source.{matchedSourceMember.Name});";
+                }
+                else
+                {
+                    Warning();
                 }
             }
             return mapping;

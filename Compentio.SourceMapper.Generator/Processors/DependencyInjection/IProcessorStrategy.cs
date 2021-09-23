@@ -1,6 +1,6 @@
 ﻿using Compentio.SourceMapper.Metadata;
 
-namespace Compentio.SourceMapper.DependencyInjection
+namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
     interface IDependencyInjectionStrategy
     {
