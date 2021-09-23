@@ -32,7 +32,10 @@ namespace Compentio.SourceMapper.Generators
                 
                 ReportDiagnostics(context, result.Diagnostics);
 
-                context.AddSource(mapper.FileName, SourceText.From(result.GeneratedCode, Encoding.UTF8));
+                if (result.IsSuccess)
+                {
+                    context.AddSource(mapper.FileName, SourceText.From(result.GeneratedCode, Encoding.UTF8));
+                }                    
             }
         }
 
@@ -49,7 +52,7 @@ namespace Compentio.SourceMapper.Generators
         {
             foreach (var diagnosticInfo in diagnostics)
             {
-                context.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.DiagnosticDescriptor, diagnosticInfo.Metadata.Location, diagnosticInfo.Metadata.Name));
+                context.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.DiagnosticDescriptor, diagnosticInfo.Metadata?.Location, diagnosticInfo.Message));
             }            
         }
     }

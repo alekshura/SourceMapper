@@ -7,7 +7,7 @@ using System.Linq;
 namespace Compentio.SourceMapper.Metadata
 {
     /// <summary>
-    /// Encapsulates all data for one abstract class or interface that define mappings.
+    /// Encapsulates all data for one abstract class or interface that defines mappings.
     /// </summary>
     interface IMapperMetadata : IMetadata
     {
