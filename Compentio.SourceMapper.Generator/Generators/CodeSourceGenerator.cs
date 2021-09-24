@@ -43,9 +43,9 @@ namespace Compentio.SourceMapper.Generators
         {
             var processorStrategy = DependencyInjectionStrategyFactory.GetStrategy(_sourcesMetadata);
 
-            var extensionCode = processorStrategy.GenerateCode(_sourcesMetadata);
+            var result = processorStrategy.GenerateCode(_sourcesMetadata);
 
-            context.AddSource($"{_sourcesMetadata.DependencyInjection.DependencyInjectionClassName}.cs", SourceText.From(extensionCode, Encoding.UTF8));
+            context.AddSource($"{_sourcesMetadata.DependencyInjection.DependencyInjectionClassName}.cs", SourceText.From(result.GeneratedCode, Encoding.UTF8));
         }
 
         private void ReportDiagnostics(GeneratorExecutionContext context, IEnumerable<DiagnosticsInfo> diagnostics)

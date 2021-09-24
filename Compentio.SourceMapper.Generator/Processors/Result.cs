@@ -31,6 +31,11 @@ namespace Compentio.SourceMapper.Processors
             _diagnostics = diagnostics;
         }
 
+        private Result(string code)
+        {
+            _code = code;
+        }
+
         private Result(Exception exception)
         {
             _diagnostics = new List<DiagnosticsInfo>
@@ -46,6 +51,11 @@ namespace Compentio.SourceMapper.Processors
         internal static IResult Ok(string code, IList<DiagnosticsInfo> diagnostics)
         {
             return new Result(code, diagnostics);
+        }
+
+        internal static IResult Ok(string code)
+        {
+            return new Result(code);
         }
 
         internal static IResult Error(Exception exception)

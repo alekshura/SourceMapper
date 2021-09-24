@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Compentio.SourceMapper.Tests.Entities
+﻿namespace Compentio.SourceMapper.Tests.Entities
 {
-    class Address
+    public class Address
     {
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string House { get; set; }
+        public Region Region { get; set; }
     }
 }

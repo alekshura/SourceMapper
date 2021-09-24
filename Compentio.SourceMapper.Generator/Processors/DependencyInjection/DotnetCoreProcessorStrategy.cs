@@ -1,12 +1,10 @@
 ﻿using Compentio.SourceMapper.Metadata;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
     internal class DotnetCoreProcessorStrategy : IDependencyInjectionStrategy
     {
-        public string GenerateCode(ISourcesMetadata sourcesMetadata)
+        public IResult GenerateCode(ISourcesMetadata sourcesMetadata)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
@@ -27,9 +25,7 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
             }}
             ";
 
-            var tree = CSharpSyntaxTree.ParseText(result);
-            var root = tree.GetRoot().NormalizeWhitespace();
-            return root.ToFullString();
+            return Result.Ok(result);
         }
 
         private string GenerateServices(ISourcesMetadata sourcesMetadata)

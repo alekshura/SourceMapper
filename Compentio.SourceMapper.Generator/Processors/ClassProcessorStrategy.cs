@@ -1,7 +1,5 @@
-﻿using Compentio.SourceMapper.Attributes;
-using Compentio.SourceMapper.Matchers;
+﻿using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Compentio.SourceMapper.Processors
@@ -40,7 +38,7 @@ namespace Compentio.SourceMapper.Processors
                 {{
                     var target = new {methodMetadata.ReturnType.FullName}();
                     
-                    {GenerateMappings(sourceMetadata, methodMetadata.Parameters.First().Properties, methodMetadata.ReturnType.Properties, methodMetadata.MappingAttributes)}
+                    {GenerateMappings(sourceMetadata, methodMetadata)}
                     
                     return target;
                 }}";
@@ -49,16 +47,17 @@ namespace Compentio.SourceMapper.Processors
             return methods;
         }
 
-        private string GenerateMappings(IMapperMetadata sourceMetadata, IEnumerable<IPropertyMetadata> sourceMembers,
-            IEnumerable<IPropertyMetadata> targetMemebers, IEnumerable<MappingAttribute> mappingAttributes)
+        private string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
             var mappings = string.Empty;
+            var sourceMembers = methodMetadata.Parameters.First().Properties;
+            var targetMemebers = methodMetadata.ReturnType.Properties;
 
             foreach (var targetMember in targetMemebers)
             {
-                var expressionAttribute = mappingAttributes.MatchExpressionAttribute(targetMember);
-                var matchedSourceMember = sourceMembers.MatchSourceMember(mappingAttributes, targetMember);
-                var matchedTargetMember = targetMemebers.MatchTargetMember(mappingAttributes, targetMember);
+                var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember);
+                var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
+                var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
                 if (matchedSourceMember is null || matchedTargetMember is null)
                 {
@@ -73,13 +72,13 @@ namespace Compentio.SourceMapper.Processors
                     matchedTargetMember = targetMember;
                 }
 
-                mappings += GenerateMapping(sourceMetadata, matchedSourceMember, matchedTargetMember);
+                mappings += GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
             }
 
             return mappings;
         }
 
-        private string GenerateMapping(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
+        private string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
         {
             if (matchedSourceMember is null || matchedTargetMember is null)
                 return string.Empty;
@@ -87,7 +86,7 @@ namespace Compentio.SourceMapper.Processors
             var mapping = "\n";
             if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
             {
-                mapping += $"target.{matchedTargetMember?.Name} = source.{matchedSourceMember?.Name};";
+                mapping += $"target.{matchedTargetMember?.Name} = {parameter.Name}.{matchedSourceMember?.Name};";
             }
 
             if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
@@ -95,7 +94,7 @@ namespace Compentio.SourceMapper.Processors
                 var method = sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
                 if (method is not null)
                 {
-                    mapping += $"target.{matchedTargetMember?.Name} = {method.Name}(source.{matchedSourceMember.Name});";
+                    mapping += $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
                 }
                 else
                 {

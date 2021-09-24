@@ -4,6 +4,6 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
     interface IDependencyInjectionStrategy
     {
-        string GenerateCode(ISourcesMetadata sourcesMetadata);
+        IResult GenerateCode(ISourcesMetadata sourcesMetadata);
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Compentio.SourceMapper.Tests.Entities
+﻿namespace Compentio.SourceMapper.Tests.Entities
 {
-    class Region
+    public class Region
     {
+        public string State { get; set; }
+        public string District { get; set; }
     }
 }
