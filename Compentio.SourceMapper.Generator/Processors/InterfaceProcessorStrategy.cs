@@ -59,19 +59,6 @@ namespace Compentio.SourceMapper.Processors
             {
                 var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
-
-                if (matchedSourceMember is null || matchedTargetMember is null)
-                {
-                    matchedSourceMember = sourceMembers.MatchSourceMember(targetMember);
-                    if (matchedSourceMember is null)
-                    {
-                        PropertyMappingWarning(targetMember);
-                        continue;
-                    }
-
-                    matchedTargetMember = targetMember;
-                }
-
                 mappings += GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
             }
 
@@ -80,8 +67,16 @@ namespace Compentio.SourceMapper.Processors
 
         private string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
         {
+            if (matchedTargetMember is null && matchedSourceMember is not null)
+            {
+                PropertyMappingWarning(matchedSourceMember);
+            }
+
             if (matchedSourceMember is null || matchedTargetMember is null)
+            {
+                PropertyMappingWarning(matchedTargetMember);
                 return string.Empty;
+            }
 
             var mapping = "\n";
 

@@ -17,7 +17,12 @@ namespace Compentio.SourceMapper.Matchers
         internal static IPropertyMetadata MatchSourceMember(this IEnumerable<IPropertyMetadata> sourceMembers, IEnumerable<MappingAttribute> mappingAttributes, IPropertyMetadata targetMember)
         {
             var matchedAttribute = mappingAttributes.MatchTargetAttribute(targetMember);
-            return sourceMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Source);
+            var matchedSourceMember = sourceMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Source);
+            if (matchedSourceMember is null)
+            {
+                matchedSourceMember = sourceMembers.MatchSourceMember(targetMember);
+            }
+            return matchedSourceMember;
         }
         /// <summary>
         /// Method searches for target member that matches <see cref="MappingAttribute.Target"/> value. This <see cref="MappingAttribute"/> also should match the target property.
@@ -29,7 +34,8 @@ namespace Compentio.SourceMapper.Matchers
         internal static IPropertyMetadata MatchTargetMember(this IEnumerable<IPropertyMetadata> targetMembers, IEnumerable<MappingAttribute> mappingAttributes, IPropertyMetadata targetMember)
         {
             var matchedAttribute = mappingAttributes.MatchTargetAttribute(targetMember);
-            return targetMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Target);
+            var matchedTargetMember = targetMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Target);
+            return matchedTargetMember is not null ? matchedTargetMember : targetMember;
         }
         /// <summary>
         /// Method searches for source member that name matches target member.
