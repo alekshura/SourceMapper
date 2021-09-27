@@ -28,59 +28,93 @@ public interface IUserMapper
 }
 ```
 
+## Interface mapping 
+
+## Class mapping
+
 `ClassName` are responsible for name of the generated mapping class name. If it is empty dotnet interface `I` truncated or `Impl` added to abstract class name
 
 ## Embedded objects
-Lats assume, that we want to map `UserDao` -> `UserInfo`, where those ones defained as:
+Lats assume, that we have "more complicated objects" to map `NoteDto MapToDto(NoteDao source)` with embedded objects:
 
 ```
-public class UserDao
+public class NoteDto
 {
-    public long UserId { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public UserGender UserGender { get; set; }
-    public string City { get; set; }
-    public string House { get; set; }
-    public string ZipCode { get; set; }
-    public string District { get; set; }
-    public string State { get; set; }
-    public DateTime BirthDate { get; set; }
-}    
-    
-public class UserInfo
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public Gender Gender { get; set; }
-    public Address Address { get; set; }
-    public DateTime BirthDate { get; set; }
+    public long Id { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public NoteDocumentDto Document { get; set; }
 }
-
-public enum Gender { Male, Female }
-public enum UserGender { Female, Male, Unknown }
-
 ```
 
-than it can be done:
+and
 
 ```
-[Mapper(ClassName = "ClassUserMapper")]
-public abstract class UserMapper
+public class NoteDao
 {
-    [Mapping(Source = nameof(UserDao.UserId), Target = nameof(UserInfo.Id), Expression = nameof(ConvertUserId))]
-    [Mapping(Source = nameof(UserDao.FirstName), Target = nameof(UserInfo.Name))]
-    [Mapping(Source = nameof(UserDao.UserGender), Target = nameof(UserInfo.Gender), Expression = nameof(ConvertUserGender))]
-    public abstract UserInfo MapToDomainMoodel(UserDao userDao);
+    public long Id { get; set; }
+    public string PageTitle { get; set; }
+    public string Description { get; set; }
+    public DateTime ValidFrom { get; set; }
+    public DateTime ValidTo { get; set; }
+    public string CreatedBy { get; set; }
+    public DateTime Created { get; set; }
+    public DateTime Modified { get; set; }
+    public NoteDocumentDao Document { get; set; }
+}
+```
 
-    protected int ConvertUserId(long id)
+than it is enough to add mapper for these types of objects and it will be matched and used in `NoteDto MapToDto(NoteDao source)` method:
+
+```
+[Mapper]
+public interface INotesMapper
+{
+    [Mapping(Source = nameof(NoteDao.PageTitle), Target = nameof(NoteDto.Title))]
+    NoteDto MapToDto(NoteDao source);
+
+    [Mapping(Source = nameof(NoteDocumentDao.Metadata.CreatorFirstName), Target = nameof(NoteDocumentDto.Autor))]
+    NoteDocumentDto MapToDto(NoteDocumentDao source);
+}
+```
+Example of generated code for this mapping:
+
+```
+ public class NotesMapper : INotesMapper
+{
+    public static NotesMapper Create() => new();
+    public virtual Compentio.Example.App.Entities.NoteDto MapToDto(Compentio.Example.App.Entities.NoteDao source)
     {
-        return Convert.ToInt32(id);
+        var target = new Compentio.Example.App.Entities.NoteDto();
+        target.Id = source.Id;
+        target.Title = source.PageTitle;
+        target.Description = source.Description;
+        target.Document = MapToDto(source.Document);
+        return target;
     }
-    protected readonly Func<UserGender, Gender> ConvertUserGender = gender => gender == UserGender.Female ? Gender.Female : Gender.Male;
+
+    public virtual Compentio.Example.App.Entities.NoteDocumentDto MapToDto(Compentio.Example.App.Entities.NoteDocumentDao source)
+    {
+        var target = new Compentio.Example.App.Entities.NoteDocumentDto();
+        target.Id = source.Id;
+        target.Title = source.Title;
+        target.Metadata = MapDocumentToDto(source.Metadata);
+        return target;
+    }
+
+    public virtual Compentio.Example.App.Entities.NoteDao MapToDao(Compentio.Example.App.Entities.NoteDto source)
+    {
+        var target = new Compentio.Example.App.Entities.NoteDao();
+        target.Id = source.Id;
+        target.PageTitle = source.Title;
+        target.Description = source.Description;
+        return target;
+    }
 }
+
 ```
+The generated class is in the same namespace as its base abstract class of interface. It can be found in Visual Studio: //TODO
 
-
+## Dependency injection
 
 # Roadmap
