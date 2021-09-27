@@ -8,7 +8,7 @@ That is the main difference between `SourceMapper` and [Automapper](https://auto
 
 # Installation
 Install using nuget package manager or console:
-```properties
+```console
 Install-Package SourceMapper
 ```
 In the project where it is installed add `OutputItemType="Analyzer"`
