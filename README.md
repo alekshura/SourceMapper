@@ -19,7 +19,7 @@ In the project where it is installed add `OutputItemType="Analyzer"`
 # How to use
 To define mapping we have to mark mapping abstract class or interface with `MapperAttribute`:
 
-``` 
+```csharp
 [Mapper]
 public interface INotesMapper
 {
@@ -29,7 +29,7 @@ public interface INotesMapper
 This will generate mapping class with default class name `NotesMapper` for properties that names are the same for `NoteDto` and `NoteDao` classes.
 When the names are different than we can use `Source` and `Target` names of the properties:
 
-```
+```csharp
 [Mapper(ClassName = "InterfaceUserMapper")]
 public interface IUserMapper
 {
@@ -46,7 +46,7 @@ in the mapping interface or abstract class name.
 Use interfaces to prepare basic mapping. 
 In a case when mapped object contains another objects, e.g.:
 
-```
+```csharp
 public class NoteDto
 {
     public long Id { get; set; }
@@ -58,7 +58,7 @@ public class NoteDto
 
 and
 
-```
+```csharp
 public class NoteDao
 {
     public long Id { get; set; }
@@ -75,7 +75,7 @@ public class NoteDao
 it is enough to add mapping method to the interface for these types and the code generation processor will match and generate mappings for 
 `NoteDto MapToDto(NoteDao source)` method:
 
-```
+```csharp
 [Mapper]
 public interface INotesMapper
 {
@@ -89,7 +89,7 @@ public interface INotesMapper
 
 the output will be:
 
-```
+```csharp
  public class NotesMapper : INotesMapper
 {
     public static NotesMapper Create() => new();
