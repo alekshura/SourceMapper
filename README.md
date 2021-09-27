@@ -145,9 +145,10 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 ```csharp
  Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
-                    services.AddTransient<INotesService, NotesService>()
-                            .AddSingleton<INotesRepository, NotesRepository>()
-                            .AddMappers());
+                    services
+                    //.here you services
+                    //
+                    .AddMappers());
 ```
 
 
