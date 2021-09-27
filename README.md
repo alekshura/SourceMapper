@@ -27,6 +27,9 @@ public interface INotesMapper
 }
 ```
 This will generate mapping class with default class name `NotesMapper` for properties that names are the same for `NoteDto` and `NoteDao` classes.
+The generated class is in the same namespace as its base abstract class of interface. It can be found in project in Visual Studio: 
+> Dependencies -> Analyzers -> Compentio.SourceMapper.Generators.MainSourceGenerator.
+
 When the names are different than we can use `Source` and `Target` names of the properties:
 
 ```csharp
@@ -90,7 +93,7 @@ public interface INotesMapper
 the output will be:
 
 ```csharp
- public class NotesMapper : INotesMapper
+public class NotesMapper : INotesMapper
 {
     public static NotesMapper Create() => new();
     public virtual Compentio.Example.App.Entities.NoteDto MapToDto(Compentio.Example.App.Entities.NoteDao source)
@@ -116,16 +119,40 @@ the output will be:
 
 
 ## Class mapping
-For more complicated convertings 
+For more complicated mapings use abstract class to define mappers. The main difference between abstract class mapper and interface, that `Expression`
+property can be used in `MappingAttribute`:
 
+```csharp
+[Mapper(ClassName = "NotesMappings")]
+public abstract class NotesClassMapper
+{
+    [Mapping(Target = nameof(NoteDocumentDto.Autor), Expression = nameof(ConvertAuthor))]
+    public abstract NoteDocumentDto MapToDto(NoteDocumentDao source);
 
-## Embedded objects
+    protected readonly Func<NoteDocumentDao, string> ConvertAuthor = s => s.Metadata.CreatorFirstName + s.Metadata.CreatorLastName;
+}
 
-Example of generated code for this mapping:
+```
 
+`Expression` - it is a name of mapping function, that can be used for additional properties mapping. 
+> It must be `public` or `protected`, since it is used in generated mapper class that implements abstract mapping class.
 
-The generated class is in the same namespace as its base abstract class of interface. It can be found in Visual Studio: //TODO
 
 ## Dependency injection
+To simplify adding dependency injection for mappers `MappersDependencyInjectionExtensions` class is generated, that can be used (for now only for
+`Microsoft.Extensions.DependencyInjection`) by adding `AddMappers()` that adds all mappers defined in the project:
+
+```csharp
+ Host.CreateDefaultBuilder(args)
+                .ConfigureServices((_, services) =>
+                    services.AddTransient<INotesService, NotesService>()
+                            .AddSingleton<INotesRepository, NotesRepository>()
+                            .AddMappers());
+```
+
+
 
 # Roadmap
+TBD
+
+
