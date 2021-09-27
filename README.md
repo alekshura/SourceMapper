@@ -13,7 +13,7 @@ Install-Package SourceMapper
 ```
 In the project where it is installed add `OutputItemType="Analyzer"`
 
-```console
+```xml
 <ItemGroup>
     <ProjectReference xxx OutputItemType="Analyzer" />
  </ItemGroup>
