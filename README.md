@@ -7,10 +7,13 @@ engine and generates classes for mappers during build time of you project.
 That is the main difference between `SourceMapper` and [Automapper](https://automapper.org/): you can see, reuse or inherit from generated code after app build process.
 
 # Installation
-Install using nuget `Install-Package SourceMapper`.
+Install using nuget package manager or console:
+```console
+Install-Package SourceMapper
+```
 In the project where it is installed add `OutputItemType="Analyzer"`
 
-```
+```console
 <ItemGroup>
     <ProjectReference xxx OutputItemType="Analyzer" />
  </ItemGroup>
