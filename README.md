@@ -154,9 +154,12 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
                     .AddMappers());
 ```
 
+# Roadmap & ideas
 
-
-# Roadmap
-TBD
-
+- [x] Basic interface and abstract class mapper
+- [ ] Collections mappings
+- [ ] Add Using property to `MapperAttribute` to use mappings from another mappers
+- [ ] Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
+- [ ] <del>Automatic casting</del> of the properties
+- [ ] Dependency injection containers automatic recognize ad generating extnsions for mappers 
 
