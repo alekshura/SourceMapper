@@ -6,6 +6,16 @@ It is based on .NetCore [Source Generators](https://github.com/dotnet/roslyn/blo
 engine and generates classes for mappers during build time of you project.
 That is the main difference between `SourceMapper` and [Automapper](https://automapper.org/): you can see, reuse or inherit from generated code after app build process.
 
+# Installation
+Install using nuget `Install-Package SourceMapper`.
+In the project where it is installed add `OutputItemType="Analyzer"`
+
+```
+<ItemGroup>
+    <ProjectReference xxx OutputItemType="Analyzer" />
+ </ItemGroup>
+```
+
 # How to use
 To define mapping we have to mark mapping abstract class or interface with `MapperAttribute`:
 
@@ -16,7 +26,7 @@ public interface INotesMapper
     NoteDto MapToDto(NoteDao source);
 }
 ```
-This will generate mapping class for properties that names are the same for `NoteDto` and `NoteDao` classes.
+This will generate mapping class with default class name `NotesMapper` for properties that names are the same for `NoteDto` and `NoteDao` classes.
 When the names are different than we can use `Source` and `Target` names of the properties:
 
 ```
@@ -28,14 +38,13 @@ public interface IUserMapper
 }
 ```
 
-## Interface mapping 
+The `ClassName` property in `MappeAttribute` is responsible for name of the generated mapping class. 
+For default `MappeAttribute` interface prefix `I` is truncated or `Impl` added to the class name if there is no `I` prefix
+in the mapping interface or abstract class name.
 
-## Class mapping
-
-`ClassName` are responsible for name of the generated mapping class name. If it is empty dotnet interface `I` truncated or `Impl` added to abstract class name
-
-## Embedded objects
-Lats assume, that we have "more complicated objects" to map `NoteDto MapToDto(NoteDao source)` with embedded objects:
+## Interface mapping
+Use interfaces to prepare basic mapping. 
+In a case when mapped object contains another objects, e.g.:
 
 ```
 public class NoteDto
@@ -63,8 +72,8 @@ public class NoteDao
     public NoteDocumentDao Document { get; set; }
 }
 ```
-
-than it is enough to add mapper for these types of objects and it will be matched and used in `NoteDto MapToDto(NoteDao source)` method:
+it is enough to add mapping method to the interface for these types and the code generation processor will match and generate mappings for 
+`NoteDto MapToDto(NoteDao source)` method:
 
 ```
 [Mapper]
@@ -77,7 +86,8 @@ public interface INotesMapper
     NoteDocumentDto MapToDto(NoteDocumentDao source);
 }
 ```
-Example of generated code for this mapping:
+
+the output will be:
 
 ```
  public class NotesMapper : INotesMapper
@@ -89,30 +99,31 @@ Example of generated code for this mapping:
         target.Id = source.Id;
         target.Title = source.PageTitle;
         target.Description = source.Description;
-        target.Document = MapToDto(source.Document);
+        target.Document = MapDocumentToDto(source.Document);
         return target;
     }
 
-    public virtual Compentio.Example.App.Entities.NoteDocumentDto MapToDto(Compentio.Example.App.Entities.NoteDocumentDao source)
+    public virtual Compentio.Example.App.Entities.NoteDocumentDto MapDocumentToDto(Compentio.Example.App.Entities.NoteDocumentDao source)
     {
         var target = new Compentio.Example.App.Entities.NoteDocumentDto();
         target.Id = source.Id;
         target.Title = source.Title;
-        target.Metadata = MapDocumentToDto(source.Metadata);
-        return target;
-    }
-
-    public virtual Compentio.Example.App.Entities.NoteDao MapToDao(Compentio.Example.App.Entities.NoteDto source)
-    {
-        var target = new Compentio.Example.App.Entities.NoteDao();
-        target.Id = source.Id;
-        target.PageTitle = source.Title;
-        target.Description = source.Description;
         return target;
     }
 }
-
 ```
+> All methds are marked as `virtual`, so there is a possibility to override them in own mappers code. 
+
+
+## Class mapping
+For more complicated convertings 
+
+
+## Embedded objects
+
+Example of generated code for this mapping:
+
+
 The generated class is in the same namespace as its base abstract class of interface. It can be found in Visual Studio: //TODO
 
 ## Dependency injection
