@@ -9,13 +9,14 @@ That is the main difference between `SourceMapper` and [Automapper](https://auto
 # Installation
 Install using nuget package manager or console:
 ```console
-Install-Package SourceMapper
+dotnet add package Compentio.SourceMapper --version 0.0.2-beta
 ```
 In the project where it is installed add `OutputItemType="Analyzer"`
 
 ```xml
 <ItemGroup>
-    <ProjectReference xxx OutputItemType="Analyzer" />
+    <PackageReference Include="Compentio.SourceMapper" Version="0.0.2-beta" OutputItemType="Analyzer" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
 </ItemGroup>
 ```
 
