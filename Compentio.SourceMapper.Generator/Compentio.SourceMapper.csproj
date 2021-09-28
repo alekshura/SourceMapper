@@ -5,6 +5,14 @@
     <LangVersion>9.0</LangVersion>
     <IsRoslynComponent>true</IsRoslynComponent>
     <Nullable>enable</Nullable>
+    <Company>Compentio</Company>
+    <Product>SourceMapper</Product>
+    <Authors>Aleksander Parchomenko</Authors>
+    <PackageProjectUrl>https://github.com/alekshura/SourceMapper</PackageProjectUrl>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+    <Version>0.0.1-beta</Version>
+    <Description>Code generator for mappings based on attributes defined in interfaces or abstrat classes. It is based on .NetCore Source Generators engine and generates classes for mappers during build time of you project.</Description>
   </PropertyGroup>
 
   <ItemGroup>
