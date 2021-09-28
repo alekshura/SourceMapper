@@ -155,7 +155,8 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 ```
 
 # Roadmap & development
-|       |  |     | 
+| aa      |  aa | aa|
+| :---: | :---: |---|
 |1| [✔] Basic interface and abstract class mapper
 |2| [❌] Collections mappings
 |3| [❌] Add Using property to `MapperAttribute` to use mappings from another mappers
