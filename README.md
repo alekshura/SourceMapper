@@ -16,7 +16,7 @@ In the project where it is installed add `OutputItemType="Analyzer"`
 ```xml
 <ItemGroup>
     <ProjectReference xxx OutputItemType="Analyzer" />
- </ItemGroup>
+</ItemGroup>
 ```
 
 # How to use
@@ -154,12 +154,12 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
                     .AddMappers());
 ```
 
-# Roadmap & ideas
+# Roadmap & development
 
-- [x] Basic interface and abstract class mapper
-- [ ] Collections mappings
-- [ ] Add Using property to `MapperAttribute` to use mappings from another mappers
-- [ ] Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
-- [ ] <del>Automatic casting</del> of the properties
-- [ ] Dependency injection containers automatic recognize ad generating extnsions for mappers 
+- [✔] Basic interface and abstract class mapper
+- [❌] Collections mappings
+- [❌] Add Using property to `MapperAttribute` to use mappings from another mappers
+- [❌] Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
+- [❌] <del>Automatic casting</del> of the properties
+- [❌] Dependency injection containers automatic recognize ad generating extnsions for mappers 
 
