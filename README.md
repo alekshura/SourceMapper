@@ -7,15 +7,25 @@ engine and generates classes for mappers during build time of you project.
 That is the main difference between `SourceMapper` and [Automapper](https://automapper.org/): you can see, reuse or inherit from generated code after app build process.
 
 # Installation
-Install using nuget package manager or console:
+Install using nuget package manager:
+
 ```console
-Install-Package SourceMapper
+Install-Package Compentio.SourceMapper -Version 0.0.2-beta
 ```
-In the project where it is installed add `OutputItemType="Analyzer"`
+
+or `.NET CLI`:
+
+```console
+dotnet add package Compentio.SourceMapper --version 0.0.2-beta
+```
+In the project where it is installed add `OutputItemType="Analyzer"`. 
+For now Microsoft DependencyInjection extension class generated for adding mappers to container, so `Microsoft.Extensions.DependencyInjection` 
+also needs to be referenced: 
 
 ```xml
 <ItemGroup>
-    <ProjectReference xxx OutputItemType="Analyzer" />
+    <PackageReference Include="Compentio.SourceMapper" Version="0.0.2-beta" OutputItemType="Analyzer" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
 </ItemGroup>
 ```
 
