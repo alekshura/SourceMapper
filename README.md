@@ -156,10 +156,11 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 
 # Roadmap & development
 
-- [✔] Basic interface and abstract class mapper
-- [❌] Collections mappings
-- [❌] Add Using property to `MapperAttribute` to use mappings from another mappers
-- [❌] Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
-- [❌] <del>Automatic casting</del> of the properties
-- [❌] Dependency injection containers automatic recognize ad generating extnsions for mappers 
+[✔] Basic interface and abstract class mapper
+[❌] Collections mappings
+[❌] Add Using property to `MapperAttribute` to use mappings from another mappers
+[❌] Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
+[✔] <del>Automatic casting</del> of the properties
+[] TBD: Dependency injection containers automatic recognize container type and generating extensions methods for mappers
+[❌] Linq extensions - generate extensions for mapping collections, e.g.: `IEnumerable<NoteDocumentDto> documentDtos = documentsDaos.MapToDto()`
 
