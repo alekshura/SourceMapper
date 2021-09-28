@@ -18,7 +18,9 @@ or `.NET CLI`:
 ```console
 dotnet add package Compentio.SourceMapper --version 0.0.2-beta
 ```
-In the project where it is installed add `OutputItemType="Analyzer"`
+In the project where it is installed add `OutputItemType="Analyzer"`. 
+For now Microsoft DependencyInjection extension class generated for adding mappers to container, so `Microsoft.Extensions.DependencyInjection` 
+also needs to be referenced: 
 
 ```xml
 <ItemGroup>
