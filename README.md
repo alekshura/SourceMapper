@@ -7,7 +7,14 @@ engine and generates classes for mappers during build time of you project.
 That is the main difference between `SourceMapper` and [Automapper](https://automapper.org/): you can see, reuse or inherit from generated code after app build process.
 
 # Installation
-Install using nuget package manager or console:
+Install using nuget package manager:
+
+```console
+Install-Package Compentio.SourceMapper -Version 0.0.2-beta
+```
+
+or `.NET CLI`:
+
 ```console
 dotnet add package Compentio.SourceMapper --version 0.0.2-beta
 ```
