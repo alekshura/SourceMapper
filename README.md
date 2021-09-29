@@ -24,7 +24,7 @@ also needs to be referenced:
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="Compentio.SourceMapper" Version="0.0.2-beta" OutputItemType="Analyzer" />
+    <PackageReference Include="Compentio.SourceMapper" Version="1.0.2-rc" OutputItemType="Analyzer" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
 </ItemGroup>
 ```
