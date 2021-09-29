@@ -10,13 +10,13 @@ That is the main difference between `SourceMapper` and [Automapper](https://auto
 Install using nuget package manager:
 
 ```console
-Install-Package Compentio.SourceMapper -Version 0.0.2-beta
+Install-Package Compentio.SourceMapper -Version 1.0.2-rc
 ```
 
 or `.NET CLI`:
 
 ```console
-dotnet add package Compentio.SourceMapper --version 0.0.2-beta
+dotnet add package Compentio.SourceMapper --version 1.0.2-rc
 ```
 In the project where it is installed add `OutputItemType="Analyzer"`. 
 For now Microsoft DependencyInjection extension class generated for adding mappers to container, so `Microsoft.Extensions.DependencyInjection` 
