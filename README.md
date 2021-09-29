@@ -173,5 +173,5 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 |[❌]|Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
 |[❔] |<del>Automatic casting</del> of the properties
 |[❔] |Dependency injection containers automatic recognize container type and generating extensions methods for mappers
-|[❌]|Linq extensions - generate extensions for mapping collections, e.g.: `IEnumerable<NoteDocumentDto> documentDtos = documentsDaos.MapToDto()`
+|[❔]|Linq extensions - generate extensions for mapping collections, e.g.: `IEnumerable<NoteDocumentDto> documentDtos = documentsDaos.MapToDto()`
 
