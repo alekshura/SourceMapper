@@ -168,7 +168,7 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 | Status | Description |
 | --- |---|
 |[✔] |Basic interface and abstract class mapper
-|[❌]|Collections mappings
+|[✔]|Collections mappings
 |[❌]|Add Using property to `MapperAttribute` to use mappings from another mappers
 |[❌]|Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
 |[❔] |<del>Automatic casting</del> of the properties
