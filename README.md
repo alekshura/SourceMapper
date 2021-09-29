@@ -160,7 +160,7 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
                     //
                     .AddMappers());
 ```
-The `Compentio.SourceMapper` searches for 4 main dependency container packages and generates extension code. If there no any container packages installed, DI extension class in not generated.
+The `Compentio.SourceMapper` searches for 3 main dependency container packages (`Microsoft.Extensions.DependencyInjection`, `Autofac.Extensions.DependencyInjection`, and `StructureMap.Microsoft.DependencyInjection`) and generates extension code. If there no any container packages found, Dependency Injection extension class in not generated.
 
 # Roadmap & development
 | Status | Description |
