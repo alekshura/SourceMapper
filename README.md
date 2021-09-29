@@ -19,13 +19,10 @@ or `.NET CLI`:
 dotnet add package Compentio.SourceMapper --version 1.0.2-rc
 ```
 In the project where it is installed add `OutputItemType="Analyzer"`. 
-For now Microsoft DependencyInjection extension class generated for adding mappers to container, so `Microsoft.Extensions.DependencyInjection` 
-also needs to be referenced: 
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="Compentio.SourceMapper" Version="1.0.2-rc" OutputItemType="Analyzer" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
+    <PackageReference Include="Compentio.SourceMapper" Version="1.0.3-rc" OutputItemType="Analyzer" />
 </ItemGroup>
 ```
 
@@ -163,6 +160,7 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
                     //
                     .AddMappers());
 ```
+The `Compentio.SourceMapper` searches for 4 main dependency container packages and generates extension code. If there no any container packages installed, DI extension class in not generated.
 
 # Roadmap & development
 | Status | Description |
@@ -172,6 +170,7 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 |[❌]|Add Using property to `MapperAttribute` to use mappings from another mappers
 |[❌]|Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
 |[❔] |<del>Automatic casting</del> manual casing Attribute of the properties
-|[❔] |Dependency injection containers automatic recognize container type and generating extensions methods for mappers
+|[✔] |Dependency injection containers automatic recognize container type and generating extensions methods for mappers
+|[❌] |Dependency injection containers diagnostics
 |[❔]|Linq extensions - generate extensions for mapping collections, e.g.: `IEnumerable<NoteDocumentDto> documentDtos = documentsDaos.MapToDto()`
 
