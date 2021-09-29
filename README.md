@@ -10,13 +10,13 @@ That is the main difference between `SourceMapper` and [Automapper](https://auto
 Install using nuget package manager:
 
 ```console
-Install-Package Compentio.SourceMapper -Version 0.0.2-beta
+Install-Package Compentio.SourceMapper -Version 1.0.2-rc
 ```
 
 or `.NET CLI`:
 
 ```console
-dotnet add package Compentio.SourceMapper --version 0.0.2-beta
+dotnet add package Compentio.SourceMapper --version 1.0.2-rc
 ```
 In the project where it is installed add `OutputItemType="Analyzer"`. 
 For now Microsoft DependencyInjection extension class generated for adding mappers to container, so `Microsoft.Extensions.DependencyInjection` 
@@ -24,7 +24,7 @@ also needs to be referenced:
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="Compentio.SourceMapper" Version="0.0.2-beta" OutputItemType="Analyzer" />
+    <PackageReference Include="Compentio.SourceMapper" Version="1.0.2-rc" OutputItemType="Analyzer" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
 </ItemGroup>
 ```
@@ -168,10 +168,10 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 | Status | Description |
 | --- |---|
 |[✔] |Basic interface and abstract class mapper
-|[❌]|Collections mappings
+|[✔]|Collections mappings
 |[❌]|Add Using property to `MapperAttribute` to use mappings from another mappers
 |[❌]|Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
-|[❔] |<del>Automatic casting</del> of the properties
+|[❔] |<del>Automatic casting</del> manual casing Attribute of the properties
 |[❔] |Dependency injection containers automatic recognize container type and generating extensions methods for mappers
-|[❌]|Linq extensions - generate extensions for mapping collections, e.g.: `IEnumerable<NoteDocumentDto> documentDtos = documentsDaos.MapToDto()`
+|[❔]|Linq extensions - generate extensions for mapping collections, e.g.: `IEnumerable<NoteDocumentDto> documentDtos = documentsDaos.MapToDto()`
 
