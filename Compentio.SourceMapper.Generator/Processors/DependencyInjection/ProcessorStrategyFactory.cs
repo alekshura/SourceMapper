@@ -10,11 +10,11 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
             { DependencyInjectionType.DotNetCore, new DotnetCoreProcessorStrategy() }
         };
 
-        internal static IDependencyInjectionStrategy GetStrategy(ISourcesMetadata sourcesMetadata)
+        internal static IDependencyInjectionStrategy? GetStrategy(ISourcesMetadata sourcesMetadata)
         {
             if (!_dependencyInjectionStrategies.ContainsKey(sourcesMetadata.DependencyInjection.DependencyInjectionType))
             {
-                return new DotnetCoreProcessorStrategy();
+                return null;
             }
 
             return _dependencyInjectionStrategies[sourcesMetadata.DependencyInjection.DependencyInjectionType];
@@ -23,6 +23,6 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 
     internal enum DependencyInjectionType
     {
-        DotNetCore, Castle, Autofac, StructureMap, Ninject, None
+        DotNetCore, Autofac, StructureMap, None
     }
 }

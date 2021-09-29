@@ -30,9 +30,11 @@ namespace Compentio.SourceMapper.Metadata
     internal class SourcesMetadata : ISourcesMetadata
     {
         private readonly List<IMapperMetadata> _mappers = new();
+        private readonly DependencyInjectionType _dependencyInjectionType;
 
-        private SourcesMetadata() 
-        { 
+        private SourcesMetadata(DependencyInjectionType dependencyInjectionType) 
+        {
+            _dependencyInjectionType = dependencyInjectionType;
         }
         static SourcesMetadata()
         {
@@ -42,10 +44,10 @@ namespace Compentio.SourceMapper.Metadata
 
         public DependencyInjection DependencyInjection => new() 
         {
-            DependencyInjectionType = DependencyInjectionType.DotNetCore
+            DependencyInjectionType = _dependencyInjectionType
         };
 
-        public static ISourcesMetadata Create() => new SourcesMetadata();
+        public static ISourcesMetadata Create(DependencyInjectionType dependencyInjectionType) => new SourcesMetadata(dependencyInjectionType);
 
         public void AddOrUpdate(IMapperMetadata mapperMetadata)
         {

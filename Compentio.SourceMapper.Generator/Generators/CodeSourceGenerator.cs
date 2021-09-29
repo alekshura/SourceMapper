@@ -43,6 +43,12 @@ namespace Compentio.SourceMapper.Generators
         {
             var processorStrategy = DependencyInjectionStrategyFactory.GetStrategy(_sourcesMetadata);
 
+            if (processorStrategy is null)
+            {
+                // TODO Diagnostics
+                return;
+            }
+
             var result = processorStrategy.GenerateCode(_sourcesMetadata);
 
             context.AddSource($"{_sourcesMetadata.DependencyInjection.DependencyInjectionClassName}.cs", SourceText.From(result.GeneratedCode, Encoding.UTF8));
