@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Alekshura Github Pages</title>
+		<title>SourceMapper</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -20,16 +20,16 @@
 				<!-- Header -->
 					<header id="header" class="alt">
 						<span class="logo"><img src="images/logo.svg" alt="" /></span>
-						<h1>@alekshura</h1>
-						<p>Find out my public code examples, articles and projects<br />
-						here <a href="https://aleksander-parkhomenko.medium.com/">@aleksander-parkhomenko</a> or on our company site <a href="https://pl.linkedin.com/company/compentio">@compentio</a>.</p>
+						<h1>SourceMapper</h1>						
 					</header>
 
 				<!-- Nav -->
 					<nav id="nav">
 						<ul>
-							<li><a href="#intro" class="active">Welcome</a></li>
-							<li><a href="#first">Repositories</a></li>
+							<li><a href="#intro" class="active">Source Mapper</a></li>
+							<li><a href="#first">Define</a></li>
+							<li><a href="#second">Tag</a></li>
+							<li><a href="#third">Use</a></li>
 						</ul>
 					</nav>
 
@@ -41,45 +41,62 @@
 								<div class="spotlight">
 									<div class="content">
 										<header class="major">
-											<h2>Welcome</h2>
+											<h2>Source Mapper</h2>
 										</header>
-										<p>Welcome to our Github pages! Here you can find out a different implemented and solutions of modern web apps that we have been challenged during delivery of variuos projects.
-										This is also the entrypoint to some our started or futured Open source initiatives, repos, ideas or simply code examples. 
-											You also be welcome on <a href="https://aleksander-parkhomenko.medium.com/">@aleksander-parkhomenko on medium</a> or on the <a href="http://compent.io">compent.io</a> articles, that describes code examples.
+										<p>
+										SourceMapper is code generator for mappings based on attributes defined in interfaces or abstrat classes. 
+										It is based on .NetCore Source Generators engine and generates classes for mappers during build time of you project. 
+										That is the main difference between SourceMapper and Automapper: you can see, reuse or inherit from generated code after app build process.	
 										</p>
 									</div>
-									<span class="image"><img src="images/pic01.jpg" alt="" /></span>
+								
 								</div>
 							</section>
 
 						<!-- First Section -->
 							<section id="first" class="main special">
 								<header class="major">
-									<h2>Repositories</h2>
+									<h2>Interface or abstract class</h2>
 								</header>
-								<ul class="features">
-									<li>
-										<span class="icon solid major style1 fa-code"></span>
-										<h3>Ankara</h3>
-										<p>.NET 5 Backend with AD Auth, Custom FluenMigrator CLI, custom .NET Core SessionMiddleware that overrides .NET code default Session implementations and permits only on current session for user.</p>
-									</li>
-									<li>
-										<span class="icon major style3 fa-copy"></span>
-										<h3>Material-menu</h3>
-										<p>This is an examle for Angular10 material RWD application with menu. An idea is to create e.g. CLI for generate menu based Frontend apps.</p>
-									</li>
-									<li>
-										<span class="icon major style5 fa-gem"></span>
-										<h3>Ferragosto Notes</h3>
-										<p>This is .NET 5 template for Microservice with Azure Active Dicrectory authorization, MongoDB database used. The valuable example here is API integration tests with Azure Active Directory authorization mocks.</p>
-									</li>
-								</ul>
+								<div class="content">
+									<p>
+										Create interface or abstract class that defines mappings	
+									</p>
+								</div>
+
+							</section>
+
+						<section id="second" class="main special">
+								<header class="major">
+									<h2>Tag with attributes</h2>
+								</header>
+								<div class="content">
+									<p>
+										Tag mapping properties with attributes and conversion functions	
+									</p>
+								</div>
+								
+						</section>
+
+						<section id="third" class="main special">
+								<header class="major">
+									<h2>Mapper code is generated</h2>
+								</header>
+								<div class="content">
+									<p>
+										Use generated mapper code
+									</p>
+								</div>
+								
 								<footer class="major">
 									<ul class="actions special">
-										<li><a href="https://github.com/alekshura" class="button">See more on Github</a></li>
+										<li><a href="https://github.com/alekshura/SourceMapper" class="button">See on Github</a></li>
 									</ul>
 								</footer>
-							</section>						
+						</section>							
+
+
+						
 					</div>
 
 				<!-- Footer -->
