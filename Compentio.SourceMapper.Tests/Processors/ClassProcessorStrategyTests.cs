@@ -9,20 +9,20 @@ using Xunit;
 
 namespace Compentio.SourceMapper.Tests.Processors
 {
-    public class InterfaceProcessorStrategyTests : ProcessorStrategyTestBase
+    public class ClassProcessorStrategyTests : ProcessorStrategyTestBase
     {
         private readonly IFixture _fixture;
         private readonly IProcessorStrategy _processorStrategy;
         private readonly Mock<IMapperMetadata> _sourceMetadataMock;
 
-        public InterfaceProcessorStrategyTests()
+        public ClassProcessorStrategyTests()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization { ConfigureMembers = true })
                 .Customize(new SupportMutableValueTypesCustomization());
 
             _sourceMetadataMock = _fixture.Create<Mock<IMapperMetadata>>();
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Interface);
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Class);
             _processorStrategy = ProcessorStrategyFactory.GetStrategy(_sourceMetadataMock.Object);            
         }
 

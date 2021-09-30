@@ -16,5 +16,15 @@ namespace Compentio.SourceMapper.Tests.Entities
         public DateTime BirthDate { get; set; }
     }
 
-    public enum UserGender { Female, Male, Unknown }
+    public class UserDataDao
+    {
+        public long UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public UserGender UserGender { get; set; }
+        public AddressDao UserAddress { get; set; }
+        public DateTime BirthDate { get; set; }
+    }
+
+    public enum UserGender { Female, Male }
 }

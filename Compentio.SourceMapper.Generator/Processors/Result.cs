@@ -12,8 +12,17 @@ namespace Compentio.SourceMapper.Processors
     /// </summary>
     interface IResult
     {
+        /// <summary>
+        /// Generated and formatted code
+        /// </summary>
         string GeneratedCode { get; }
+        /// <summary>
+        /// Success flag of code generation
+        /// </summary>
         bool IsSuccess { get; }
+        /// <summary>
+        /// List of warning or errors that appeared during code generation process
+        /// </summary>
         IEnumerable<DiagnosticsInfo>? Diagnostics { get; }
     }
 

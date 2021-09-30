@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace Compentio.SourceMapper.Processors
 {
+    /// <summary>
+    /// Interface for code generation strategies
+    /// </summary>
     interface IProcessorStrategy
     {
         /// <summary>
@@ -14,7 +17,10 @@ namespace Compentio.SourceMapper.Processors
         /// <returns>Generated code and diagnostics information. See also: <seealso cref="Result"/></returns>
         IResult GenerateCode(IMapperMetadata mapperMetadata); 
     }
-
+    /// <summary>
+    /// Base abstract class for code generation strategies.
+    /// It containt common functionality for code processors
+    /// </summary>
     internal abstract class AbstractProcessorStrategy : IProcessorStrategy
     {
         private readonly List<DiagnosticsInfo> _diagnostics = new();
