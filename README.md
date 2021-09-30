@@ -10,13 +10,13 @@ That is the main difference between `SourceMapper` and [Automapper](https://auto
 Install using nuget package manager:
 
 ```console
-Install-Package Compentio.SourceMapper -Version 1.0.2-rc
+Install-Package Compentio.SourceMapper -Version 1.0.3-rc
 ```
 
 or `.NET CLI`:
 
 ```console
-dotnet add package Compentio.SourceMapper --version 1.0.2-rc
+dotnet add package Compentio.SourceMapper --version 1.0.3-rc
 ```
 In the project where it is installed add `OutputItemType="Analyzer"`. 
 
