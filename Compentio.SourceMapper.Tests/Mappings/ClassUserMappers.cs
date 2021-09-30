@@ -1,6 +1,7 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Tests.Entities;
 using System;
+using System.Linq;
 
 namespace Compentio.SourceMapper.Tests.Mappings
 {
@@ -21,5 +22,21 @@ namespace Compentio.SourceMapper.Tests.Mappings
         }
         protected static string ConvertUserName(UserDao userDao) => $"{userDao.FirstName} {userDao.LastName}";
         protected readonly Func<UserGender, Sex> ConvertUserGender = gender => gender == UserGender.Female ? Sex.W : Sex.M;
+    }
+
+    [Mapper(ClassName = "ClassUserDaoArrayMapper")]
+    public abstract class UserDataArrayMapper
+    {
+        [Mapping(Source = nameof(UserWithArrayDao.UserAddresses), Target = nameof(UserInfoWithArray.Addresses), Expression = nameof(ConvertAddresses))]
+        public abstract UserInfoWithArray MapToDomainModel(UserWithArrayDao userWithArrayDao);
+
+        protected Address[] ConvertAddresses(AddressDao[] addresses)
+        {
+            return addresses.Select(a => MapAddress(a)).ToArray();
+        }
+
+        public abstract Address MapAddress(AddressDao addressDao);
+
+        public abstract Region MapRegion(RegionDao regionDao);
     }
 }

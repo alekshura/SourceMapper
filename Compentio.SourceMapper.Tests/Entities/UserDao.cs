@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Compentio.SourceMapper.Tests.Entities
 {
@@ -23,6 +24,24 @@ namespace Compentio.SourceMapper.Tests.Entities
         public string LastName { get; set; }
         public UserGender UserGender { get; set; }
         public AddressDao UserAddress { get; set; }
+        public DateTime BirthDate { get; set; }
+    }
+
+    public class UserWithArrayDao
+    {
+        public long UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public AddressDao[] UserAddresses { get; set; }
+        public DateTime BirthDate { get; set; }
+    }
+
+    public class UserWithListDao
+    {
+        public long UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public IList<AddressDao> UserAddresses { get; set; }
         public DateTime BirthDate { get; set; }
     }
 
