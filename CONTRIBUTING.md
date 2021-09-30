@@ -35,7 +35,6 @@ Summary of the changes (Less than 80 chars)
  - Detail 2
 
 #bugnumber (in this specific format)
-closes #issuenumber
 ```
 
 **Tests**
