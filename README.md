@@ -191,7 +191,8 @@ public abstract class UserMapper
 ```
 
 More examples can be found in repo code:
-https://github.com/alekshura/SourceMapper/blob/40b62d3ff83f70fc68abcacf45f899d1698c725e/Compentio.SourceMapper.Tests/Mappings/ClassUserMappers.cs#L1
+https://github.com/alekshura/SourceMapper/blob/master/Compentio.SourceMapper.Tests/Mappings/ClassUserMappers.cs and
+https://github.com/alekshura/SourceMapper/blob/master/Compentio.SourceMapper.Tests/Mappings/InterfaceUserMappers.cs
 
 
 ## Dependency injection
