@@ -39,5 +39,5 @@ Summary of the changes (Less than 80 chars)
 
 **Tests**
 
--  Tests need to be provided for every bug/feature that is completed.
--  If there is a scenario that is far too hard to test there does not need to be a test for it.
+-  Tests and also unit or integration tests need to be provided and written for every bug/feature that is completed.
+-  All unit or integration tests should pass
