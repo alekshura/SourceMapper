@@ -147,6 +147,44 @@ public abstract class NotesClassMapper
 `Expression` - it is a name of mapping function, that can be used for additional properties mapping. 
 > It must be `public` or `protected`, since it is used in generated mapper class that implements abstract mapping class.
 
+### Mapping collections
+Lets assume we need to map two entities:
+
+```csharp
+public class UserDao
+{
+    public long UserId { get; set; }
+    public AddressDao[] UserAddresses { get; set; }
+}
+```
+to 
+
+```csharp
+public class UserInfo
+{
+    public int Id { get; set; }
+    public Address[] Addresses { get; set; }
+}
+```
+It can be achieved using abstract class mapper:
+
+```
+[Mapper(ClassName = "UserDataMapper")]
+public abstract class UserMapper
+{
+    [Mapping(Source = nameof(UserDao.UserAddresses), Target = nameof(UserInfo.Addresses), Expression = nameof(ConvertAddresses))]
+    public abstract UserInfoWithArray MapToDomainModel(UserWithArrayDao userWithArrayDao);
+
+    protected Address[] ConvertAddresses(AddressDao[] addresses)
+    {
+        return addresses.Select(a => MapAddress(a)).ToArray();
+    }
+
+    public abstract Address MapAddress(AddressDao addressDao);
+}
+```
+
+
 
 ## Dependency injection
 To simplify adding dependency injection for mappers `MappersDependencyInjectionExtensions` class is generated, that can be used (for now only for
