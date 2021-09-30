@@ -168,16 +168,22 @@ public class UserInfo
 ```
 It can be achieved using abstract class mapper:
 
-```
+```csharp
 [Mapper(ClassName = "UserDataMapper")]
 public abstract class UserMapper
 {
     [Mapping(Source = nameof(UserDao.UserAddresses), Target = nameof(UserInfo.Addresses), Expression = nameof(ConvertAddresses))]
+    [Mapping(Source = nameof(UserDao.UserId), Target = nameof(UserInfo.Id), Expression = nameof(ConvertUserId))]
     public abstract UserInfoWithArray MapToDomainModel(UserWithArrayDao userWithArrayDao);
 
     protected Address[] ConvertAddresses(AddressDao[] addresses)
     {
         return addresses.Select(a => MapAddress(a)).ToArray();
+    }
+    
+    protected static int ConvertUserId(long id)
+    {
+        return Convert.ToInt32(id);
     }
 
     public abstract Address MapAddress(AddressDao addressDao);
