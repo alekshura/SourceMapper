@@ -51,9 +51,9 @@ public interface IUserMapper
 }
 ```
 
-The `ClassName` property in `MappeAttribute` is responsible for name of the generated mapping class. 
-For default `MappeAttribute` interface prefix `I` is truncated or `Impl` added to the class name if there is no `I` prefix
-in the mapping interface or abstract class name.
+The `ClassName` property in `MapperAttribute` is responsible for name of the generated mapping class. 
+For default `MapperAttribute` interface prefix `I` is removed or `Impl` suffix added to the generated class name if there is no `I` prefix
+in the mapping interface name.
 
 ## Interface mapping
 Use interfaces to prepare basic mapping. 
@@ -77,11 +77,6 @@ public class NoteDao
     public long Id { get; set; }
     public string PageTitle { get; set; }
     public string Description { get; set; }
-    public DateTime ValidFrom { get; set; }
-    public DateTime ValidTo { get; set; }
-    public string CreatedBy { get; set; }
-    public DateTime Created { get; set; }
-    public DateTime Modified { get; set; }
     public NoteDocumentDao Document { get; set; }
 }
 ```
