@@ -27,8 +27,8 @@
 					<nav id="nav">
 						<ul>
 							<li><a href="#intro" class="active">Source Mapper</a></li>
-							<li><a href="#first">Define</a></li>
-							<li><a href="#second">Tag</a></li>
+							<li><a href="#first">Install</a></li>
+							<li><a href="#second">Define</a></li>
 							<li><a href="#third">Use</a></li>
 						</ul>
 					</nav>
@@ -60,39 +60,39 @@
 						<!-- First Section -->
 							<section id="first" class="main special">
 								<header class="major">
-									<h2>Interface or abstract class</h2>
+									<h2>Install using nuget package manager:</h2>
 								</header>
 								<div class="content">
-									<div style="overflow: auto;">
-										<div style="float: left; width: 50%; text-align: left;">
-										<p>
-											<ul>
-												<li>Create interface or abstract class that defines mappings.</li> 
-												<li>Use <code>MapperAttribute</code> to inform that it is mapper interface. </li>
-												<li>Use <code>MappingAttribute</code> to map properties by name.</li>
-											</ul>
-										</p>
-										</div>
-										<div style="float: right; width: 50%;">
-											<script src="https://gist.github.com/alekshura/144c825edd7b13cb6e28e77b5a06be33.js?file=IUserMapper.cs" type="text/javascript"></script>
-										</div>
-									</div>									
+									<p style="text-align: justify;">										
+										<code>
+											Install-Package Compentio.SourceMapper
+										</code>
+
+										or .NET CLI:
+										<code>
+											dotnet add package Compentio.SourceMapper
+										</code>
+									</p>								
 								</div>
 
 							</section>
 
 						<section id="second" class="main special">
 								<header class="major">
-									<h2>Tag with attributes</h2>
+									<h2>Define mappers</h2>
 								</header>
 								<div class="content">
 									<div style="overflow: auto;">
-										<div style="float: left; width: 45%; text-align: left;">
-										<p>
-											Tag mapping properties with <code>MappingAttribute</code> and conversion functions.
-										</p>
+										<div style="float: left; width: 50%; text-align: left;">
+											<p>
+												<ul>
+													<li>Create interface or abstract class that defines mappings.</li> 
+													<li>Use <code>MapperAttribute</code> to inform that it is mapper interface. </li>
+													<li>Use <code>MappingAttribute</code> to map properties by name.</li>
+												</ul>
+											</p>
 										</div>
-										<div style="float: right; width: 55%;">
+										<div style="float: right; width: 50%;">
 											<script src="https://gist.github.com/alekshura/144c825edd7b13cb6e28e77b5a06be33.js?file=IUserDaoMapper.cs" type="text/javascript"></script>
 										</div>
 									</div>									
@@ -102,7 +102,7 @@
 
 						<section id="third" class="main special">
 							<header class="major">
-								<h2>Use generated classes</h2>
+								<h2>Use buildtime generated classes</h2>
 							</header>
 							<div class="content">
 								<div>
