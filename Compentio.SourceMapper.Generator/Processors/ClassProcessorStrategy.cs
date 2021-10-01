@@ -36,6 +36,9 @@ namespace Compentio.SourceMapper.Processors
             {
                 methods += @$"public override {methodMetadata.FullName}
                 {{
+                    if ({methodMetadata.Parameters.First().Name} == null)
+                        return null;
+
                     var target = new {methodMetadata.ReturnType.FullName}();
                     
                     {GenerateMappings(sourceMetadata, methodMetadata)}
