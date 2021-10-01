@@ -43,10 +43,14 @@
 										<header class="major">
 											<h2>Source Mapper</h2>
 										</header>
-										<p>
-										SourceMapper is code generator for mappings based on attributes defined in interfaces or abstrat classes. 
+										<p style="text-align: justify;">
+											<b>SourceMapper</b> is code generator for mappings based on attributes defined in interfaces or abstrat classes. 
 										It is based on .NetCore Source Generators engine and generates classes for mappers during build time of you project. 
-										That is the main difference between SourceMapper and Automapper: you can see, reuse or inherit from generated code after app build process.	
+										That is the main difference between SourceMapper and Automapper: you can see, reuse or inherit from generated code after app build process.
+										<br/>
+										All generated mapping methods in classes are virtual: you can easily override them and use automatically generated mapping in derived class.
+										<br/>
+										<b>SourceMapper</b> also generates extension method for Dependency Injection of generated mappers.
 										</p>
 									</div>
 								
@@ -59,9 +63,20 @@
 									<h2>Interface or abstract class</h2>
 								</header>
 								<div class="content">
-									<p>
-										Create interface or abstract class that defines mappings	
-									</p>
+									<div style="overflow: auto;">
+										<div style="float: left; width: 65%; text-align: left;">
+										<p>
+											<ul>
+												<li>Create interface or abstract class that defines mappings.</li> 
+												<li>Use <code>MapperAttribute</code> to inform that it is mapper interface. </li>
+												<li>Use <code>MappingAttribute</code> to map properties by name.</li>
+											</ul>
+										</p>
+										</div>
+										<div style="float: right; width: 35%;">
+											<script src="https://gist.github.com/alekshura/144c825edd7b13cb6e28e77b5a06be33.js?file=IUserMapper.cs" type="text/javascript"></script>
+										</div>
+									</div>									
 								</div>
 
 							</section>
@@ -71,28 +86,35 @@
 									<h2>Tag with attributes</h2>
 								</header>
 								<div class="content">
-									<p>
-										Tag mapping properties with attributes and conversion functions	
-									</p>
+									<div style="overflow: auto;">
+										<div style="float: left; width: 45%; text-align: left;">
+										<p>
+											Tag mapping properties with <code>MappingAttribute</code> and conversion functions.
+										</p>
+										</div>
+										<div style="float: right; width: 55%;">
+											<script src="https://gist.github.com/alekshura/144c825edd7b13cb6e28e77b5a06be33.js?file=IUserDaoMapper.cs" type="text/javascript"></script>
+										</div>
+									</div>									
 								</div>
 								
 						</section>
 
 						<section id="third" class="main special">
-								<header class="major">
-									<h2>Mapper code is generated</h2>
-								</header>
-								<div class="content">
-									<p>
-										Use generated mapper code
-									</p>
-								</div>
+							<header class="major">
+								<h2>Use generated classes</h2>
+							</header>
+							<div class="content">
+								<div>
+									<script src="https://gist.github.com/alekshura/144c825edd7b13cb6e28e77b5a06be33.js?file=UserMapper.cs" type="text/javascript"></script>
+								</div>								
+							</div>
 								
-								<footer class="major">
-									<ul class="actions special">
-										<li><a href="https://github.com/alekshura/SourceMapper" class="button">See on Github</a></li>
-									</ul>
-								</footer>
+							<footer class="major">
+								<ul class="actions special">
+									<li><a href="https://github.com/alekshura/SourceMapper" class="button">See and contribute on Github</a></li>
+								</ul>
+							</footer>
 						</section>							
 
 
