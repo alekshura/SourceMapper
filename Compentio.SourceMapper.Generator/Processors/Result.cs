@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Processors
     interface IResult
     {
         /// <summary>
-        /// Generated and formatted code
+        /// Generated and formatted mapper code
         /// </summary>
         string GeneratedCode { get; }
         /// <summary>

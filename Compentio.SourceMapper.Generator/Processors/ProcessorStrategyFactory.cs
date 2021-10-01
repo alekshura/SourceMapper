@@ -1,10 +1,12 @@
 ﻿using Compentio.SourceMapper.Metadata;
 using Microsoft.CodeAnalysis;
-using System;
 using System.Collections.Generic;
 
 namespace Compentio.SourceMapper.Processors
 {
+    /// <summary>
+    /// Code processor factory that returns proper processod that depends on mapper definition type: abstract class or interface
+    /// </summary>
     internal class ProcessorStrategyFactory
     {
         private readonly static Dictionary<TypeKind, IProcessorStrategy> _mappersStrategies = new()
@@ -13,6 +15,11 @@ namespace Compentio.SourceMapper.Processors
             { TypeKind.Class, new ClassProcessorStrategy() }
         };
 
+        /// <summary>
+        /// returns appropriate generator strategy based on mapper type kind <see cref="TypeKind"/>
+        /// </summary>
+        /// <param name="mapperMetadata"></param>
+        /// <returns></returns>
         internal static IProcessorStrategy GetStrategy(IMapperMetadata mapperMetadata)
         {
             if (!_mappersStrategies.ContainsKey(mapperMetadata.TypeKind))

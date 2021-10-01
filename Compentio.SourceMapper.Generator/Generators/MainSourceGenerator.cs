@@ -15,6 +15,10 @@ namespace Compentio.SourceMapper.Generators
     [Generator]
     public class MainSourceGenerator : ISourceGenerator
     {
+        /// <summary>
+        /// Main entrypoint for code generation process start. Here all mappers metadata and dependency injection configuration are set up
+        /// </summary>
+        /// <param name="context"></param>
         public void Execute(GeneratorExecutionContext context)
         {
             if (context.SyntaxReceiver is null)
@@ -43,6 +47,10 @@ namespace Compentio.SourceMapper.Generators
             sourceGenerator.GenerateDependencyInjectionExtensions(context);
         }
 
+        /// <summary>
+        /// <see cref="MainSourceGenerator"/> inirialization entrypoint. Here you can attach <see cref="Debugger"/> for debug code that is generated during build process 
+        /// </summary>
+        /// <param name="context"></param>
         public void Initialize(GeneratorInitializationContext context)
         {
 #if DEBUG

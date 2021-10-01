@@ -3,7 +3,7 @@
 namespace Compentio.SourceMapper.Metadata
 {
     /// <summary>
-    /// Main interface for all metadata types
+    /// Base interface for all metadata types
     /// </summary>
     interface IMetadata
     {

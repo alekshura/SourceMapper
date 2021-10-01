@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace Compentio.SourceMapper.Generators
 {
+    /// <summary>
+    /// Syntax receiver. It is responsible for syntax changes in abstract classes and interfaces in you code, that are tagged with <see cref="MapperAttribute"/>
+    /// </summary>
     public class MappersSyntaxReceiver : ISyntaxReceiver
     {
         public List<TypeDeclarationSyntax> Candidates { get; } = new();

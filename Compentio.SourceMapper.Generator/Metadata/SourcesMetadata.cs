@@ -12,7 +12,6 @@ namespace Compentio.SourceMapper.Metadata
     {
         /// <summary>
         /// Dependency injection container type used in source project
-        /// TODO: get DI used in target project
         /// </summary>
         DependencyInjection DependencyInjection { get; }
 
