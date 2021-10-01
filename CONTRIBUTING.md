@@ -1,14 +1,14 @@
 # How to contribute
 
-The way to contribute is to open an issue and start a discussion on [main repo issue tracker](https://github.com/alekshura/SourceMapper/issues)
-Then we can decide if and how a feature or a change could be implemented and if you should submit a pull requests with code changes.
+The way to contribute is to open start a discussion on [repo discussions tab](https://github.com/alekshura/SourceMapper/discussions).
+During discussion we together decide if and how a feature or a change could be implemented and than we will create an issue.
+Every PR shoulb be referenced to the issue (or issues).
 
 I recommend to read firs: [Being a good open source citizen](https://hackernoon.com/being-a-good-open-source-citizen-9060d0ab9732#.x3hocgw85)
 
-## Bugs and feature requests?
+## Bugs?
 Please create a new issue in the main GitHub repo:
-
-* [SourceMapper](https://github.com/alekshura/SourceMapper/issues), tag it as a `bug` or `enhancement`
+* [SourceMapper](https://github.com/alekshura/SourceMapper/issues), tag it as a `bug`
 
 ## Filing issues
 The best way to get your bug fixed is to be as detailed as you can be about the problem.
@@ -41,3 +41,8 @@ Summary of the changes (Less than 80 chars)
 
 -  Tests and also unit or integration tests need to be provided and written for every bug/feature that is completed.
 -  All unit or integration tests should pass
+
+**Documentation**
+All new features should be documented:
+- In README.md
+- In code - new properties, methods, classes or interfaces
