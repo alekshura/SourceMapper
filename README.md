@@ -185,10 +185,7 @@ public abstract class UserMapper
 }
 ```
 
-More examples can be found in repo code:
-https://github.com/alekshura/SourceMapper/blob/master/Compentio.SourceMapper.Tests/Mappings/ClassUserMappers.cs and
-https://github.com/alekshura/SourceMapper/blob/master/Compentio.SourceMapper.Tests/Mappings/InterfaceUserMappers.cs
-
+For more examples see [Wiki examples](https://github.com/alekshura/SourceMapper/wiki/Examples#mapping-collections).
 
 ## Dependency injection
 To simplify adding dependency injection for mappers `MappersDependencyInjectionExtensions` class is generated, that can be used (for now only for
