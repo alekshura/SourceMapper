@@ -1,10 +1,13 @@
 # SourceMapper
 
 # Introduction
-`SourceMapper` is code generator for mappings based on attributes defined in interfaces or abstrat classes. 
-It is based on .NetCore [Source Generators](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.md) 
-engine and generates classes for mappers during build time of you project.
-That is the main difference between `SourceMapper` and [Automapper](https://automapper.org/): you can see, reuse or inherit from generated code after app build process.
+`SourceMapper` is a code generator that uses attributes placed in interfaces or abstract classes: 
+during build time it generates mapping classes and methods for mappings based on "rules" defined in these attributes. 
+
+It is based on [Source Generators](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.md) feature
+that has been intoduced with `C# 9.0` and brings a possibility to  generate code during build time.
+
+After configuring you mappers you can see, control and override the generated code for the mappings.
 
 # Installation
 Install using nuget package manager:
@@ -96,6 +99,8 @@ public class NotesMapper : INotesMapper
     public static NotesMapper Create() => new();
     public virtual Compentio.Example.App.Entities.NoteDto MapToDto(Compentio.Example.App.Entities.NoteDao source)
     {
+        if (source == null)
+            return source;
         var target = new Compentio.Example.App.Entities.NoteDto();
         target.Id = source.Id;
         target.Title = source.PageTitle;
@@ -106,6 +111,8 @@ public class NotesMapper : INotesMapper
 
     public virtual Compentio.Example.App.Entities.NoteDocumentDto MapDocumentToDto(Compentio.Example.App.Entities.NoteDocumentDao source)
     {
+        if (source == null)
+            return source;
         var target = new Compentio.Example.App.Entities.NoteDocumentDto();
         target.Id = source.Id;
         target.Title = source.Title;
@@ -197,15 +204,4 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
 ```
 The `Compentio.SourceMapper` searches for 3 main dependency container packages (`Microsoft.Extensions.DependencyInjection`, `Autofac.Extensions.DependencyInjection`, and `StructureMap.Microsoft.DependencyInjection`) and generates extension code. If there no any container packages found, Dependency Injection extension class in not generated.
 
-# Roadmap & development
-| Status | Description |
-| --- |---|
-|[✔] |Basic interface and abstract class mapper
-|[✔]|Collections mappings
-|[❌]|Add Using property to `MapperAttribute` to use mappings from another mappers
-|[❌]|Inverse mapping - `MappingAttribute` property that automaticly generates inverse mapping 
-|[❔] |<del>Automatic casting</del> manual casing Attribute of the properties
-|[✔] |Dependency injection containers automatic recognize container type and generating extensions methods for mappers
-|[❌] |Dependency injection containers diagnostics
-|[❔]|Linq extensions - generate extensions for mapping collections, e.g.: `IEnumerable<NoteDocumentDto> documentDtos = documentsDaos.MapToDto()`
 
