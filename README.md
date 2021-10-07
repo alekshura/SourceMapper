@@ -15,7 +15,9 @@ during build time it generates mapping classes and methods for mappings based on
 It is based on [Source Generators](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.md) feature
 that has been intoduced with `C# 9.0` and brings a possibility to  generate code during build time.
 
+:point_right:
 After configuring you mappers you can see, control and override the generated code for the mappings.
+:point_left:
 
 # Installation
 Install using nuget package manager:
