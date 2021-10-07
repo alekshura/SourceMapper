@@ -1,4 +1,4 @@
-# <img src="/Compentio.Assets/Logo.png" width="50"> SourceMapper
+# <img src="/Compentio.Assets/Logo.png" align="left" width="50"> SourceMapper
 
 [![NuGet](http://img.shields.io/nuget/v/Compentio.SourceMapper.svg)](https://www.nuget.org/packages/Compentio.SourceMapper)
 ![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/alekshura_SourceMapper?server=https%3A%2F%2Fsonarcloud.io)
