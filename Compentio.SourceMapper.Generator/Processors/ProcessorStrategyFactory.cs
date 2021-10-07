@@ -7,7 +7,7 @@ namespace Compentio.SourceMapper.Processors
     /// <summary>
     /// Code processor factory that returns proper processod that depends on mapper definition type: abstract class or interface
     /// </summary>
-    internal class ProcessorStrategyFactory
+    internal static class ProcessorStrategyFactory
     {
         private readonly static Dictionary<TypeKind, IProcessorStrategy> _mappersStrategies = new()
         {

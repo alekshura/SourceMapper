@@ -53,7 +53,7 @@ namespace Compentio.SourceMapper.Metadata
             var mapper = _mappers.FirstOrDefault(m => m.Name == mapperMetadata.Name);
             if (mapper is not null)
             {
-                mapper = mapperMetadata;
+                _mappers.Where(m => m == mapper).ToList().ForEach(m => m = mapperMetadata);
             }
             else
             {
