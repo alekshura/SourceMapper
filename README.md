@@ -1,6 +1,7 @@
 # SourceMapper
 
 [![NuGet](http://img.shields.io/nuget/v/Compentio.SourceMapper.svg)](https://www.nuget.org/packages/Compentio.SourceMapper)
+![Nuget](https://img.shields.io/nuget/dt/Compentio.SourceMapper)
 ![GitHub](https://img.shields.io/github/license/alekshura/SourceMapper)
 
 # Introduction
