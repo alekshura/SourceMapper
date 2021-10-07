@@ -27,7 +27,7 @@ jobs:
           PACKAGE_NAME: Compentio.SourceMapper
           
           # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
-          VERSION_FILE_PATH: Directory.Build.props
+          VERSION_FILE_PATH: Compentio.SourceMapper.Generator/Compentio.SourceMapper.csproj
 
           # Regex pattern to extract version info in a capturing group
           VERSION_REGEX: ^\s*<Version>(.*)<\/Version>\s*$
@@ -39,7 +39,7 @@ jobs:
           # TAG_COMMIT: true
 
           # Format of the git tag, [*] gets replaced with actual version
-          TAG_FORMAT: v*
+          # TAG_FORMAT: v*
 
           # API key to authenticate with NuGet server
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
