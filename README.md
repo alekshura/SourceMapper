@@ -1,11 +1,11 @@
 # SourceMapper
 
 [![NuGet](http://img.shields.io/nuget/v/Compentio.SourceMapper.svg)](https://www.nuget.org/packages/Compentio.SourceMapper)
+[![Build](https://github.com/alekshura/SourceMapper/actions/workflows/build.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/build.yml)
+[![Test](https://github.com/alekshura/SourceMapper/actions/workflows/pr-tests.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/pr-tests.yml)
 [![Build](https://github.com/alekshura/SourceMapper/actions/workflows/main.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/main.yml)
 ![Nuget](https://img.shields.io/nuget/dt/Compentio.SourceMapper)
 ![GitHub](https://img.shields.io/github/license/alekshura/SourceMapper)
-[![Test](https://github.com/alekshura/SourceMapper/actions/workflows/pr-tests.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/pr-tests.yml)
-[![Build](https://github.com/alekshura/SourceMapper/actions/workflows/build.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/build.yml)
 ![GitHub top language](https://img.shields.io/github/languages/top/alekshura/SourceMapper)
 
 # Introduction
