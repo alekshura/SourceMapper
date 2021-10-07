@@ -1,5 +1,7 @@
 # SourceMapper
 
+[![NuGet](http://img.shields.io/nuget/v/AutoMapper.svg)](https://www.nuget.org/packages/Compentio.SourceMapper)
+
 # Introduction
 `SourceMapper` is a code generator that uses attributes placed in interfaces or abstract classes: 
 during build time it generates mapping classes and methods for mappings based on "rules" defined in these attributes. 
