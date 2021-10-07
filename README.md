@@ -1,7 +1,7 @@
 # SourceMapper
 
 [![NuGet](http://img.shields.io/nuget/v/Compentio.SourceMapper.svg)](https://www.nuget.org/packages/Compentio.SourceMapper)
-[![Build](https://github.com/alekshura/SourceMapper/actions/workflows/build.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/build.yml)
+![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/alekshura_SourceMapper?server=https%3A%2F%2Fsonarcloud.io)
 [![Test](https://github.com/alekshura/SourceMapper/actions/workflows/pr-tests.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/pr-tests.yml)
 [![Build](https://github.com/alekshura/SourceMapper/actions/workflows/main.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/main.yml)
 ![Nuget](https://img.shields.io/nuget/dt/Compentio.SourceMapper)
