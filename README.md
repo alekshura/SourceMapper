@@ -4,6 +4,7 @@
 [![Build](https://github.com/alekshura/SourceMapper/actions/workflows/main.yml/badge.svg)](https://github.com/alekshura/SourceMapper/actions/workflows/main.yml)
 ![Nuget](https://img.shields.io/nuget/dt/Compentio.SourceMapper)
 ![GitHub](https://img.shields.io/github/license/alekshura/SourceMapper)
+![GitHub top language](https://img.shields.io/github/languages/top/alekshura/SourceMapper)
 
 # Introduction
 `SourceMapper` is a code generator that uses attributes placed in interfaces or abstract classes: 
