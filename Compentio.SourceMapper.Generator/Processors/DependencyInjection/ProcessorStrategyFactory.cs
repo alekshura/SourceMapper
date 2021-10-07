@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {    
-    internal class DependencyInjectionStrategyFactory
+    internal static class DependencyInjectionStrategyFactory
     {
         private readonly static Dictionary<DependencyInjectionType, IDependencyInjectionStrategy> _dependencyInjectionStrategies = new()
         {
