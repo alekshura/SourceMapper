@@ -4,7 +4,7 @@
 ### New Rules
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-SMAP0001 | SourceMapperAnalyzer | Warning | SMAP0001_SourceMapperAnalyzer, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics-descriptors#smap0001)
-SMAP0002 | SourceMapperAnalyzer | Error | SMAP0002_SourceMapperAnalyzer, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics-descriptors#smap0002)
-SMAP0003 | SourceMapperAnalyzer | Warning | SMAP0003_SourceMapperAnalyzer, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics-descriptors#smap0003)
-SMAP0099 | SourceMapperAnalyzer | Error | SMAP0099_SourceMapperAnalyzer, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics-descriptors#smap0099)
+SMAP0001 | Design | Info | SMAP0001_CompentioSourceMapper, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics#smap0001)
+SMAP0002 | Design | Error | SMAP0002_CompentioSourceMapper, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics#smap0002)
+SMAP0003 | Design | Info | SMAP0003_CompentioSourceMapper, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics#smap0003)
+SMAP0099 | Design | Error | SMAP0099_CompentioSourceMapper, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics#smap0099)
