@@ -10,7 +10,7 @@ namespace Compentio.SourceMapper.Diagnostics
         private const string DiagnosticsDescriptorsUri = "https://github.com/alekshura/SourceMapper/wiki/Diagnostics#";
 
         public static readonly DiagnosticDescriptor ExpressionMustBeUsedInClass =
-            new("SMAP0001", "Expression must be used in abstract class", "The Expression '{0}' must be in abstract class", "Design", DiagnosticSeverity.Info, true,
+            new("SMAP0001", "Expression must be used in abstract class", "The Expression '{0}' must be in abstract class", "Design", DiagnosticSeverity.Warning, true,
                 "Expression property can be used only in abstract classes. In interface it is ignored.", $"{DiagnosticsDescriptorsUri}smap0001");
 
         public static readonly DiagnosticDescriptor ConversionFunctionShouldBePublicOrProtected =
@@ -18,7 +18,7 @@ namespace Compentio.SourceMapper.Diagnostics
                "Conversion function must be public or protected, because generated inherited mapping class uses it.", $"{DiagnosticsDescriptorsUri}smap0002");
 
         public static readonly DiagnosticDescriptor PropertyIsNotMapped =
-           new("SMAP0003", "Property is not mapped", "The property '{0}' is not mapped", "Design", DiagnosticSeverity.Info, true,
+           new("SMAP0003", "Property is not mapped", "The property '{0}' is not mapped", "Design", DiagnosticSeverity.Warning, true,
                "Source property for defined target property not found, thus property does not mapped.", $"{DiagnosticsDescriptorsUri}#smap0003");
 
         public static readonly DiagnosticDescriptor UnexpectedError =
