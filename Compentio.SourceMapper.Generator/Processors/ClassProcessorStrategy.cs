@@ -15,9 +15,11 @@ namespace Compentio.SourceMapper.Processors
                             // <generated-at '{System.DateTime.UtcNow}' />
 
             using System;
+            using System.Diagnostics.CodeAnalysis;
 
             { $"namespace {mapperMetadata.Namespace}"}
             {{
+               [ExcludeFromCodeCoverage]
                public class {mapperMetadata.TargetClassName} : {mapperMetadata.Name}
                {{                  
                    { GenerateMethods(mapperMetadata) }                  
