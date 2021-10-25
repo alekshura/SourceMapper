@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Compentio.SourceMapper.Processors
 {
     /// <summary>
-    /// Code processor factory that returns proper processod that depends on mapper definition type: abstract class or interface
+    /// Code processor factory that returns proper processor that depends on mapper definition type: abstract class or interface
     /// </summary>
     internal static class ProcessorStrategyFactory
     {
