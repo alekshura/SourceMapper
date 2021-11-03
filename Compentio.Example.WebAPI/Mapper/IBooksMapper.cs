@@ -7,9 +7,11 @@ namespace Compentio.Example.WebAPI.Mapper
     public interface IBooksMapper
     {
         [Mapping(Source = nameof(BookDao.Description), Target = nameof(BookDto.BookDescription))]
+        [Mapping(Source = nameof(BookDao.Id), Target = nameof(BookDto.BookId))]
         BookDto MapBookToDto(BookDao source);
 
         [Mapping(Source = nameof(BookDto.BookDescription), Target = nameof(BookDao.Description))]
+        [Mapping(Source = nameof(BookDto.BookId), Target = nameof(BookDao.Id))]
         BookDao MapBookToDao(BookDto source);
 
         [Mapping(Source = nameof(AddressDao.PostCode), Target = nameof(AddressDto.PostalCode))]

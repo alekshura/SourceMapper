@@ -7,7 +7,7 @@ namespace Compentio.Example.WebAPI
     /// <summary>
     /// Sample code with Autofac DI
     /// </summary>
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
