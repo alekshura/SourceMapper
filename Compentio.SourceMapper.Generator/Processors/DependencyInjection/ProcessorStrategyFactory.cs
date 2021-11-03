@@ -7,7 +7,8 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
     {
         private readonly static Dictionary<DependencyInjectionType, IDependencyInjectionStrategy> _dependencyInjectionStrategies = new()
         {
-            { DependencyInjectionType.DotNetCore, new DotnetCoreProcessorStrategy() }
+            { DependencyInjectionType.DotNetCore, new DotnetCoreProcessorStrategy() },
+            { DependencyInjectionType.Autofac, new AutofacProcessorStrategy() }
         };
 
         internal static IDependencyInjectionStrategy? GetStrategy(ISourcesMetadata sourcesMetadata)

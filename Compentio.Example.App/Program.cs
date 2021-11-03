@@ -9,6 +9,9 @@ using Compentio.SourceMapper.DependencyInjection;
 
 namespace Compentio.ConsoleApp
 {
+    /// <summary>
+    /// Sample code using standard DotNetCore DI
+    /// </summary>
     class Program
     {
         static async Task Main(string[] args)
