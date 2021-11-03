@@ -2,7 +2,7 @@
 {
     internal class DependencyInjection
     {
-        internal DependencyInjectionType DependencyInjectionType { get; set; }
+        internal virtual DependencyInjectionType DependencyInjectionType { get; set; }
         internal string DependencyInjectionClassName { get; }  = "MappersDependencyInjectionExtensions";
     }
 }
