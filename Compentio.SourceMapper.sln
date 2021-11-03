@@ -12,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compentio.SourceMapper.Tests", "Compentio.SourceMapper.Tests\Compentio.SourceMapper.Tests.csproj", "{6930DDF1-653B-4200-96BA-6C3BB2FEA2B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.SourceMapper.Tests", "Compentio.SourceMapper.Tests\Compentio.SourceMapper.Tests.csproj", "{6930DDF1-653B-4200-96BA-6C3BB2FEA2B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compentio.Example.WebAPI", "Compentio.Example.WebAPI\Compentio.Example.WebAPI.csproj", "{043B1040-8796-4448-BD00-83C2692716A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{6930DDF1-653B-4200-96BA-6C3BB2FEA2B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6930DDF1-653B-4200-96BA-6C3BB2FEA2B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6930DDF1-653B-4200-96BA-6C3BB2FEA2B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{043B1040-8796-4448-BD00-83C2692716A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{043B1040-8796-4448-BD00-83C2692716A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{043B1040-8796-4448-BD00-83C2692716A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{043B1040-8796-4448-BD00-83C2692716A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
