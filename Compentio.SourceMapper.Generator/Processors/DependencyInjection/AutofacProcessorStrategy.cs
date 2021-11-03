@@ -1,5 +1,6 @@
 ﻿using Compentio.SourceMapper.Metadata;
 using System;
+using System.Text;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
@@ -33,14 +34,14 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 
         private string GenerateBuilder(ISourcesMetadata sourcesMetadata)
         {
-            var builder = string.Empty;
+            var builder = new StringBuilder();
 
             foreach (var mapper in sourcesMetadata.Mappers)
             {
-                builder += $"builder.RegisterType<{mapper.Namespace}.{mapper.TargetClassName}>().As<{mapper.Namespace}.{mapper.Name}>().SingleInstance();";
+                builder.AppendLine($"builder.RegisterType<{mapper.Namespace}.{mapper.TargetClassName}>().As<{mapper.Namespace}.{mapper.Name}>().SingleInstance();");
             }
 
-            return builder;
+            return builder.ToString();
         }
     }
 }
