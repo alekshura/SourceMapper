@@ -13,9 +13,13 @@ namespace Compentio.Example.WebAPI.Mapper
         BookDao MapBookToDao(BookDto source);
 
         [Mapping(Source = nameof(AddressDao.PostCode), Target = nameof(AddressDto.PostalCode))]
+        [Mapping(Source = nameof(AddressDao.HomeNumber), Target = nameof(AddressDto.Home))]
+        [Mapping(Source = nameof(AddressDao.Id), Target = nameof(AddressDto.AddressId))]
         AddressDto MapAddressToDto(AddressDao source);
 
         [Mapping(Source = nameof(AddressDto.PostalCode), Target = nameof(AddressDao.PostCode))]
+        [Mapping(Source = nameof(AddressDto.Home), Target = nameof(AddressDao.HomeNumber))]
+        [Mapping(Source = nameof(AddressDto.AddressId), Target = nameof(AddressDao.Id))]
         AddressDao MapAddressToDao(AddressDto source);
     }
 }

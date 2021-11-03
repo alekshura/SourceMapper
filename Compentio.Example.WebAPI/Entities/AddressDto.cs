@@ -1,7 +1,10 @@
-﻿namespace Compentio.Example.WebAPI.Entities
+﻿using System;
+
+namespace Compentio.Example.WebAPI.Entities
 {
     public class AddressDto
     {
+        public Guid AddressId { get; set; }
         public string Country { get; set; }
         public string Region { get; set; }
         public string City { get; set; }
