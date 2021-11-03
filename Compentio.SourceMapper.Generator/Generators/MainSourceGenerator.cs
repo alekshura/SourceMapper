@@ -73,19 +73,19 @@ namespace Compentio.SourceMapper.Generators
 
         private DependencyInjectionType GetDependencyInjectionType(IEnumerable<AssemblyIdentity> assemblies)
         {
-            if (assemblies.Any(ai => ai.Name.Equals("Microsoft.Extensions.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.DotNetCore;
-            }
-
             if (assemblies.Any(ai => ai.Name.Equals("Autofac.Extensions.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
             {
                 return DependencyInjectionType.Autofac;
             }
 
+            if (assemblies.Any(ai => ai.Name.Equals("Microsoft.Extensions.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
+            {
+                return DependencyInjectionType.DotNetCore;
+            }
+
             if (assemblies.Any(ai => ai.Name.Equals("StructureMap.Microsoft.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
             {
-                return DependencyInjectionType.Autofac;
+                return DependencyInjectionType.StructureMap;
             }
             
             return DependencyInjectionType.None;            
