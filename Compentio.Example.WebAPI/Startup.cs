@@ -1,7 +1,4 @@
 using Autofac;
-using Compentio.Example.WebAPI.Repository;
-using Compentio.Example.WebAPI.Services;
-using Compentio.SourceMapper.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,16 +24,13 @@ namespace Compentio.Example.WebAPI
             services.AddControllers();
         }
 
-
         /// <summary>
         /// Registration directly with Autofac. This runs after ConfigureServices so the things
         /// here will override registrations made in ConfigureServices.
         /// </summary>
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterType<BooksService>().As<IBooksService>().InstancePerDependency();
-            builder.RegisterType<BooksRepository>().As<IBooksRepository>().SingleInstance();
-            builder.AddMappers();
+            builder.RegisterModule(new AutofacModule());
         }
 
         /// <summary>
