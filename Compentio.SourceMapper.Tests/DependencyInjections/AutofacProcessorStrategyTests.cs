@@ -48,9 +48,11 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             // Arrange
             var mockSourceMetadata = GetMockSourceMetadata();
             var mockMapperMetadata = new Mock<IMapperMetadata>();
-            mockMapperMetadata.Setup(m => m.Namespace).Returns(string.Empty);
-            mockMapperMetadata.Setup(m => m.TargetClassName).Returns(string.Empty);
-            mockMapperMetadata.Setup(m => m.Name).Returns(string.Empty);
+
+            mockMapperMetadata.Setup(m => m.Name).Returns("Name");
+            mockMapperMetadata.Setup(m => m.Namespace).Returns("Namespace");
+            mockMapperMetadata.Setup(m => m.TargetClassName).Returns("TargetClassName");
+
             mockSourceMetadata.Setup(s => s.Mappers).Returns(new ReadOnlyCollection<IMapperMetadata>(new List<IMapperMetadata> { mockMapperMetadata.Object }));
 
             // Act
