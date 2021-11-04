@@ -49,7 +49,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             Assert.IsAssignableFrom<AutofacProcessorStrategy>(dependencyInjectionStrategy);
         }
 
-        private Mock<ISourcesMetadata> GetMockSourcesMetadata(DependencyInjectionType dependencyInjectionType)
+        private static Mock<ISourcesMetadata> GetMockSourcesMetadata(DependencyInjectionType dependencyInjectionType)
         {
             var mockDependencyInjection = GetMockDependencyInjection(dependencyInjectionType);
             var mockSourceMetadata = new Mock<ISourcesMetadata>();

@@ -76,7 +76,7 @@ namespace Compentio.SourceMapper.Processors
 
         public IEnumerable<DiagnosticsInfo>? Diagnostics => _diagnostics;
 
-        public bool IsSuccess => !_diagnostics.Any(info => info.Exception is not null);
+        public bool IsSuccess => _diagnostics is null || !_diagnostics.Any(info => info.Exception is not null);
 
         private string FormatCode(string code)
         {

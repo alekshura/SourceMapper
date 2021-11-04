@@ -1,5 +1,7 @@
-﻿using Compentio.SourceMapper.Metadata;
+﻿using Compentio.SourceMapper.Diagnostics;
+using Compentio.SourceMapper.Metadata;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
@@ -34,6 +36,8 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 
         private string GenerateBuilder(ISourcesMetadata sourcesMetadata)
         {
+            if (sourcesMetadata.Mappers == null) return string.Empty;
+
             var builder = new StringBuilder();
 
             foreach (var mapper in sourcesMetadata.Mappers)
