@@ -117,16 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AutofacAssemblyName" xml:space="preserve">
-    <value>Autofac.Extensions.DependencyInjection</value>
-  </data>
   <data name="DependencyInjectionClassName" xml:space="preserve">
     <value>MappersDependencyInjectionExtensions</value>
-  </data>
-  <data name="DotNetCoreAssemblyName" xml:space="preserve">
-    <value>Microsoft.Extensions.DependencyInjection</value>
-  </data>
-  <data name="StructureMapAssemblyName" xml:space="preserve">
-    <value>StructureMap.Microsoft.DependencyInjection</value>
   </data>
 </root>

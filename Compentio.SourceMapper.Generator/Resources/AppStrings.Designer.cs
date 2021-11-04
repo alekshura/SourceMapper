@@ -61,38 +61,11 @@ namespace Compentio.SourceMapper.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Autofac.Extensions.DependencyInjection.
-        /// </summary>
-        internal static string AutofacAssemblyName {
-            get {
-                return ResourceManager.GetString("AutofacAssemblyName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to MappersDependencyInjectionExtensions.
         /// </summary>
         internal static string DependencyInjectionClassName {
             get {
                 return ResourceManager.GetString("DependencyInjectionClassName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Microsoft.Extensions.DependencyInjection.
-        /// </summary>
-        internal static string DotNetCoreAssemblyName {
-            get {
-                return ResourceManager.GetString("DotNetCoreAssemblyName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to StructureMap.Microsoft.DependencyInjection.
-        /// </summary>
-        internal static string StructureMapAssemblyName {
-            get {
-                return ResourceManager.GetString("StructureMapAssemblyName", resourceCulture);
             }
         }
     }
