@@ -2,7 +2,7 @@
 using Moq;
 using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors.DependencyInjection;
-using AutoFixture;
+using FluentAssertions;
 
 namespace Compentio.SourceMapper.Tests.DependencyInjections
 {
@@ -18,7 +18,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(mockSourceMetadata.Object);
 
             //Assert
-            Assert.Null(dependencyInjectionStrategy);
+            dependencyInjectionStrategy.Should().BeNull();
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(mockSourceMetadata.Object);
 
             //Assert
-            Assert.IsAssignableFrom<DotnetCoreProcessorStrategy>(dependencyInjectionStrategy);
+            dependencyInjectionStrategy.Should().BeOfType<DotnetCoreProcessorStrategy>();
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(mockSourceMetadata.Object);
 
             //Assert
-            Assert.IsAssignableFrom<AutofacProcessorStrategy>(dependencyInjectionStrategy);
+            dependencyInjectionStrategy.Should().BeOfType<AutofacProcessorStrategy>();
         }
 
         private static Mock<ISourcesMetadata> GetMockSourcesMetadata(DependencyInjectionType dependencyInjectionType)

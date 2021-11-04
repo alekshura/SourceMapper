@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Xunit;
+using FluentAssertions;
 
 namespace Compentio.SourceMapper.Tests.DependencyInjections
 {
@@ -24,7 +25,8 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var result = autofacProcessorStrategy.GenerateCode(mockSourceMetadata.Object);
 
             // Assert
-            Assert.True(result is not null && result.IsSuccess);
+            result.Should().NotBeNull();
+            result.IsSuccess.Should().BeTrue();
         }
 
         [Fact]
@@ -39,7 +41,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var result = autofacProcessorStrategy.GenerateCode(mockSourceMetadata.Object);
 
             // Assert
-            Assert.DoesNotContain(BUILDER_REGISTER_SERVICE, result.GeneratedCode, StringComparison.InvariantCultureIgnoreCase);
+            result.GeneratedCode.Should().NotContain(BUILDER_REGISTER_SERVICE);
         }
 
         [Fact]
@@ -60,7 +62,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var result = autofacProcessorStrategy.GenerateCode(mockSourceMetadata.Object);
 
             // Assert
-            Assert.Contains(BUILDER_REGISTER_SERVICE, result.GeneratedCode, StringComparison.InvariantCultureIgnoreCase);
+            result.GeneratedCode.Should().Contain(BUILDER_REGISTER_SERVICE);
         }
 
         private static Mock<ISourcesMetadata> GetMockSourceMetadata()
