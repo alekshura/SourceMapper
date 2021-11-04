@@ -1,6 +1,7 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors.DependencyInjection;
+using Compentio.SourceMapper.Resources;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
@@ -73,17 +74,17 @@ namespace Compentio.SourceMapper.Generators
 
         private DependencyInjectionType GetDependencyInjectionType(IEnumerable<AssemblyIdentity> assemblies)
         {
-            if (assemblies.Any(ai => ai.Name.Equals("Autofac.Extensions.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
+            if (assemblies.Any(ai => ai.Name.Equals(AppStrings.AutofacAssemblyName, StringComparison.OrdinalIgnoreCase)))
             {
                 return DependencyInjectionType.Autofac;
             }
 
-            if (assemblies.Any(ai => ai.Name.Equals("Microsoft.Extensions.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
+            if (assemblies.Any(ai => ai.Name.Equals(AppStrings.DotNetCoreAssemblyName, StringComparison.OrdinalIgnoreCase)))
             {
                 return DependencyInjectionType.DotNetCore;
             }
 
-            if (assemblies.Any(ai => ai.Name.Equals("StructureMap.Microsoft.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
+            if (assemblies.Any(ai => ai.Name.Equals(AppStrings.StructureMapAssemblyName, StringComparison.OrdinalIgnoreCase)))
             {
                 return DependencyInjectionType.StructureMap;
             }

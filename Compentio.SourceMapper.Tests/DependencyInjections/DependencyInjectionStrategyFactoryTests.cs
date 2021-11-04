@@ -58,7 +58,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             return mockSourceMetadata;
         }
 
-        private Mock<DependencyInjection> GetMockDependencyInjection(DependencyInjectionType dependencyInjectionType)
+        private static Mock<DependencyInjection> GetMockDependencyInjection(DependencyInjectionType dependencyInjectionType)
         {
             var mockDependencyInjection = new Mock<DependencyInjection>();
             mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(dependencyInjectionType);
