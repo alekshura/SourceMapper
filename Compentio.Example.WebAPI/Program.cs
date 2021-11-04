@@ -14,6 +14,10 @@ namespace Compentio.Example.WebAPI
             CreateHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        /// The UseServiceProviderFactory call attaches the
+        /// Autofac provider to the generic hosting mechanism.
+        /// </summary>
         static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
