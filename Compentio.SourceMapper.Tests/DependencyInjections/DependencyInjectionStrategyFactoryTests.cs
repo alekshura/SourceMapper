@@ -1,21 +1,34 @@
-﻿using Xunit;
-using Moq;
+﻿using AutoFixture;
 using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors.DependencyInjection;
 using FluentAssertions;
+using Moq;
+using Xunit;
 
 namespace Compentio.SourceMapper.Tests.DependencyInjections
 {
     public class DependencyInjectionStrategyFactoryTests
     {
+        private readonly IFixture _fixture;
+        private readonly Mock<ISourcesMetadata> _mockSourceMetadata;
+        private readonly Mock<DependencyInjection> _mockDependencyInjection;
+
+        public DependencyInjectionStrategyFactoryTests()
+        {
+            _fixture = new Fixture();
+            _mockSourceMetadata = _fixture.Create<Mock<ISourcesMetadata>>();
+            _mockDependencyInjection = _fixture.Create<Mock<DependencyInjection>>();
+        }
+
         [Fact]
         public void GetStrategy_WithNoneDependencyInjection_ReturnNull()
         {
             // Arrange
-            var mockSourceMetadata = GetMockSourcesMetadata(DependencyInjectionType.None);
+            _mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(DependencyInjectionType.None);
+            _mockSourceMetadata.Setup(m => m.DependencyInjection).Returns(_mockDependencyInjection.Object);
 
             //Act
-            var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(mockSourceMetadata.Object);
+            var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(_mockSourceMetadata.Object);
 
             //Assert
             dependencyInjectionStrategy.Should().BeNull();
@@ -24,12 +37,12 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         [Fact]
         public void GetStrategy_ForDotNetCoreDI_ReturnDotnetCoreProcessorStrategy()
         {
-
             // Arrange
-            var mockSourceMetadata = GetMockSourcesMetadata(DependencyInjectionType.DotNetCore);
+            _mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(DependencyInjectionType.DotNetCore);
+            _mockSourceMetadata.Setup(m => m.DependencyInjection).Returns(_mockDependencyInjection.Object);
 
             //Act
-            var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(mockSourceMetadata.Object);
+            var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(_mockSourceMetadata.Object);
 
             //Assert
             dependencyInjectionStrategy.Should().BeOfType<DotnetCoreProcessorStrategy>();
@@ -38,32 +51,15 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         [Fact]
         public void GetStrategy_ForAutofacDI_ReturnAutofacProcessorStrategy()
         {
-
-            // Arrange          
-            var mockSourceMetadata = GetMockSourcesMetadata(DependencyInjectionType.Autofac);
+            // Arrange
+            _mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(DependencyInjectionType.Autofac);
+            _mockSourceMetadata.Setup(m => m.DependencyInjection).Returns(_mockDependencyInjection.Object);
 
             //Act
-            var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(mockSourceMetadata.Object);
+            var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(_mockSourceMetadata.Object);
 
             //Assert
             dependencyInjectionStrategy.Should().BeOfType<AutofacProcessorStrategy>();
-        }
-
-        private static Mock<ISourcesMetadata> GetMockSourcesMetadata(DependencyInjectionType dependencyInjectionType)
-        {
-            var mockDependencyInjection = GetMockDependencyInjection(dependencyInjectionType);
-            var mockSourceMetadata = new Mock<ISourcesMetadata>();
-            mockSourceMetadata.Setup(m => m.DependencyInjection).Returns(mockDependencyInjection.Object);
-
-            return mockSourceMetadata;
-        }
-
-        private static Mock<DependencyInjection> GetMockDependencyInjection(DependencyInjectionType dependencyInjectionType)
-        {
-            var mockDependencyInjection = new Mock<DependencyInjection>();
-            mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(dependencyInjectionType);
-
-            return mockDependencyInjection;
         }
     }
 }
