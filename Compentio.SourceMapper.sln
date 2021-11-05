@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.SourceMapper", "Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj", "{B66B2628-50B5-4AE5-A88A-5DEB39FFB449}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.Example.App", "Compentio.Example.App\Compentio.Example.App.csproj", "{792D18D8-5E2C-4DEC-95C9-44B8F8AF2FAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.Example.DotNetCore.App", "Compentio.Example.DotNetCore.App\Compentio.Example.DotNetCore.App.csproj", "{792D18D8-5E2C-4DEC-95C9-44B8F8AF2FAA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{59821036-CEBB-4E27-88A9-43BF86492019}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.SourceMapper.Tests", "Compentio.SourceMapper.Tests\Compentio.SourceMapper.Tests.csproj", "{6930DDF1-653B-4200-96BA-6C3BB2FEA2B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compentio.Example.WebAPI", "Compentio.Example.WebAPI\Compentio.Example.WebAPI.csproj", "{043B1040-8796-4448-BD00-83C2692716A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compentio.Example.Autofac.App", "Compentio.Example.Autofac.App\Compentio.Example.Autofac.App.csproj", "{043B1040-8796-4448-BD00-83C2692716A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
