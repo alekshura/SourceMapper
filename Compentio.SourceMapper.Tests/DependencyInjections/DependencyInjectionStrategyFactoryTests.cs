@@ -35,7 +35,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         }
 
         [Fact]
-        public void GetStrategy_ForDotNetCoreDI_ReturnDotnetCoreProcessorStrategy()
+        public void GetStrategy_ForDotNetCoreType_ReturnDotnetCoreProcessorStrategy()
         {
             // Arrange
             _mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(DependencyInjectionType.DotNetCore);
@@ -49,7 +49,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         }
 
         [Fact]
-        public void GetStrategy_ForAutofacDI_ReturnAutofacProcessorStrategy()
+        public void GetStrategy_ForAutofacType_ReturnAutofacProcessorStrategy()
         {
             // Arrange
             _mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(DependencyInjectionType.Autofac);
@@ -60,6 +60,36 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
 
             //Assert
             dependencyInjectionStrategy.Should().BeOfType<AutofacProcessorStrategy>();
+        }
+
+        [Fact]
+        public void FactoryStrategies_ContainStrategy_DotNetCore()
+        {
+            // Act
+            var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.DotNetCore);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void FactoryStrategies_ContainStrategy_Autofac()
+        {
+            // Act
+            var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.Autofac);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void FactoryStrategies_NotContainStrategy_None()
+        {
+            // Act
+            var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.None);
+
+            //Assert
+            result.Should().BeFalse();
         }
     }
 }
