@@ -6,13 +6,15 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Compentio.SourceMapper.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Compentio.ConsoleApp
 {
     /// <summary>
     /// Sample code using standard DotNetCore DI
     /// </summary>
-    class Program
+    [ExcludeFromCodeCoverage]
+    static class Program
     {
         static async Task Main(string[] args)
         {

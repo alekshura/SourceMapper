@@ -1,10 +1,12 @@
 ﻿using Compentio.Example.Autofac.App.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Compentio.Example.Autofac.App.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class BooksRepository : IBooksRepository
     {
         public async Task<BookDao> CreateBook(BookDao book)

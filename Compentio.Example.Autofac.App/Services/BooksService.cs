@@ -3,11 +3,13 @@ using Compentio.Example.Autofac.App.Mapper;
 using Compentio.Example.Autofac.App.Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Compentio.Example.Autofac.App.Services
 {
+    [ExcludeFromCodeCoverage]
     public class BooksService : IBooksService
     {
         private readonly IBooksRepository _booksRepository;

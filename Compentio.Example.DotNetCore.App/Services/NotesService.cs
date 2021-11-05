@@ -3,6 +3,7 @@ using Compentio.Example.DotNetCore.App.Mappers;
 using Compentio.Example.DotNetCore.App.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Compentio.Example.DotNetCore.App.Services
         Task<NoteDto> UpdateNote(NoteDto note);
     }
 
+    [ExcludeFromCodeCoverage]
     public class NotesService : INotesService
     {
         private readonly INotesRepository _repository;

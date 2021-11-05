@@ -1,6 +1,7 @@
 ﻿using Compentio.Example.DotNetCore.App.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Compentio.Example.DotNetCore.App.Repositories
@@ -13,6 +14,7 @@ namespace Compentio.Example.DotNetCore.App.Repositories
         Task<NoteDao> UpdateNote(NoteDao note);
     }
 
+    [ExcludeFromCodeCoverage]
     public class NotesRepository : INotesRepository
     {
         public async Task<NoteDao> CreateNote(NoteDao note)

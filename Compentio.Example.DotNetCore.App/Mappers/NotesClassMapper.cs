@@ -1,9 +1,11 @@
 ﻿using Compentio.Example.DotNetCore.App.Entities;
 using Compentio.SourceMapper.Attributes;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Compentio.Example.DotNetCore.App.Mappers
 {
+    [ExcludeFromCodeCoverage]
     [Mapper(ClassName = "NotesMappings")]
     public abstract class NotesClassMapper
     {

@@ -2,9 +2,11 @@
 using Compentio.Example.Autofac.App.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Compentio.Example.Autofac.App.Controllers
 {
+    [ExcludeFromCodeCoverage]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase

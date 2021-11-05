@@ -1,12 +1,14 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Compentio.Example.Autofac.App
 {
     /// <summary>
     /// Sample code with Autofac DI
     /// </summary>
+    [ExcludeFromCodeCoverage]
     static class Program
     {
         static void Main(string[] args)
