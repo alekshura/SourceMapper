@@ -21,7 +21,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
 
         private static string GetDependencyInjectionClassNameString()
         {
-            var resourceManager = new ResourceManager(typeof(Compentio.SourceMapper.Resources.AppStrings));
+            var resourceManager = new ResourceManager(typeof(Resources.AppStrings));
             string message = resourceManager.GetString("DependencyInjectionClassName", CultureInfo.InvariantCulture);
 
             return message;

@@ -4,6 +4,13 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Generators\**" />
+    <Content Remove="Generators\**" />
+    <EmbeddedResource Remove="Generators\**" />
+    <None Remove="Generators\**" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
@@ -12,10 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj" OutputItemType="Analyzer" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Generators\" />
   </ItemGroup>
   
 </Project>
