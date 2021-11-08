@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Compentio.ConsoleApp
 {
     /// <summary>
-    /// Sample code using standard DotNetCore DI
+    /// Sample code using standard DotNetCore Dependency Injection
     /// </summary>
     [ExcludeFromCodeCoverage]
     static class Program

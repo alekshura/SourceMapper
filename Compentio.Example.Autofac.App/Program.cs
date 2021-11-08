@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Compentio.Example.Autofac.App
 {
     /// <summary>
-    /// Sample code with Autofac DI
+    /// Sample code with Autofac Dependency Injection
     /// </summary>
     [ExcludeFromCodeCoverage]
     static class Program
