@@ -198,8 +198,12 @@ public abstract class UserMapper
 For more examples see [Wiki examples](https://github.com/alekshura/SourceMapper/wiki/Examples#mapping-collections).
 
 ## Dependency injection
+The `Compentio.SourceMapper` searches for 3 main dependency container packages (`Microsoft.Extensions.DependencyInjection`, `Autofac.Extensions.DependencyInjection`, and `StructureMap.Microsoft.DependencyInjection`) and generates extension code. If there no any container packages found, Dependency Injection extension class is not generated.
+
 To simplify adding dependency injection for mappers `MappersDependencyInjectionExtensions` class is generated, that can be used (for now only for
-`Microsoft.Extensions.DependencyInjection`) by adding `AddMappers()` that adds all mappers defined in the project:
+`Microsoft.Extensions.DependencyInjection` and `Autofac.Extensions.DependencyInjection`) by adding `AddMappers()` that adds all mappers defined in the project.
+
+For `Microsoft.Extensions.DependencyInjection`, in service configuration:
 
 ```csharp
  Host.CreateDefaultBuilder(args)
@@ -209,6 +213,37 @@ To simplify adding dependency injection for mappers `MappersDependencyInjectionE
                     //
                     .AddMappers());
 ```
-The `Compentio.SourceMapper` searches for 3 main dependency container packages (`Microsoft.Extensions.DependencyInjection`, `Autofac.Extensions.DependencyInjection`, and `StructureMap.Microsoft.DependencyInjection`) and generates extension code. If there no any container packages found, Dependency Injection extension class is not generated.
 
+In case of `Autofac.Extensions.DependencyInjection`, container configuration can be separated in module file `AutofacModules`, where we place registrations directly with Autofac: 
 
+```csharp
+public class AutofacModule : Module
+{
+	protected override void Load(ContainerBuilder builder)
+	{
+		builder.RegisterType<BooksService>().As<IBooksService>().InstancePerDependency();
+		builder.RegisterType<BooksRepository>().As<IBooksRepository>().SingleInstance();
+		builder.AddMappers();
+	}
+}
+```
+
+That module need to be register in container configure section of `Startup` file:
+
+```csharp
+public void ConfigureContainer(ContainerBuilder builder)
+{
+	builder.RegisterModule(new AutofacModule());
+}
+```
+
+To run Autofac mechanism, we need to call Autofac factory with attached `Startup` file by using:
+
+```csharp
+Host.CreateDefaultBuilder(args)
+	.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+	.ConfigureWebHostDefaults(webBuilder =>
+	{
+		webBuilder.UseStartup<Startup>();
+	});
+```
