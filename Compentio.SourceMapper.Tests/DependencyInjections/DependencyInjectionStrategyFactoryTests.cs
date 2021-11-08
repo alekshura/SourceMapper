@@ -63,7 +63,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         }
 
         [Fact]
-        public void FactoryStrategies_ContainStrategy_DotNetCore()
+        public void FactoryStrategies_ContainStrategyKey_DotNetCore()
         {
             // Act
             var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.DotNetCore);
@@ -73,7 +73,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         }
 
         [Fact]
-        public void FactoryStrategies_ContainStrategy_Autofac()
+        public void FactoryStrategies_ContainStrategyKey_Autofac()
         {
             // Act
             var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.Autofac);
@@ -83,7 +83,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         }
 
         [Fact]
-        public void FactoryStrategies_NotContainStrategy_None()
+        public void FactoryStrategies_NotContainStrategyKey_None()
         {
             // Act
             var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.None);

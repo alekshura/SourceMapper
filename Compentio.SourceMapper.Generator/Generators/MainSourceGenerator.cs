@@ -16,10 +16,6 @@ namespace Compentio.SourceMapper.Generators
     [Generator]
     public class MainSourceGenerator : ISourceGenerator
     {
-        private const string AutofacAssemblyName = "Autofac.Extensions.DependencyInjection";
-        private const string DotNetCoreAssemblyName = "Microsoft.Extensions.DependencyInjection";
-        private const string StructureMapAssemblyName = "StructureMap.Microsoft.DependencyInjection";
-
         /// <summary>
         /// Main entrypoint for code generation process start. Here all mappers metadata and dependency injection configuration are set up
         /// </summary>
@@ -34,7 +30,7 @@ namespace Compentio.SourceMapper.Generators
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
                 return;
 
-            var sourcesMetadata = SourcesMetadata.Create(GetDependencyInjectionType(context.Compilation.ReferencedAssemblyNames));
+            var sourcesMetadata = SourcesMetadata.Create(DependencyInjectionService.GetDependencyInjectionType(context.Compilation.ReferencedAssemblyNames));
 
             foreach (var typeDeclaration in receiver.Candidates)
             {
@@ -74,26 +70,6 @@ namespace Compentio.SourceMapper.Generators
         {
             return type.GetAttributes()
                        .Any(a => a.AttributeClass?.Name == nameof(MapperAttribute)) && type.IsAbstract;
-        }
-
-        private DependencyInjectionType GetDependencyInjectionType(IEnumerable<AssemblyIdentity> assemblies)
-        {
-            if (assemblies.Any(ai => ai.Name.Equals(AutofacAssemblyName, StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.Autofac;
-            }
-
-            if (assemblies.Any(ai => ai.Name.Equals(DotNetCoreAssemblyName, StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.DotNetCore;
-            }
-
-            if (assemblies.Any(ai => ai.Name.Equals(StructureMapAssemblyName, StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.StructureMap;
-            }
-            
-            return DependencyInjectionType.None;            
         }
     }
 }
