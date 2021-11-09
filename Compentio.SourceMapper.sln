@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.SourceMapper.Tests", "Compentio.SourceMapper.Tests\Compentio.SourceMapper.Tests.csproj", "{6930DDF1-653B-4200-96BA-6C3BB2FEA2B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compentio.Example.Autofac.App", "Compentio.Example.Autofac.App\Compentio.Example.Autofac.App.csproj", "{043B1040-8796-4448-BD00-83C2692716A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.Example.Autofac.App", "Compentio.Example.Autofac.App\Compentio.Example.Autofac.App.csproj", "{043B1040-8796-4448-BD00-83C2692716A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{ACA5F063-6504-41B4-8106-9F48E4B5D315}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{792D18D8-5E2C-4DEC-95C9-44B8F8AF2FAA} = {ACA5F063-6504-41B4-8106-9F48E4B5D315}
+		{043B1040-8796-4448-BD00-83C2692716A5} = {ACA5F063-6504-41B4-8106-9F48E4B5D315}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D42B86EF-D955-44EA-873D-8C7784836F81}
