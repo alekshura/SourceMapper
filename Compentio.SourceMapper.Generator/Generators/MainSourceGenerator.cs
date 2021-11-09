@@ -1,6 +1,7 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors.DependencyInjection;
+using Compentio.SourceMapper.Resources;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace Compentio.SourceMapper.Generators
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
                 return;
 
-            var sourcesMetadata = SourcesMetadata.Create(GetDependencyInjectionType(context.Compilation.ReferencedAssemblyNames));
+            var sourcesMetadata = SourcesMetadata.Create(DependencyInjectionService.GetDependencyInjectionType(context.Compilation.ReferencedAssemblyNames));
 
             foreach (var typeDeclaration in receiver.Candidates)
             {
@@ -69,26 +70,6 @@ namespace Compentio.SourceMapper.Generators
         {
             return type.GetAttributes()
                        .Any(a => a.AttributeClass?.Name == nameof(MapperAttribute)) && type.IsAbstract;
-        }
-
-        private DependencyInjectionType GetDependencyInjectionType(IEnumerable<AssemblyIdentity> assemblies)
-        {
-            if (assemblies.Any(ai => ai.Name.Equals("Microsoft.Extensions.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.DotNetCore;
-            }
-
-            if (assemblies.Any(ai => ai.Name.Equals("Autofac.Extensions.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.Autofac;
-            }
-
-            if (assemblies.Any(ai => ai.Name.Equals("StructureMap.Microsoft.DependencyInjection", StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.Autofac;
-            }
-            
-            return DependencyInjectionType.None;            
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Compentio.Example.App.Entities;
+﻿using Compentio.Example.DotNetCore.App.Entities;
 using Compentio.SourceMapper.Attributes;
 using System;
 
-namespace Compentio.Example.App.Mappers
+namespace Compentio.Example.DotNetCore.App.Mappers
 {
     [Mapper]
     public interface INotesMapper

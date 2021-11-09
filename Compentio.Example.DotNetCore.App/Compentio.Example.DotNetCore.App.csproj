@@ -6,11 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Compentio.SourceMapper" Version="1.0.11" />
+    <Compile Remove="Generators\**" />
+    <EmbeddedResource Remove="Generators\**" />
+    <None Remove="Generators\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj" OutputItemType="Analyzer" />
+  </ItemGroup>
+  
 </Project>

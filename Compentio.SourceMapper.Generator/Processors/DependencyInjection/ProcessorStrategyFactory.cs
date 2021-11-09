@@ -5,19 +5,20 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 {    
     internal static class DependencyInjectionStrategyFactory
     {
-        private readonly static Dictionary<DependencyInjectionType, IDependencyInjectionStrategy> _dependencyInjectionStrategies = new()
+        internal readonly static Dictionary<DependencyInjectionType, IDependencyInjectionStrategy> DependencyInjectionStrategies = new()
         {
-            { DependencyInjectionType.DotNetCore, new DotnetCoreProcessorStrategy() }
+            { DependencyInjectionType.DotNetCore, new DotnetCoreProcessorStrategy() },
+            { DependencyInjectionType.Autofac, new AutofacProcessorStrategy() }
         };
 
         internal static IDependencyInjectionStrategy? GetStrategy(ISourcesMetadata sourcesMetadata)
         {
-            if (!_dependencyInjectionStrategies.ContainsKey(sourcesMetadata.DependencyInjection.DependencyInjectionType))
+            if (!DependencyInjectionStrategies.ContainsKey(sourcesMetadata.DependencyInjection.DependencyInjectionType))
             {
                 return null;
             }
 
-            return _dependencyInjectionStrategies[sourcesMetadata.DependencyInjection.DependencyInjectionType];
+            return DependencyInjectionStrategies[sourcesMetadata.DependencyInjection.DependencyInjectionType];
         }
     }
 

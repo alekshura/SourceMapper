@@ -1,5 +1,8 @@
-﻿using Compentio.SourceMapper.Metadata;
+﻿using Compentio.SourceMapper.Diagnostics;
+using Compentio.SourceMapper.Metadata;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
@@ -7,7 +10,42 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
     {
         public IResult GenerateCode(ISourcesMetadata sourcesMetadata)
         {
-            throw new NotImplementedException();
+            var result = @$"// <mapper-source-generated />
+                            // <generated-at '{System.DateTime.UtcNow}' />
+
+            using System;
+            using Microsoft.Extensions.DependencyInjection;
+            using Autofac;
+            using Autofac.Extensions.DependencyInjection;
+
+            { $"namespace Compentio.SourceMapper.DependencyInjection"}
+            {{
+               public static class {sourcesMetadata.DependencyInjection.DependencyInjectionClassName}
+               {{                  
+                   public static ContainerBuilder AddMappers(this ContainerBuilder builder)
+                   {{
+                        { GenerateBuilder(sourcesMetadata) }
+                        return builder;
+                   }}                                  
+               }}
+            }}
+            ";
+
+            return Result.Ok(result);
+        }
+
+        private string GenerateBuilder(ISourcesMetadata sourcesMetadata)
+        {
+            if (sourcesMetadata.Mappers == null) return string.Empty;
+
+            var builder = new StringBuilder();
+
+            foreach (var mapper in sourcesMetadata.Mappers)
+            {
+                builder.AppendLine($"builder.RegisterType<{mapper.Namespace}.{mapper.TargetClassName}>().As<{mapper.Namespace}.{mapper.Name}>().SingleInstance();");
+            }
+
+            return builder.ToString();
         }
     }
 }

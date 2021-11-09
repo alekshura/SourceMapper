@@ -21,7 +21,7 @@ namespace Compentio.SourceMapper.Diagnostics
         /// <summary>
         /// Exception thrown during code generation
         /// </summary>
-        internal Exception? Exception { get; set; }
+        internal virtual Exception? Exception { get; set; }
         /// <summary>
         /// Formatted message that is shoun in build console
         /// </summary>

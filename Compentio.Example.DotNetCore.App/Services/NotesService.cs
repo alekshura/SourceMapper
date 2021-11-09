@@ -1,13 +1,14 @@
-﻿using Compentio.Example.App.Entities;
-using Compentio.Example.App.Mappers;
-using Compentio.Example.App.Repositories;
+﻿using Compentio.Example.DotNetCore.App.Entities;
+using Compentio.Example.DotNetCore.App.Mappers;
+using Compentio.Example.DotNetCore.App.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Compentio.Example.App.Services
+namespace Compentio.Example.DotNetCore.App.Services
 {
     public interface INotesService
     {
@@ -17,6 +18,7 @@ namespace Compentio.Example.App.Services
         Task<NoteDto> UpdateNote(NoteDto note);
     }
 
+    [ExcludeFromCodeCoverage]
     public class NotesService : INotesService
     {
         private readonly INotesRepository _repository;

@@ -9,11 +9,11 @@
     <Product>SourceMapper</Product>
     <Authors>Aleksander Parchomenko</Authors>
     <PackageProjectUrl>https://alekshura.github.io/SourceMapper/</PackageProjectUrl>
-    <AssemblyVersion>1.0.11.0</AssemblyVersion>
-    <FileVersion>1.0.11.0</FileVersion>
+    <AssemblyVersion>1.0.12.0</AssemblyVersion>
+    <FileVersion>1.0.12.0</FileVersion>
     <PackageId>Compentio.SourceMapper</PackageId>
     <GenerateRepositoryUrlAttribute>true</GenerateRepositoryUrlAttribute>
-    <Version>1.0.11</Version>
+    <Version>1.0.12</Version>
     <Description>Code generator for mappings based on attributes defined in interfaces or abstrat classes. It is based on .NetCore Source Generators engine and generates classes for mappers during build time of you project.</Description>
     <Copyright>Copyright (c) @alekshura Compentio 2021</Copyright>
     <RepositoryUrl>https://github.com/alekshura/SourceMapper</RepositoryUrl>
@@ -49,6 +49,21 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\AppStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\AppStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

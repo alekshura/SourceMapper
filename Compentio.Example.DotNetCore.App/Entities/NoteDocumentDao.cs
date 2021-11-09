@@ -1,4 +1,4 @@
-﻿namespace Compentio.Example.App.Entities
+﻿namespace Compentio.Example.DotNetCore.App.Entities
 {
     public class NoteDocumentDao
     {

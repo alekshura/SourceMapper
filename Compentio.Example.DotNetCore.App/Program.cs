@@ -1,15 +1,20 @@
-﻿using Compentio.Example.App.Repositories;
-using Compentio.Example.App.Services;
+﻿using Compentio.Example.DotNetCore.App.Repositories;
+using Compentio.Example.DotNetCore.App.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Compentio.SourceMapper.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Compentio.ConsoleApp
 {
-    class Program
+    /// <summary>
+    /// Sample code using standard DotNetCore Dependency Injection
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    static class Program
     {
         static async Task Main(string[] args)
         {
