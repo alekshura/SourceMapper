@@ -120,4 +120,7 @@
   <data name="DependencyInjectionClassName" xml:space="preserve">
     <value>MappersDependencyInjectionExtensions</value>
   </data>
+  <data name="DependencyInjectionNotUsedException" xml:space="preserve">
+    <value>The project does not include any supported dependency injection mechanism.</value>
+  </data>
 </root>

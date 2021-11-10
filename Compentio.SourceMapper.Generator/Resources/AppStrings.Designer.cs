@@ -68,5 +68,14 @@ namespace Compentio.SourceMapper.Resources {
                 return ResourceManager.GetString("DependencyInjectionClassName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project does not include any supported dependency injection mechanism..
+        /// </summary>
+        internal static string DependencyInjectionNotUsedException {
+            get {
+                return ResourceManager.GetString("DependencyInjectionNotUsedException", resourceCulture);
+            }
+        }
     }
 }
