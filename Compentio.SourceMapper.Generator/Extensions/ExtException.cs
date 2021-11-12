@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace Compentio.SourceMapper.Extensions
 {
-    public class ExtException : Exception
+    public class ExtException : Exception, ISerializable
     {
         private readonly string _stackTrace;
 
