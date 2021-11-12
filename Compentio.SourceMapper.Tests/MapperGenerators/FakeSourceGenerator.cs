@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Compentio.SourceMapper.Generators;
+using Microsoft.CodeAnalysis;
 
 namespace Compentio.SourceMapper.Tests.Generators
 {
@@ -14,6 +15,7 @@ namespace Compentio.SourceMapper.Tests.Generators
 
         public void Initialize(GeneratorInitializationContext context)
         {
+            context.RegisterForSyntaxNotifications(() => new MappersSyntaxReceiver());
         }
 
         public GeneratorExecutionContext GeneratorExecutionContext
