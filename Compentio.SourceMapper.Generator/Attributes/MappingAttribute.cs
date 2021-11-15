@@ -23,6 +23,10 @@ namespace Compentio.SourceMapper.Attributes
         /// </summary>
         public string Expression { get; set; } = string.Empty;
         /// <summary>
+        /// Create reverse mapping for the method.
+        /// </summary>
+        public bool CreateInverse { get; set; } = false;
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MappingAttribute()
