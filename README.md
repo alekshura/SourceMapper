@@ -200,8 +200,7 @@ For more examples see [Wiki examples](https://github.com/alekshura/SourceMapper/
 ## Dependency injection
 The `Compentio.SourceMapper` searches for 3 main dependency container packages (`Microsoft.Extensions.DependencyInjection`, `Autofac.Extensions.DependencyInjection`, and `StructureMap.Microsoft.DependencyInjection`) and generates extension code. If there no any container packages found, Dependency Injection extension class is not generated.
 
-To simplify adding dependency injection for mappers `MappersDependencyInjectionExtensions` class is generated, that can be used (for now only for
-`Microsoft.Extensions.DependencyInjection` and `Autofac.Extensions.DependencyInjection`) by adding `AddMappers()` that adds all mappers defined in the project.
+To simplify adding dependency injection for mappers `MappersDependencyInjectionExtensions` class is generated, that can be used by adding `AddMappers()` that adds all mappers defined in the project.
 
 For `Microsoft.Extensions.DependencyInjection`, in service configuration:
 
@@ -221,8 +220,7 @@ public class AutofacModule : Module
 {
 	protected override void Load(ContainerBuilder builder)
 	{
-		builder.RegisterType<BooksService>().As<IBooksService>().InstancePerDependency();
-		builder.RegisterType<BooksRepository>().As<IBooksRepository>().SingleInstance();
+		// other services
 		builder.AddMappers();
 	}
 }
@@ -246,4 +244,53 @@ Host.CreateDefaultBuilder(args)
 	{
 		webBuilder.UseStartup<Startup>();
 	});
+```
+
+For StructureMap, we add `AddMappers` in container configuration in `Startup` file:
+
+```csharp
+public void ConfigureContainer(Container builder)
+{
+	builder.Configure(config =>
+	{
+		// other services
+		config.AddMappers();
+	});
+}
+```
+
+In example project StructureMap container is builded by running `StructureMapContainerBuilderFactory` from program host
+
+```csharp
+Host.CreateDefaultBuilder(args)
+	.UseServiceProviderFactory(new StructureMapContainerBuilderFactory())
+	.ConfigureWebHostDefaults(webBuilder =>
+	{
+		webBuilder.UseStartup<Startup>();
+	});
+```
+
+where provider is a service provider factory class constructed for StructureMap mechanism (working with `Container`, not with `Registry`):
+
+```csharp
+public class StructureMapContainerBuilderFactory : IServiceProviderFactory<Container>
+{
+	private IServiceCollection _services;
+
+	public Container CreateBuilder(IServiceCollection services)
+	{
+		_services = services;
+		return new Container();
+	}
+
+	public IServiceProvider CreateServiceProvider(Container builder)
+	{
+		builder.Configure(config =>
+		{
+			config.Populate(_services);
+		});
+
+		return builder.GetInstance<IServiceProvider>();
+	}
+}
 ```

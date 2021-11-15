@@ -14,7 +14,6 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
                             // <generated-at '{System.DateTime.UtcNow}' />
 
             using System;
-            using Microsoft.Extensions.DependencyInjection;
             using Autofac;
             using Autofac.Extensions.DependencyInjection;
 
