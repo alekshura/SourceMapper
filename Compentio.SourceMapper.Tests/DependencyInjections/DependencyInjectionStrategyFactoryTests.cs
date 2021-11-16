@@ -63,6 +63,20 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         }
 
         [Fact]
+        public void GetStrategy_ForStructureMapType_ReturnStructureMapProcessorStrategy()
+        {
+            // Arrange
+            _mockDependencyInjection.Setup(d => d.DependencyInjectionType).Returns(DependencyInjectionType.StructureMap);
+            _mockSourceMetadata.Setup(m => m.DependencyInjection).Returns(_mockDependencyInjection.Object);
+
+            //Act
+            var dependencyInjectionStrategy = DependencyInjectionStrategyFactory.GetStrategy(_mockSourceMetadata.Object);
+
+            //Assert
+            dependencyInjectionStrategy.Should().BeOfType<StructureMapProcessorStrategy>();
+        }
+
+        [Fact]
         public void FactoryStrategies_ContainStrategyKey_DotNetCore()
         {
             // Act
@@ -77,6 +91,16 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         {
             // Act
             var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.Autofac);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void FactoryStrategies_ContainStrategyKey_StructureMap()
+        {
+            // Act
+            var result = DependencyInjectionStrategyFactory.DependencyInjectionStrategies.ContainsKey(DependencyInjectionType.StructureMap);
 
             //Assert
             result.Should().BeTrue();

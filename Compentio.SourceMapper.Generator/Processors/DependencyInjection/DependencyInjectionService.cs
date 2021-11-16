@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
@@ -27,14 +26,14 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
                 return DependencyInjectionType.Autofac;
             }
 
-            if (assemblies.Any(ai => ai.Name.Equals(DotNetCoreAssemblyName, StringComparison.OrdinalIgnoreCase)))
-            {
-                return DependencyInjectionType.DotNetCore;
-            }
-
             if (assemblies.Any(ai => ai.Name.Equals(StructureMapAssemblyName, StringComparison.OrdinalIgnoreCase)))
             {
                 return DependencyInjectionType.StructureMap;
+            }
+
+            if (assemblies.Any(ai => ai.Name.Equals(DotNetCoreAssemblyName, StringComparison.OrdinalIgnoreCase)))
+            {
+                return DependencyInjectionType.DotNetCore;
             }
 
             return DependencyInjectionType.None;
