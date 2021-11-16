@@ -66,12 +66,16 @@ namespace Compentio.SourceMapper.Metadata
                         var sourceConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
                         var targetConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Target)).Value;
                         var expressionConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Expression)).Value;
+                        var createInverseConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.CreateInverse)).Value;
+                        var methodNameConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.InverseMethodName)).Value;
 
                         var mappingAttr = new MappingAttribute
                         {
                             Source = sourceConstant.Value as string ?? string.Empty,
                             Target = targetConstant.Value as string ?? string.Empty,
-                            Expression = expressionConstant.Value as string ?? string.Empty
+                            Expression = expressionConstant.Value as string ?? string.Empty,
+                            CreateInverse = createInverseConstant.Value as bool? ?? false,
+                            InverseMethodName = methodNameConstant.Value as string ?? string.Empty
                         };
                         return mappingAttr;
                     });

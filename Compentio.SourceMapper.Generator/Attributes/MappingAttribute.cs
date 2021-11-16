@@ -27,6 +27,10 @@ namespace Compentio.SourceMapper.Attributes
         /// </summary>
         public bool CreateInverse { get; set; } = false;
         /// <summary>
+        /// Name of the new method for inverse mapping mechanism
+        /// </summary>
+        public string InverseMethodName { get; set; } = string.Empty;
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MappingAttribute()
