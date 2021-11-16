@@ -1,11 +1,9 @@
 ﻿using AutoFixture;
-using AutoFixture.AutoMoq;
 using Compentio.SourceMapper.Diagnostics;
 using Compentio.SourceMapper.Generators;
 using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors.DependencyInjection;
 using FluentAssertions;
-using Microsoft.CodeAnalysis;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
@@ -14,25 +12,18 @@ namespace Compentio.SourceMapper.Tests.MapperGenerators
 {
     public class CodeSourceGeneratorTests : CodeSourceGeneratorTestBase
     {
-        private readonly IFixture _fixture;
         private readonly Mock<IMapperMetadata> _mockMapperMetadata;
         private readonly Mock<ISourcesMetadata> _mockSourcesMetadata;
 
         private readonly CodeSourceGenerator _codeSourceGenerator;
-        private readonly GeneratorExecutionContext _generatorExecutionContext;
 
         public CodeSourceGeneratorTests()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization { ConfigureMembers = true })
-                .Customize(new SupportMutableValueTypesCustomization()); 
-
             _mockMapperMetadata = _fixture.Create<Mock<IMapperMetadata>>();
             _mockSourcesMetadata = _fixture.Create<Mock<ISourcesMetadata>>();
             _mockSourcesMetadata.Setup(s => s.Mappers).Returns(new List<IMapperMetadata> { _mockMapperMetadata.Object });
 
             _codeSourceGenerator = new CodeSourceGenerator(_mockSourcesMetadata.Object);
-            _generatorExecutionContext = GetFakeContext(TestCode);
         }
 
         [Fact]
@@ -125,17 +116,5 @@ namespace Compentio.SourceMapper.Tests.MapperGenerators
             diagnostics.Should().NotBeNull();
             diagnostics.Should().BeEmpty();
         }
-
-        private string TestCode =>
-            @"namespace Compentio.SourceMapper.Tests
-            {
-                public class Program
-                {
-                    public static void Main(string[] args)
-                    {
-                    }
-                }
-            }
-            ";
     }
 }
