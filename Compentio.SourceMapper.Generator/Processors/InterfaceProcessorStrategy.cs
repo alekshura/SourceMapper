@@ -3,6 +3,7 @@ using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace Compentio.SourceMapper.Processors
 {
@@ -25,8 +26,8 @@ namespace Compentio.SourceMapper.Processors
                public class {mapperMetadata?.TargetClassName} : {mapperMetadata?.Name}
                {{
                   public static {mapperMetadata?.TargetClassName} Create() => new();
-                  
-                   { GenerateMethods(mapperMetadata) }                  
+
+                  { GenerateMethods(mapperMetadata) }
                }}
 
                { GeneratePartialInterface(mapperMetadata) }
@@ -36,33 +37,65 @@ namespace Compentio.SourceMapper.Processors
             return result;
         }
 
-        private object GeneratePartialInterface(IMapperMetadata mapperMetadata)
+        private string GeneratePartialInterface(IMapperMetadata mapperMetadata)
         {
-            // ToDo generate partial interface if any inverse method exists
+            if (InverseAttributeService.AnyInverseMethod(mapperMetadata.MethodsMetadata))
+            {
+                return $@"
+                public partial interface {mapperMetadata?.Name}
+                {{
+                    { GenerateInterfaceMethods(mapperMetadata) }
+                }}
+                ";
+            }
 
             return string.Empty;
         }
 
-        private string GenerateMethods(IMapperMetadata sourceMetadata)
+        private string GenerateInterfaceMethods(IMapperMetadata sourceMetadata)
         {
-            var methods = string.Empty;
+            var methodsStringBuilder = new StringBuilder();
 
             foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
             {
-                methods += GenerateRegularMethod(sourceMetadata, methodMetadata);
+                if (InverseAttributeService.IsInverseMethod(methodMetadata))
+                {
+                    methodsStringBuilder.AppendLine(GenerateInterfaceMethod(methodMetadata));
+                }
+            }
+
+            return methodsStringBuilder.ToString();
+        }
+
+        private string GenerateInterfaceMethod(IMethodMetadata methodMetadata)
+        {
+            var inverseMethodName = GetInverseMethodName(methodMetadata);
+
+            if (!string.IsNullOrEmpty(inverseMethodName)) inverseMethodName += ";";
+
+            return inverseMethodName;
+        }
+
+        private string GenerateMethods(IMapperMetadata sourceMetadata)
+        {
+            var methodsStringBuilder = new StringBuilder();
+
+            foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
+            {
+                methodsStringBuilder.Append(GenerateRegularMethod(sourceMetadata, methodMetadata));
 
                 if (InverseAttributeService.IsInverseMethod(methodMetadata))
                 {
-                    methods += "\n" + GenerateInverseMethod(sourceMetadata, methodMetadata);
+                    methodsStringBuilder.AppendLine(GenerateInverseMethod(sourceMetadata, methodMetadata));
                 }
-            }               
+            }
 
-            return methods;
+            return methodsStringBuilder.ToString();
         }
 
         private string GenerateRegularMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
-            return  @$"public virtual {methodMetadata.FullName}
+            return @$"public virtual {methodMetadata.FullName}
             {{
                 if ({methodMetadata.Parameters.First().Name} == null)
                     return null;
@@ -77,7 +110,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GenerateInverseMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
-            var inverseMethodFullName = InverseAttributeService.GetInverseMethodName(methodMetadata);
+            var inverseMethodFullName = GetInverseMethodName(methodMetadata);
 
             if (string.IsNullOrEmpty(inverseMethodFullName))
                 return inverseMethodFullName;
@@ -97,7 +130,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
         {
-            var mappings = string.Empty;
+            var mappingsStringBuilder = new StringBuilder();
             var sourceMembers = methodMetadata.Parameters.First().Properties;
             var targetMemebers = methodMetadata.ReturnType.Properties;
 
@@ -107,12 +140,12 @@ namespace Compentio.SourceMapper.Processors
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
                 if (inverseMapping)
-                    mappings += GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedTargetMember, matchedSourceMember);
+                    mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedTargetMember, matchedSourceMember));
                 else
-                    mappings += GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
+                    mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember));
             }
 
-            return mappings;
+            return mappingsStringBuilder.ToString();
         }
 
         private string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
@@ -149,6 +182,35 @@ namespace Compentio.SourceMapper.Processors
                 }
             }
             return mapping;
+        }
+
+        private string GetInverseMethodName(IMethodMetadata methodMetadata)
+        {
+            try
+            {
+                var inverseMethodName = InverseAttributeService.GetInverseMethodName(methodMetadata);
+
+                if (string.IsNullOrEmpty(inverseMethodName))
+                {
+                    ReportEmptyInverseMethodName(methodMetadata);
+
+                    return inverseMethodName;
+                }
+
+                return InverseAttributeService.GetInverseMethodFullName(methodMetadata, inverseMethodName);
+            }
+            catch (InvalidOperationException)
+            {
+                ReportMultipleInternalMethodName(methodMetadata);
+
+                return string.Empty;
+            }
+            catch (Exception exception)
+            {
+                ReportInternalMethodNameError(exception, methodMetadata);
+
+                return string.Empty;
+            }
         }
     }
 }

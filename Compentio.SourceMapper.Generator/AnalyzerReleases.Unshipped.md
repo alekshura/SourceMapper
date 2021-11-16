@@ -5,7 +5,7 @@
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 SMAP0005 | Design | Warning | SourceMapperDescriptors, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics##smap0005)
-SMAP0006 | Design | Error | SourceMapperDescriptors, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics##smap0006)
+SMAP0006 | Design | Warning | SourceMapperDescriptors, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics##smap0006)
 
 ### Changed Rules
 Rule ID | New Category | New Severity | Old Category | Old Severity | Notes

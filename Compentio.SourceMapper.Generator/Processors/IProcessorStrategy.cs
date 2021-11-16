@@ -48,5 +48,33 @@ namespace Compentio.SourceMapper.Processors
                 Metadata = metadata
             });
         }
+
+        protected void ReportEmptyInverseMethodName(IMethodMetadata methodMetadata)
+        {
+            _diagnostics.Add(new DiagnosticsInfo
+            {
+                DiagnosticDescriptor = SourceMapperDescriptors.ExpectedInverseMethodName,
+                Metadata = methodMetadata
+            });
+        }
+
+        protected void ReportMultipleInternalMethodName(IMethodMetadata methodMetadata)
+        {
+            _diagnostics.Add(new DiagnosticsInfo
+            {
+                DiagnosticDescriptor = SourceMapperDescriptors.MultipleInverseMethodName,
+                Metadata = methodMetadata
+            });
+        }
+
+        protected void ReportInternalMethodNameError(Exception exception, IMethodMetadata methodMetadata)
+        {
+            _diagnostics.Add(new DiagnosticsInfo
+            {
+                DiagnosticDescriptor = SourceMapperDescriptors.UnexpectedError,
+                Metadata = methodMetadata,
+                Exception = exception
+            });
+        }
     }
 }
