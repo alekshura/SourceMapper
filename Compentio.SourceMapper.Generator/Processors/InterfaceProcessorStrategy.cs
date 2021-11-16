@@ -56,12 +56,9 @@ namespace Compentio.SourceMapper.Processors
         {
             var methodsStringBuilder = new StringBuilder();
 
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
+            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttributeService.IsInverseMethod(m)))
             {
-                if (InverseAttributeService.IsInverseMethod(methodMetadata))
-                {
-                    methodsStringBuilder.AppendLine(GenerateInterfaceMethod(methodMetadata));
-                }
+                methodsStringBuilder.AppendLine(GenerateInterfaceMethod(methodMetadata));
             }
 
             return methodsStringBuilder.ToString();
