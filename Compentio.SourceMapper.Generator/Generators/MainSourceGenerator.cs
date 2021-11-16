@@ -1,10 +1,7 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Metadata;
-using Compentio.SourceMapper.Processors.DependencyInjection;
-using Compentio.SourceMapper.Resources;
 using Microsoft.CodeAnalysis;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
