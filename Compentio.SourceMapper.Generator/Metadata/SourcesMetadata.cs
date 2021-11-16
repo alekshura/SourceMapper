@@ -1,4 +1,5 @@
 ﻿using Compentio.SourceMapper.Processors.DependencyInjection;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +30,11 @@ namespace Compentio.SourceMapper.Metadata
     internal class SourcesMetadata : ISourcesMetadata
     {
         private readonly List<IMapperMetadata> _mappers = new();
-        private readonly DependencyInjectionType _dependencyInjectionType;
+        private readonly DependencyInjection _dependencyInjection;
 
-        private SourcesMetadata(DependencyInjectionType dependencyInjectionType) 
+        private SourcesMetadata(IEnumerable<AssemblyIdentity> assemblies) 
         {
-            _dependencyInjectionType = dependencyInjectionType;
+            _dependencyInjection = new DependencyInjection(assemblies);
         }
         static SourcesMetadata()
         {
@@ -41,12 +42,9 @@ namespace Compentio.SourceMapper.Metadata
 
         public IReadOnlyCollection<IMapperMetadata> Mappers => _mappers.AsReadOnly();
 
-        public DependencyInjection DependencyInjection => new() 
-        {
-            DependencyInjectionType = _dependencyInjectionType
-        };
+        public DependencyInjection DependencyInjection => _dependencyInjection;
 
-        public static ISourcesMetadata Create(DependencyInjectionType dependencyInjectionType) => new SourcesMetadata(dependencyInjectionType);
+        public static ISourcesMetadata Create(IEnumerable<AssemblyIdentity> assemblies) => new SourcesMetadata(assemblies);
 
         public void AddOrUpdate(IMapperMetadata mapperMetadata)
         {

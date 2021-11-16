@@ -4,11 +4,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using System.Linq;
 using System.Reflection;
 
-namespace Compentio.SourceMapper.Tests.Generators
+namespace Compentio.SourceMapper.Tests.MapperGenerators
 {
     public class CodeSourceGeneratorTestBase
     {
-        protected static GeneratorExecutionContext GetFakeContext(string sourceCode)
+        protected GeneratorExecutionContext GetFakeContext(string sourceCode)
         {
             var compilation = CSharpCompilation.Create("CodeSourceGeneratorTests",
                                                        new[] { CSharpSyntaxTree.ParseText(sourceCode) },
@@ -16,13 +16,7 @@ namespace Compentio.SourceMapper.Tests.Generators
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             var generator = new FakeSourceGenerator();
-            CSharpGeneratorDriver.Create(generator)
-                                 .RunGeneratorsAndUpdateCompilation(compilation,
-                                                                    out var outputCompilation,
-                                                                    out var diagnostics);
-
-            diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error)
-                       .Should().BeEmpty();
+            CSharpGeneratorDriver.Create(generator).RunGeneratorsAndUpdateCompilation(compilation, out _, out _);
 
             return generator.GeneratorExecutionContext;
         }

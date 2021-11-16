@@ -48,7 +48,7 @@ namespace Compentio.SourceMapper.Generators
 
             if (processorStrategy is null)
             {
-                AddNoDependencyInjectionDiagnostic(context);
+                AddDependencyInjectionDiagnostic(context);
                 ReportDiagnostics(context, _diagnostics);
                 return;
             }
@@ -58,7 +58,7 @@ namespace Compentio.SourceMapper.Generators
             context.AddSource($"{_sourcesMetadata.DependencyInjection.DependencyInjectionClassName}.cs", SourceText.From(result.GeneratedCode, Encoding.UTF8));
         }
 
-        private void AddNoDependencyInjectionDiagnostic(GeneratorExecutionContext context)
+        private void AddDependencyInjectionDiagnostic(GeneratorExecutionContext context)
         {
             _diagnostics.Add(new DiagnosticsInfo()
             {

@@ -10,7 +10,7 @@ using Moq;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Compentio.SourceMapper.Tests.Generators
+namespace Compentio.SourceMapper.Tests.MapperGenerators
 {
     public class CodeSourceGeneratorTests : CodeSourceGeneratorTestBase
     {
@@ -32,7 +32,7 @@ namespace Compentio.SourceMapper.Tests.Generators
             _mockSourcesMetadata.Setup(s => s.Mappers).Returns(new List<IMapperMetadata> { _mockMapperMetadata.Object });
 
             _codeSourceGenerator = new CodeSourceGenerator(_mockSourcesMetadata.Object);
-            _generatorExecutionContext = GetFakeContext(GetTestCode());
+            _generatorExecutionContext = GetFakeContext(TestCode);
         }
 
         [Fact]
@@ -126,19 +126,16 @@ namespace Compentio.SourceMapper.Tests.Generators
             diagnostics.Should().BeEmpty();
         }
 
-        private static string GetTestCode()
-        {
-            return @"
-namespace FakeCodeGeneratorNamespace
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-        }
-    }
-}
-";
-        }
+        private string TestCode =>
+            @"namespace Compentio.SourceMapper.Tests
+            {
+                public class Program
+                {
+                    public static void Main(string[] args)
+                    {
+                    }
+                }
+            }
+            ";
     }
 }

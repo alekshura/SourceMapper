@@ -30,7 +30,7 @@ namespace Compentio.SourceMapper.Generators
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
                 return;
 
-            var sourcesMetadata = SourcesMetadata.Create(DependencyInjectionService.GetDependencyInjectionType(context.Compilation.ReferencedAssemblyNames));
+            var sourcesMetadata = SourcesMetadata.Create(context.Compilation.ReferencedAssemblyNames);
 
             foreach (var typeDeclaration in receiver.Candidates)
             {

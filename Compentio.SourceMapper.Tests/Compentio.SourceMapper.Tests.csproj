@@ -5,12 +5,6 @@
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Generators\**" />
-    <EmbeddedResource Remove="Generators\**" />
-    <None Remove="Generators\**" />
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.17.0" />
@@ -31,10 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Compentio.SourceMapper.Generator\Compentio.SourceMapper.csproj" OutputItemType="Analyzer" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="MapperGenerators\" />
   </ItemGroup>
 
 </Project>

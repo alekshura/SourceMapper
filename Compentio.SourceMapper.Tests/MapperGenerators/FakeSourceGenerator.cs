@@ -1,7 +1,7 @@
 ﻿using Compentio.SourceMapper.Generators;
 using Microsoft.CodeAnalysis;
 
-namespace Compentio.SourceMapper.Tests.Generators
+namespace Compentio.SourceMapper.Tests.MapperGenerators
 {
     [Generator]
     public class FakeSourceGenerator : ISourceGenerator
@@ -18,12 +18,6 @@ namespace Compentio.SourceMapper.Tests.Generators
             context.RegisterForSyntaxNotifications(() => new MappersSyntaxReceiver());
         }
 
-        public GeneratorExecutionContext GeneratorExecutionContext
-        {
-            get
-            {
-                return _generatorExecutionContext;
-            }
-        }
+        public GeneratorExecutionContext GeneratorExecutionContext => _generatorExecutionContext;
     }
 }
