@@ -82,6 +82,21 @@ namespace Compentio.SourceMapper.Tests.Generators
         }
 
         [Fact]
+        public void GenerateDependencyInjectionExtensions_StructureMapStrategy_EmptyDiagnostics()
+        {
+            // Arrange
+            _mockSourcesMetadata.Setup(s => s.DependencyInjection.DependencyInjectionType).Returns(DependencyInjectionType.StructureMap);
+
+            // Act
+            _codeSourceGenerator.GenerateDependencyInjectionExtensions(_generatorExecutionContext);
+            var diagnostics = _generatorExecutionContext.Compilation.GetDiagnostics();
+
+            // Assert
+            diagnostics.Should().NotBeNull();
+            diagnostics.Should().BeEmpty();
+        }
+
+        [Fact]
         public void GenerateMapping_NoMappers_EmptyDiagnostics()
         {
             // Arrange

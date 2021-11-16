@@ -4,16 +4,16 @@ using System.Runtime.Serialization;
 namespace Compentio.SourceMapper.Extensions
 {
     [Serializable]
-    public class ExtException : Exception
+    public class DependencyInjectionException : Exception
     {
         private readonly string _stackTrace = string.Empty;
 
-        public ExtException(string message, string stackTrace) : base(message)
+        public DependencyInjectionException(string message, string stackTrace) : base(message)
         {
             _stackTrace = stackTrace;
         }
 
-        protected ExtException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext)
+        protected DependencyInjectionException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext)
         {
 
         }

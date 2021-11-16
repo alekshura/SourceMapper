@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Compentio.SourceMapper.Tests.Extensions
 {
-    public class ExtExceptionTests
+    public class DependencyInjectionExceptionTests
     {
         private const string ExceptionMessage = "Message";
         private const string ExceptionStackTrace = "StackTrace";
@@ -13,8 +13,8 @@ namespace Compentio.SourceMapper.Tests.Extensions
         public void SetCtorMessage_HasMessageFieldSet()
         {
             // Act
-            var extException = new ExtException(ExceptionMessage, string.Empty);
-            var exceptionMessage = extException.Message;
+            var dependencyInjectionException = new DependencyInjectionException(ExceptionMessage, string.Empty);
+            var exceptionMessage = dependencyInjectionException.Message;
 
             // Assert
             exceptionMessage.Should().NotBeNullOrEmpty();
@@ -24,8 +24,8 @@ namespace Compentio.SourceMapper.Tests.Extensions
         public void SetCtorStackTrace_HasStackTraceFieldSet()
         {
             // Act
-            var extException = new ExtException(string.Empty, ExceptionStackTrace);
-            var exceptionStackTrace = extException.StackTrace;
+            var dependencyInjectionException = new DependencyInjectionException(string.Empty, ExceptionStackTrace);
+            var exceptionStackTrace = dependencyInjectionException.StackTrace;
 
             //Assert
             exceptionStackTrace.Should().NotBeNullOrEmpty();

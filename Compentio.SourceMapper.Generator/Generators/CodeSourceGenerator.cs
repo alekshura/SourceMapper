@@ -63,7 +63,7 @@ namespace Compentio.SourceMapper.Generators
             _diagnostics.Add(new DiagnosticsInfo()
             {
                 DiagnosticDescriptor = SourceMapperDescriptors.DependencyInjectionNotUsed,
-                Exception = new ExtException(AppStrings.DependencyInjectionNotUsedException, context.Compilation.AssemblyName)
+                Exception = new DependencyInjectionException(AppStrings.DependencyInjectionNotUsedException, context.Compilation.AssemblyName)
             });
         }
 
