@@ -141,59 +141,5 @@ namespace Compentio.SourceMapper.Processors
 
             return mappingsStringBuilder.ToString();
         }
-
-        private string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping = false)
-        {
-            if (inverseMapping) PropertyMetadata.Swap(ref matchedSourceMember, ref matchedTargetMember);
-
-            if (matchedTargetMember is null && matchedSourceMember is not null)
-            {
-                PropertyMappingWarning(matchedSourceMember);
-            }
-
-            if (matchedSourceMember is null || matchedTargetMember is null)
-            {
-                PropertyMappingWarning(matchedTargetMember);
-                return string.Empty;
-            }
-
-            var mapping = new StringBuilder();
-
-            if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
-            {
-                mapping.AppendLine(MapProperty(matchedSourceMember, matchedTargetMember, parameter));
-            }
-
-            if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
-            {
-                mapping.AppendLine(MapClass(sourceMetadata, matchedSourceMember, matchedTargetMember, parameter, inverseMapping));
-            }
-
-            return mapping.ToString();
-        }
-
-        private string MapClass(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter, bool inverseMapping)
-        {
-            var method = GetDefinedMethod(sourceMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
-
-            if (method is not null)
-            {
-                if (inverseMapping)
-                    return $"target.{matchedTargetMember?.Name} = {InverseAttributeService.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
-                else
-                    return $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
-            }
-            else
-            {
-                PropertyMappingWarning(matchedTargetMember);
-            }
-
-            return string.Empty;
-        }
-
-        private string MapProperty(IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter)
-        {
-            return $"target.{matchedTargetMember?.Name} = {parameter.Name}.{matchedSourceMember?.Name};";
-        }
     }
 }
