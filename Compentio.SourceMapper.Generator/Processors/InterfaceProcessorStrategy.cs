@@ -1,7 +1,6 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
-using System;
 using System.Linq;
 using System.Text;
 
@@ -12,6 +11,8 @@ namespace Compentio.SourceMapper.Processors
     /// </summary>
     internal class InterfaceProcessorStrategy : AbstractProcessorStrategy
     {
+        protected override string Modifier => "virtual";
+
         protected override string GenerateMapperCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />
@@ -73,59 +74,7 @@ namespace Compentio.SourceMapper.Processors
             return inverseMethodName;
         }
 
-        private string GenerateMethods(IMapperMetadata sourceMetadata)
-        {
-            var methodsStringBuilder = new StringBuilder();
-
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
-            {
-                methodsStringBuilder.Append(GenerateRegularMethod(sourceMetadata, methodMetadata));
-
-                if (InverseAttributeService.IsInverseMethod(methodMetadata))
-                {
-                    methodsStringBuilder.AppendLine(GenerateInverseMethod(sourceMetadata, methodMetadata));
-                }
-            }
-
-            return methodsStringBuilder.ToString();
-        }
-
-        private string GenerateRegularMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
-        {
-            return @$"public virtual {methodMetadata.FullName}
-            {{
-                if ({methodMetadata.Parameters.First().Name} == null)
-                    return null;
-
-                var target = new {methodMetadata.ReturnType.FullName}();
-
-                {GenerateMappings(sourceMetadata, methodMetadata)}
-
-                return target;
-            }}";
-        }
-
-        private string GenerateInverseMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
-        {
-            var inverseMethodFullName = GetInverseMethodName(methodMetadata);
-
-            if (string.IsNullOrEmpty(inverseMethodFullName))
-                return inverseMethodFullName;
-            else
-                return @$"public virtual {inverseMethodFullName}
-                {{
-                    if ({methodMetadata.Parameters.First().Name} == null)
-                        return null;
-
-                    var target = new {methodMetadata.Parameters.First().FullName}();
-
-                    {GenerateMappings(sourceMetadata, methodMetadata, true)}
-
-                    return target;
-                }}";
-        }
-
-        private string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
+        protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
         {
             var mappingsStringBuilder = new StringBuilder();
             var sourceMembers = methodMetadata.Parameters.First().Properties;

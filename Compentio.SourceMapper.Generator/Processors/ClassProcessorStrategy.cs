@@ -1,7 +1,6 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
-using System;
 using System.Linq;
 using System.Text;
 
@@ -12,6 +11,8 @@ namespace Compentio.SourceMapper.Processors
     /// </summary>
     internal class ClassProcessorStrategy : AbstractProcessorStrategy
     {
+        protected override string Modifier => "override";
+
         protected override string GenerateMapperCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />
@@ -24,8 +25,8 @@ namespace Compentio.SourceMapper.Processors
             {{
                [ExcludeFromCodeCoverage]
                public class {mapperMetadata.TargetClassName} : {mapperMetadata.Name}
-               {{                  
-                   { GenerateMethods(mapperMetadata) }                  
+               {{
+                   { GenerateMethods(mapperMetadata) }
                }}
 
                 { GeneratePartialClass(mapperMetadata) }
@@ -71,77 +72,25 @@ namespace Compentio.SourceMapper.Processors
             return inverseMethodName;
         }
 
-        private string GenerateMethods(IMapperMetadata sourceMetadata)
-        {
-            var methodsStringBuilder = new StringBuilder();
-
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
-            {
-                methodsStringBuilder.Append(GenerateRegularMethod(sourceMetadata, methodMetadata));
-
-                if (InverseAttributeService.IsInverseMethod(methodMetadata))
-                {
-                    methodsStringBuilder.AppendLine(GenerateInverseMethod(sourceMetadata, methodMetadata));
-                }
-            }
-
-            return methodsStringBuilder.ToString();
-        }
-
-        private string GenerateRegularMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
-        {
-            return @$"public override {methodMetadata.FullName}
-            {{
-                if ({methodMetadata.Parameters.First().Name} == null)
-                    return null;
-
-                var target = new {methodMetadata.ReturnType.FullName}();
-
-                {GenerateMappings(sourceMetadata, methodMetadata)}
-
-                return target;
-            }}";
-        }
-
-        private string GenerateInverseMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
-        {
-            var inverseMethodFullName = GetInverseMethodName(methodMetadata);
-
-            if (string.IsNullOrEmpty(inverseMethodFullName))
-                return inverseMethodFullName;
-            else
-                return @$"public override {inverseMethodFullName}
-                {{
-                    if ({methodMetadata.Parameters.First().Name} == null)
-                        return null;
-
-                    var target = new {methodMetadata.Parameters.First().FullName}();
-
-                    {GenerateMappings(sourceMetadata, methodMetadata, true)}
-
-                    return target;
-                }}";
-        }
-
-        private string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
+        protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
         {
             var mappingsStringBuilder = new StringBuilder();
             var sourceMembers = methodMetadata.Parameters.First().Properties;
             var targetMemebers = methodMetadata.ReturnType.Properties;
 
             foreach (var targetMember in targetMemebers)
-            {               
+            {
                 var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
                 var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
 
                 var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping);
 
-                if(!string.IsNullOrEmpty(expressionMapping))
+                if (!string.IsNullOrEmpty(expressionMapping))
                 {
                     mappingsStringBuilder.Append(expressionMapping);
                     continue;
-                }                
+                }
 
                 mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
             }
@@ -154,7 +103,7 @@ namespace Compentio.SourceMapper.Processors
             if (inverseMapping)
                 return MapInverseExpression(expressionAttribute, parameter, matchedSourceMember, matchedTargetMember);
             else
-                return MapRegularExpression(expressionAttribute, parameter, matchedSourceMember, matchedTargetMember);                    
+                return MapRegularExpression(expressionAttribute, parameter, matchedSourceMember, matchedTargetMember);
         }
 
         private string MapInverseExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
