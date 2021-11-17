@@ -136,17 +136,16 @@ namespace Compentio.SourceMapper.Processors
                 var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
-                if (inverseMapping)
-                    mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedTargetMember, matchedSourceMember));
-                else
-                    mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember));
+                mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
             }
 
             return mappingsStringBuilder.ToString();
         }
 
-        private string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
+        private string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping = false)
         {
+            if (inverseMapping) PropertyMetadata.Swap(ref matchedSourceMember, ref matchedTargetMember);
+
             if (matchedTargetMember is null && matchedSourceMember is not null)
             {
                 PropertyMappingWarning(matchedSourceMember);
@@ -167,11 +166,14 @@ namespace Compentio.SourceMapper.Processors
 
             if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
             {
-                var method = sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
+                var method = GetDefinedMethod(sourceMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
 
                 if (method is not null)
                 {
-                    mapping += $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
+                    if (inverseMapping)
+                        mapping += $"target.{matchedTargetMember?.Name} = {InverseAttributeService.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
+                    else
+                        mapping += $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
                 }
                 else
                 {
@@ -179,6 +181,42 @@ namespace Compentio.SourceMapper.Processors
                 }
             }
             return mapping;
+        }
+
+        private IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
+        {
+            if (inverseMapping)
+            {
+                var originalMethod = sourceMetadata.MatchDefinedMethod(matchedTargetMember, matchedSourceMember);
+
+                if (originalMethod == null) return originalMethod;
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(InverseAttributeService.GetInverseMethodName(originalMethod)))
+                    {
+                        return originalMethod;
+                    }
+
+                    return null;
+                }
+                catch (InvalidOperationException)
+                {
+                    ReportMultipleInternalMethodName(originalMethod);
+
+                    return null;
+                }
+                catch (Exception exception)
+                {
+                    ReportInternalMethodNameError(exception, originalMethod);
+
+                    return null;
+                }
+            }
+            else
+            {
+                return sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
+            }
         }
 
         private string GetInverseMethodName(IMethodMetadata methodMetadata)

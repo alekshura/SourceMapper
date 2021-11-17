@@ -1,6 +1,4 @@
-﻿using Compentio.SourceMapper.Diagnostics;
-using Compentio.SourceMapper.Metadata;
-using System;
+﻿using Compentio.SourceMapper.Metadata;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,7 +52,6 @@ namespace Compentio.SourceMapper.Attributes
                 $"{methodMetadata.Parameters.First().FullName} {inverseMethodName} ({methodMetadata.ReturnType.FullName} {methodMetadata.Parameters.First().Name})";
 
             return inverseMethodFullName;
-            
-        }       
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace Compentio.SourceMapper.Metadata
                         var targetConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Target)).Value;
                         var expressionConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Expression)).Value;
                         var createInverseConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.CreateInverse)).Value;
-                        var methodNameConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.InverseMethodName)).Value;
+                        var inverseMethodNameConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.InverseMethodName)).Value;
 
                         var mappingAttr = new MappingAttribute
                         {
@@ -75,7 +75,7 @@ namespace Compentio.SourceMapper.Metadata
                             Target = targetConstant.Value as string ?? string.Empty,
                             Expression = expressionConstant.Value as string ?? string.Empty,
                             CreateInverse = createInverseConstant.Value as bool? ?? false,
-                            InverseMethodName = methodNameConstant.Value as string ?? string.Empty
+                            InverseMethodName = inverseMethodNameConstant.Value as string ?? string.Empty
                         };
                         return mappingAttr;
                     });
