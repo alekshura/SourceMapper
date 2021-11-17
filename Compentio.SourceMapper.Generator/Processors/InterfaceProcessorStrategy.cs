@@ -157,30 +157,42 @@ namespace Compentio.SourceMapper.Processors
                 return string.Empty;
             }
 
-            var mapping = "\n";
+            var mapping = new StringBuilder();
 
             if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
             {
-                mapping += $"target.{matchedTargetMember?.Name} = {parameter.Name}.{matchedSourceMember?.Name};";
+                mapping.AppendLine(MapProperty(matchedSourceMember, matchedTargetMember, parameter));
             }
 
             if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
             {
-                var method = GetDefinedMethod(sourceMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
-
-                if (method is not null)
-                {
-                    if (inverseMapping)
-                        mapping += $"target.{matchedTargetMember?.Name} = {InverseAttributeService.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
-                    else
-                        mapping += $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
-                }
-                else
-                {
-                    PropertyMappingWarning(matchedTargetMember);
-                }
+                mapping.AppendLine(MapClass(sourceMetadata, matchedSourceMember, matchedTargetMember, parameter, inverseMapping));
             }
-            return mapping;
+            return mapping.ToString();
+        }
+
+        private string MapClass(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter, bool inverseMapping)
+        {
+            var method = GetDefinedMethod(sourceMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
+
+            if (method is not null)
+            {
+                if (inverseMapping)
+                    return $"target.{matchedTargetMember?.Name} = {InverseAttributeService.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
+                else
+                    return $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
+            }
+            else
+            {
+                PropertyMappingWarning(matchedTargetMember);
+            }
+
+            return string.Empty;
+        }
+
+        private string MapProperty(IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter)
+        {
+            return $"target.{matchedTargetMember?.Name} = {parameter.Name}.{matchedSourceMember?.Name};";
         }
 
         private IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
