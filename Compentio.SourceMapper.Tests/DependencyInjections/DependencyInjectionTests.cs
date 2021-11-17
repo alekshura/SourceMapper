@@ -14,7 +14,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         public void DependencyInjectionClassName_ReturnProperString()
         {
             // Act
-            var dependencyInjection = new DependencyInjection();
+            var dependencyInjection = new SourceMapper.Processors.DependencyInjection.DependencyInjection();
 
             // Assert
             dependencyInjection.DependencyInjectionClassName.Should().NotBeNullOrEmpty();
@@ -29,7 +29,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var assemblyCollection = new List<AssemblyIdentity> { AssemblyIdentity.FromAssemblyDefinition(fakeAssembly) };
 
             // Act
-            var dependencyInjection = new DependencyInjection(assemblyCollection);
+            var dependencyInjection = new SourceMapper.Processors.DependencyInjection.DependencyInjection(assemblyCollection);
             var result = dependencyInjection.DependencyInjectionType;
 
             // Assert
@@ -44,7 +44,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var assemblyCollection = new List<AssemblyIdentity> { AssemblyIdentity.FromAssemblyDefinition(fakeAssembly) };
 
             // Act
-            var dependencyInjection = new DependencyInjection(assemblyCollection);
+            var dependencyInjection = new SourceMapper.Processors.DependencyInjection.DependencyInjection(assemblyCollection);
             var result = dependencyInjection.DependencyInjectionType;
 
             // Assert
@@ -59,7 +59,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var assemblyCollection = new List<AssemblyIdentity> { AssemblyIdentity.FromAssemblyDefinition(fakeAssembly) };
 
             // Act
-            var dependencyInjection = new DependencyInjection(assemblyCollection);
+            var dependencyInjection = new SourceMapper.Processors.DependencyInjection.DependencyInjection(assemblyCollection);
             var result = dependencyInjection.DependencyInjectionType;
 
             // Assert
@@ -74,7 +74,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
             var assemblyCollection = new List<AssemblyIdentity> { AssemblyIdentity.FromAssemblyDefinition(fakeAssembly) };
 
             // Act
-            var dependencyInjection = new DependencyInjection(assemblyCollection);
+            var dependencyInjection = new SourceMapper.Processors.DependencyInjection.DependencyInjection(assemblyCollection);
             var result = dependencyInjection.DependencyInjectionType;
 
             // Assert
