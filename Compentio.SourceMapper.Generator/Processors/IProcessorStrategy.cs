@@ -1,4 +1,6 @@
-﻿using Compentio.SourceMapper.Diagnostics;
+﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Diagnostics;
+using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using System;
 using System.Collections.Generic;
@@ -39,6 +41,71 @@ namespace Compentio.SourceMapper.Processors
         }
 
         protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
+
+        protected IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
+        {
+            if (inverseMapping)
+            {
+                var originalMethod = sourceMetadata.MatchDefinedMethod(matchedTargetMember, matchedSourceMember);
+
+                if (originalMethod == null) return originalMethod;
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(InverseAttributeService.GetInverseMethodName(originalMethod)))
+                    {
+                        return originalMethod;
+                    }
+
+                    return null;
+                }
+                catch (InvalidOperationException)
+                {
+                    ReportMultipleInternalMethodName(originalMethod);
+
+                    return null;
+                }
+                catch (Exception exception)
+                {
+                    ReportInternalMethodNameError(exception, originalMethod);
+
+                    return null;
+                }
+            }
+            else
+            {
+                return sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
+            }
+        }
+
+        protected string GetInverseMethodName(IMethodMetadata methodMetadata)
+        {
+            try
+            {
+                var inverseMethodName = InverseAttributeService.GetInverseMethodName(methodMetadata);
+
+                if (string.IsNullOrEmpty(inverseMethodName))
+                {
+                    ReportEmptyInverseMethodName(methodMetadata);
+
+                    return inverseMethodName;
+                }
+
+                return InverseAttributeService.GetInverseMethodFullName(methodMetadata, inverseMethodName);
+            }
+            catch (InvalidOperationException)
+            {
+                ReportMultipleInternalMethodName(methodMetadata);
+
+                return string.Empty;
+            }
+            catch (Exception exception)
+            {
+                ReportInternalMethodNameError(exception, methodMetadata);
+
+                return string.Empty;
+            }
+        }
 
         protected void PropertyMappingWarning(IPropertyMetadata metadata)
         {

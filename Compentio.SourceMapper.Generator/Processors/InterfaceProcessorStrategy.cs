@@ -168,6 +168,7 @@ namespace Compentio.SourceMapper.Processors
             {
                 mapping.AppendLine(MapClass(sourceMetadata, matchedSourceMember, matchedTargetMember, parameter, inverseMapping));
             }
+
             return mapping.ToString();
         }
 
@@ -193,71 +194,6 @@ namespace Compentio.SourceMapper.Processors
         private string MapProperty(IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter)
         {
             return $"target.{matchedTargetMember?.Name} = {parameter.Name}.{matchedSourceMember?.Name};";
-        }
-
-        private IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
-        {
-            if (inverseMapping)
-            {
-                var originalMethod = sourceMetadata.MatchDefinedMethod(matchedTargetMember, matchedSourceMember);
-
-                if (originalMethod == null) return originalMethod;
-
-                try
-                {
-                    if (!string.IsNullOrEmpty(InverseAttributeService.GetInverseMethodName(originalMethod)))
-                    {
-                        return originalMethod;
-                    }
-
-                    return null;
-                }
-                catch (InvalidOperationException)
-                {
-                    ReportMultipleInternalMethodName(originalMethod);
-
-                    return null;
-                }
-                catch (Exception exception)
-                {
-                    ReportInternalMethodNameError(exception, originalMethod);
-
-                    return null;
-                }
-            }
-            else
-            {
-                return sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
-            }
-        }
-
-        private string GetInverseMethodName(IMethodMetadata methodMetadata)
-        {
-            try
-            {
-                var inverseMethodName = InverseAttributeService.GetInverseMethodName(methodMetadata);
-
-                if (string.IsNullOrEmpty(inverseMethodName))
-                {
-                    ReportEmptyInverseMethodName(methodMetadata);
-
-                    return inverseMethodName;
-                }
-
-                return InverseAttributeService.GetInverseMethodFullName(methodMetadata, inverseMethodName);
-            }
-            catch (InvalidOperationException)
-            {
-                ReportMultipleInternalMethodName(methodMetadata);
-
-                return string.Empty;
-            }
-            catch (Exception exception)
-            {
-                ReportInternalMethodNameError(exception, methodMetadata);
-
-                return string.Empty;
-            }
         }
     }
 }
