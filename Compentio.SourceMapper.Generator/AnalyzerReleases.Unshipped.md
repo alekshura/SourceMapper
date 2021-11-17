@@ -4,6 +4,7 @@
 ### New Rules
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
+SMAP0004 | Design | Warning | SourceMapperDescriptors, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics##smap0004)
 SMAP0005 | Design | Warning | SourceMapperDescriptors, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics##smap0005)
 SMAP0006 | Design | Warning | SourceMapperDescriptors, [Documentation](https://github.com/alekshura/SourceMapper/wiki/Diagnostics##smap0006)
 

@@ -32,5 +32,9 @@ namespace Compentio.SourceMapper.Diagnostics
         public static readonly DiagnosticDescriptor UnexpectedError =
           new("SMAP0099", "Unexpected error", "Unexpected error ocured with message: '{0}'", "Design", DiagnosticSeverity.Error, true,
               "Unexpected exception occured during code generation.", $"{DiagnosticsDescriptorsUri}#smap0099");
+
+        public static readonly DiagnosticDescriptor DependencyInjectionNotUsed =
+          new("SMAP0004", "Dependency Injection not used", "No Dependency Injection mechanism used in project. '{0}'.", "Design", DiagnosticSeverity.Warning, true,
+              "SourceMapper based on Dependency Injection, but no used in project.", $"{DiagnosticsDescriptorsUri}#smap0004");
     }    
 }

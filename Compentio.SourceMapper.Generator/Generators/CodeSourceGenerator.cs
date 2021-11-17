@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis.Text;
 using System.Text;
 using System.Collections.Generic;
 using Compentio.SourceMapper.Diagnostics;
+using Compentio.SourceMapper.Extensions;
+using Compentio.SourceMapper.Resources;
 
 namespace Compentio.SourceMapper.Generators
 {
@@ -16,6 +18,7 @@ namespace Compentio.SourceMapper.Generators
     internal class CodeSourceGenerator
     {
         private readonly ISourcesMetadata _sourcesMetadata;
+        private readonly List<DiagnosticsInfo> _diagnostics = new();
 
         internal CodeSourceGenerator (ISourcesMetadata sourcesMetadata)
         {
@@ -45,7 +48,8 @@ namespace Compentio.SourceMapper.Generators
 
             if (processorStrategy is null)
             {
-                // TODO Diagnostics
+                AddDependencyInjectionDiagnostic(context);
+                ReportDiagnostics(context, _diagnostics);
                 return;
             }
 
@@ -54,11 +58,23 @@ namespace Compentio.SourceMapper.Generators
             context.AddSource($"{_sourcesMetadata.DependencyInjection.DependencyInjectionClassName}.cs", SourceText.From(result.GeneratedCode, Encoding.UTF8));
         }
 
+        private void AddDependencyInjectionDiagnostic(GeneratorExecutionContext context)
+        {
+            _diagnostics.Add(new DiagnosticsInfo()
+            {
+                DiagnosticDescriptor = SourceMapperDescriptors.DependencyInjectionNotUsed,
+                Exception = new DependencyInjectionException(AppStrings.DependencyInjectionNotUsedException, context.Compilation.AssemblyName)
+            });
+        }
+
         private void ReportDiagnostics(GeneratorExecutionContext context, IEnumerable<DiagnosticsInfo> diagnostics)
         {
             foreach (var diagnosticInfo in diagnostics)
             {
-                context.ReportDiagnostic(Diagnostic.Create(diagnosticInfo.DiagnosticDescriptor, diagnosticInfo.Metadata?.Location, diagnosticInfo.Message));
+                context.ReportDiagnostic(Diagnostic.Create(
+                    diagnosticInfo.DiagnosticDescriptor, 
+                    diagnosticInfo.Metadata != null ? Location.None : diagnosticInfo.Metadata?.Location, 
+                    diagnosticInfo.Message));
             }            
         }
     }

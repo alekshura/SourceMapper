@@ -1,10 +1,7 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Metadata;
-using Compentio.SourceMapper.Processors.DependencyInjection;
-using Compentio.SourceMapper.Resources;
 using Microsoft.CodeAnalysis;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -30,7 +27,7 @@ namespace Compentio.SourceMapper.Generators
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
                 return;
 
-            var sourcesMetadata = SourcesMetadata.Create(DependencyInjectionService.GetDependencyInjectionType(context.Compilation.ReferencedAssemblyNames));
+            var sourcesMetadata = SourcesMetadata.Create(context.Compilation.ReferencedAssemblyNames);
 
             foreach (var typeDeclaration in receiver.Candidates)
             {
