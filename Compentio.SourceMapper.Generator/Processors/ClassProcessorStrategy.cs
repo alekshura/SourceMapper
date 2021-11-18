@@ -38,7 +38,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialClass(IMapperMetadata mapperMetadata)
         {
-            if (InverseAttributeService.AnyInverseMethod(mapperMetadata.MethodsMetadata))
+            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata))
             {
                 return $@"
                 public abstract partial class {mapperMetadata?.Name}
@@ -55,7 +55,7 @@ namespace Compentio.SourceMapper.Processors
         {
             var methodsStringBuilder = new StringBuilder();
 
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttributeService.IsInverseMethod(m)))
+            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttribute.IsInverseMethod(m)))
             {
                 methodsStringBuilder.AppendLine(GeneratePartialClassMethod(methodMetadata));
             }

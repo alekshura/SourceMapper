@@ -40,7 +40,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialInterface(IMapperMetadata mapperMetadata)
         {
-            if (InverseAttributeService.AnyInverseMethod(mapperMetadata.MethodsMetadata))
+            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata))
             {
                 return $@"
                 public partial interface {mapperMetadata?.Name}
@@ -57,7 +57,7 @@ namespace Compentio.SourceMapper.Processors
         {
             var methodsStringBuilder = new StringBuilder();
 
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttributeService.IsInverseMethod(m)))
+            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttribute.IsInverseMethod(m)))
             {
                 methodsStringBuilder.AppendLine(GenerateInterfaceMethod(methodMetadata));
             }

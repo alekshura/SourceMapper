@@ -31,7 +31,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         }
 
         [Fact]
-        public void InstanceForClass_SetPropertiesCorrectly()
+        public void InstanceForClass_SetFieldsCorrectly()
         {
             // Arrange
             _mockPropertySymbol.Setup(p => p.Name).Returns("Name");

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Compentio.SourceMapper.Attributes
 {
-    internal static class InverseAttributeService
+    internal static class InverseAttribute
     {
         /// <summary>
         /// Check that exists any method with the inverse attribute set
@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Attributes
         /// <returns></returns>
         internal static bool AnyInverseMethod(IEnumerable<IMethodMetadata> methodsMetadata)
         {
-            return methodsMetadata.Any(m => m.MappingAttributes != null && m.MappingAttributes.Any(a => a.CreateInverse));
+            return methodsMetadata.Any(m => m.MappingAttributes != null && IsInverseMethod(m));
         }
 
         /// <summary>

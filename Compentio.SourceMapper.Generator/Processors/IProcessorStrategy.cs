@@ -57,7 +57,7 @@ namespace Compentio.SourceMapper.Processors
             {
                 methodsStringBuilder.Append(GenerateRegularMethod(sourceMetadata, methodMetadata));
 
-                if (InverseAttributeService.IsInverseMethod(methodMetadata))
+                if (InverseAttribute.IsInverseMethod(methodMetadata))
                 {
                     methodsStringBuilder.AppendLine(GenerateInverseMethod(sourceMetadata, methodMetadata));
                 }
@@ -142,7 +142,7 @@ namespace Compentio.SourceMapper.Processors
             if (method is not null)
             {
                 if (inverseMapping)
-                    return $"target.{matchedTargetMember?.Name} = {InverseAttributeService.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
+                    return $"target.{matchedTargetMember?.Name} = {InverseAttribute.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
                 else
                     return $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
             }
@@ -164,7 +164,7 @@ namespace Compentio.SourceMapper.Processors
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(InverseAttributeService.GetInverseMethodName(originalMethod)))
+                    if (!string.IsNullOrEmpty(InverseAttribute.GetInverseMethodName(originalMethod)))
                     {
                         return originalMethod;
                     }
@@ -194,7 +194,7 @@ namespace Compentio.SourceMapper.Processors
         {
             try
             {
-                var inverseMethodName = InverseAttributeService.GetInverseMethodName(methodMetadata);
+                var inverseMethodName = InverseAttribute.GetInverseMethodName(methodMetadata);
 
                 if (string.IsNullOrEmpty(inverseMethodName))
                 {
@@ -203,7 +203,7 @@ namespace Compentio.SourceMapper.Processors
                     return inverseMethodName;
                 }
 
-                return InverseAttributeService.GetInverseMethodFullName(methodMetadata, inverseMethodName);
+                return InverseAttribute.GetInverseMethodFullName(methodMetadata, inverseMethodName);
             }
             catch (InvalidOperationException)
             {
