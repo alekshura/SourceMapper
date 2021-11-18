@@ -1,6 +1,5 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Microsoft.CodeAnalysis;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,21 +8,24 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Encapsulates a method from mapper that is used for mappings
     /// </summary>
-    interface IMethodMetadata : IMetadata
+    internal interface IMethodMetadata : IMetadata
     {
         /// <summary>
         /// Method return type
         /// </summary>
         ITypeMetadata ReturnType { get; }
+
         /// <summary>
         /// Parameters of the method
         /// </summary>
         IEnumerable<ITypeMetadata> Parameters { get; }
+
         /// <summary>
         /// Method full name with return type and its namespace and parameters.
         /// This name is ready to be used in code generation.
         /// </summary>
         string FullName { get; }
+
         /// <summary>
         /// Attributes that used for mappings
         /// </summary>
@@ -33,17 +35,18 @@ namespace Compentio.SourceMapper.Metadata
     internal class MethodMetadata : IMethodMetadata
     {
         private readonly IMethodSymbol _methodSymbol;
-        private readonly SymbolDisplayFormat _methodFullNameFormat = 
+
+        private readonly SymbolDisplayFormat _methodFullNameFormat =
             new(parameterOptions: SymbolDisplayParameterOptions.IncludeName | SymbolDisplayParameterOptions.IncludeType,
                    memberOptions: SymbolDisplayMemberOptions.IncludeParameters,
                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
-
 
         internal MethodMetadata(IMethodSymbol methodSymbol)
         {
             _methodSymbol = methodSymbol;
         }
-        public string Name 
+
+        public string Name
         {
             get
             {
@@ -58,11 +61,10 @@ namespace Compentio.SourceMapper.Metadata
 
         public string FullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFullNameFormat)}";
 
-        public IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
+        public virtual IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
                     .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))
                     .Select(attribute =>
                     {
-
                         var sourceConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
                         var targetConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Target)).Value;
                         var expressionConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Expression)).Value;
