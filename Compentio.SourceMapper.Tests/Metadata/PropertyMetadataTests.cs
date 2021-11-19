@@ -31,14 +31,64 @@ namespace Compentio.SourceMapper.Tests.Metadata
         }
 
         [Fact]
-        public void InstanceForClass_SetFieldsCorrectly()
+        public void InstanceForClass_ValidNameField()
         {
             // Arrange
             _mockPropertySymbol.Setup(p => p.Name).Returns("Name");
+
+            // Act
+            var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);
+
+            // Assert
+            propertyMetadata.Name.Should().Be("Name");
+        }
+
+        [Fact]
+        public void InstanceForClass_ValidFullNameField()
+        {
+            // Arrange
             _mockPropertySymbol.Setup(p => p.Type.ToDisplayString(It.IsAny<SymbolDisplayFormat>())).Returns("FullName");
+
+            // Act
+            var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);
+
+            // Assert
+            propertyMetadata.FullName.Should().Be("FullName");
+        }
+
+        [Fact]
+        public void InstanceForClass_ValidIsClassField()
+        {
+            // Arrange
             _mockPropertySymbol.Setup(p => p.Type.TypeKind).Returns(TypeKind.Class);
             _mockPropertySymbol.Setup(p => p.Type.SpecialType).Returns(SpecialType.None);
+
+            // Act
+            var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);
+
+            // Assert
+            propertyMetadata.IsClass.Should().BeTrue();
+        }
+
+        [Fact]
+        public void InstanceForClass_ValidLocationField()
+        {
+            // Arrange
             _mockPropertySymbol.Setup(p => p.Locations).Returns(ImmutableArray.Create(_mockLocation.Object));
+
+            // Act
+            var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);
+
+            // Assert
+            propertyMetadata.Location.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void InstanceForClass_NotEmptyProperties()
+        {
+            // Arrange
+            _mockPropertySymbol.Setup(p => p.Type.TypeKind).Returns(TypeKind.Class);
+            _mockPropertySymbol.Setup(p => p.Type.SpecialType).Returns(SpecialType.None);
             _mockPropertySymbol.Setup(p => p.Type.GetMembers()).Returns(ImmutableArray.Create(_mockSymbol.Object));
             _mockSymbol.Setup(s => s.Kind).Returns(SymbolKind.Property);
             _mockSymbol.Setup(s => s.IsStatic).Returns(false);
@@ -47,10 +97,6 @@ namespace Compentio.SourceMapper.Tests.Metadata
             var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);
 
             // Assert
-            propertyMetadata.Name.Should().Be("Name");
-            propertyMetadata.FullName.Should().Be("FullName");
-            propertyMetadata.IsClass.Should().BeTrue();
-            propertyMetadata.Location.Should().NotBeNull();
             propertyMetadata.Properties.Should().NotBeEmpty();
         }
 
