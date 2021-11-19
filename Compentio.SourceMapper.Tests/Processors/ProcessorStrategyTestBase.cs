@@ -1,10 +1,9 @@
-﻿using Compentio.SourceMapper.Attributes;
+﻿using AutoFixture;
+using AutoFixture.AutoMoq;
 using Compentio.SourceMapper.Generators;
-using Compentio.SourceMapper.Metadata;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Moq;
 using System.Linq;
 using System.Reflection;
 
@@ -12,6 +11,15 @@ namespace Compentio.SourceMapper.Tests.Processors
 {
     public class ProcessorStrategyTestBase
     {
+        protected readonly IFixture _fixture;
+
+        protected ProcessorStrategyTestBase()
+        {
+            _fixture = new Fixture()
+                .Customize(new AutoMoqCustomization { ConfigureMembers = true })
+                .Customize(new SupportMutableValueTypesCustomization());
+        }
+
         protected static string GetGeneratedOutput(string sourceCode)
         {
             var compilation = CSharpCompilation.Create("MainSourceGeneratorTests",
