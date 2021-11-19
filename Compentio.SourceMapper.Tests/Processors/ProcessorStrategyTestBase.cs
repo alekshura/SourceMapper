@@ -1,7 +1,10 @@
-﻿using Compentio.SourceMapper.Generators;
+﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Generators;
+using Compentio.SourceMapper.Metadata;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Moq;
 using System.Linq;
 using System.Reflection;
 
