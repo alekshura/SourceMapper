@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Compentio.SourceMapper.Tests.Processors
 {
-    public class ProcessorStrategyTestBase
+    public abstract class ProcessorStrategyTestBase
     {
         protected readonly IFixture _fixture;
 
@@ -20,7 +20,7 @@ namespace Compentio.SourceMapper.Tests.Processors
                 .Customize(new SupportMutableValueTypesCustomization());
         }
 
-        protected static string GetGeneratedOutput(string sourceCode)
+        protected string GetGeneratedOutput(string sourceCode)
         {
             var compilation = CSharpCompilation.Create("MainSourceGeneratorTests",
                                                        new[] { CSharpSyntaxTree.ParseText(sourceCode) },
