@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using AutoFixture.AutoMoq;
 using Compentio.SourceMapper.Metadata;
 using Compentio.SourceMapper.Processors;
 using FluentAssertions;
@@ -11,48 +10,41 @@ namespace Compentio.SourceMapper.Tests.Processors
 {
     public class ClassProcessorStrategyTests : ProcessorStrategyTestBase
     {
-        private readonly IFixture _fixture;
         private readonly IProcessorStrategy _processorStrategy;
         private readonly Mock<IMapperMetadata> _sourceMetadataMock;
 
         public ClassProcessorStrategyTests()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization { ConfigureMembers = true })
-                .Customize(new SupportMutableValueTypesCustomization());
-
             _sourceMetadataMock = _fixture.Create<Mock<IMapperMetadata>>();
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Name).Returns("MapperName");
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Namespace).Returns("Namespace");
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TargetClassName).Returns("TargetClassName");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Class);
-            _processorStrategy = ProcessorStrategyFactory.GetStrategy(_sourceMetadataMock.Object);            
+
+            _processorStrategy = ProcessorStrategyFactory.GetStrategy(_sourceMetadataMock.Object);
         }
 
         [Fact]
         public void GenerateCode_Returns_NotEmpty_Code()
         {
-            // Arrange 
+            // Arrange
             var mathodsMetadata = _fixture.CreateMany<IMethodMetadata>();
 
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Name).Returns("MapperName");
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Namespace).Returns("Namespace");
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TargetClassName).Returns("TargetClassName");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(mathodsMetadata);
 
             // Act
             var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
             // Assert
-            result.GeneratedCode.Should().NotBeNullOrEmpty();            
+            result.GeneratedCode.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
         public void GenerateCode_Check_Diagnostics()
         {
-            // Arrange 
+            // Arrange
             var mathodsMetadata = _fixture.CreateMany<IMethodMetadata>();
 
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Name).Returns("MapperName");
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Namespace).Returns("Namespace");
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TargetClassName).Returns("TargetClassName");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(mathodsMetadata);
 
             // Act

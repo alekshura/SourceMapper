@@ -35,7 +35,6 @@ namespace Compentio.SourceMapper.Tests.Metadata
 namespace {FakeNamespace}
 {{
     using System;
-    using Compentio.SourceMapper.Attributes;
 
     public abstract class {FakeClassName}
     {{
