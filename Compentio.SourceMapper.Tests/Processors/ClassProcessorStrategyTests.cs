@@ -91,6 +91,35 @@ namespace Compentio.SourceMapper.Tests.Processors
         }
 
         [Fact]
+        public void GenerateCode_InverseExpressionSourceAndTarget_ValidExpressionMapping()
+        {
+            // Arrange
+            var methodMetadata = GetValidMethodWithAttributesForExpression(_mockMappingAttribute);
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
+
+            // Act
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+
+            // Arrange
+            result.Diagnostics.Should().NotContain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
+        }
+
+        [Fact]
+        public void GenerateCode_InverseExpressionOnlyTarget_ValidExpressionMapping()
+        {
+            // Arrange
+            var methodMetadata = GetValidMethodWithAttributesForExpression(_mockMappingAttribute);
+            methodMetadata.Setup(m => m.Parameters).Returns(_fixture.Create<IEnumerable<ITypeMetadata>>());
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
+
+            // Act
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+
+            // Arrange
+            result.Diagnostics.Should().NotContain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
+        }
+
+        [Fact]
         public void GenerateCode_ReportEmptyInverseMethodName()
         {
             // Arrange
@@ -142,6 +171,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             var sourceParameters = mockMethodMetadata.Object.Parameters.First();
             var mockParameters = GetValidMethodParameters(sourceParameters);
 
+            // Set matched value fot source and target parameters
             mockMethodMetadata.Setup(m => m.Parameters).Returns(new List<ITypeMetadata> { mockParameters.Object });
             mockMethodMetadata.Setup(m => m.ReturnType).Returns(mockParameters.Object);
             mockMethodMetadata.Setup(m => m.MappingAttributes).Returns(new List<MappingAttribute> { mockMappingAttribute.Object });
@@ -151,8 +181,20 @@ namespace Compentio.SourceMapper.Tests.Processors
             return mockMethodMetadata;
         }
 
+        private Mock<IMethodMetadata> GetValidMethodWithAttributesForExpression(Mock<MappingAttribute> mockMappingAttribute)
+        {
+            var mockMethodMetadata = GetValidMethodWithAttributes(mockMappingAttribute);
+
+            // Set the same values for expression matching
+            mockMappingAttribute.Setup(m => m.Target).Returns(mockMethodMetadata.Object.ReturnType.Properties.FirstOrDefault().Name);
+            mockMappingAttribute.Setup(m => m.Source).Returns(mockMethodMetadata.Object.ReturnType.Properties.FirstOrDefault().Name);
+
+            return mockMethodMetadata;
+        }
+
         private Mock<ITypeMetadata> GetValidMethodParameters(ITypeMetadata sourceTypeMetadata)
         {
+            // Duplicate ITypeValue
             var mockParameters = _fixture.Create<Mock<ITypeMetadata>>();
             mockParameters.Setup(p => p.Name).Returns(sourceTypeMetadata.Name);
             mockParameters.Setup(p => p.FullName).Returns(sourceTypeMetadata.FullName);
