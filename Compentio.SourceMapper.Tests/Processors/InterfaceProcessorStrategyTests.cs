@@ -16,11 +16,9 @@ namespace Compentio.SourceMapper.Tests.Processors
     {
         private readonly IProcessorStrategy _processorStrategy;
         private readonly Mock<IMapperMetadata> _sourceMetadataMock;
-        private readonly Mock<MappingAttribute> _mockMappingAttribute;
 
         public InterfaceProcessorStrategyTests()
         {
-            _mockMappingAttribute = _fixture.Create<Mock<MappingAttribute>>();
             _sourceMetadataMock = _fixture.Create<Mock<IMapperMetadata>>();
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Interface);
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Name).Returns("MapperName");
