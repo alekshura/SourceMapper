@@ -114,7 +114,7 @@ namespace Compentio.SourceMapper.Processors
 
             if (expressionAttribute is not null && matchedSourceMember is not null)
             {
-                mapping.AppendLine($"target.{expressionAttribute?.InverseTarget} = {expressionAttribute?.InverseExpression}({parameter.Name}.{matchedSourceMember.Name});");
+                mapping.AppendLine($"target.{expressionAttribute?.InverseTarget} = {expressionAttribute?.InverseExpression}({parameter.Name}.{matchedTargetMember.Name});");
                 return mapping.ToString();
             }
 
