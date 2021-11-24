@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Compentio.Example.Autofac.App.Mapper;
 using Compentio.Example.Autofac.App.Repository;
 using Compentio.Example.Autofac.App.Services;
 using Compentio.SourceMapper.DependencyInjection;
@@ -17,6 +18,8 @@ namespace Compentio.Example.Autofac.App
             builder.RegisterType<BooksService>().As<IBooksService>().InstancePerDependency();
             builder.RegisterType<BooksRepository>().As<IBooksRepository>().SingleInstance();
             builder.AddMappers();
+            // Override mapper class by custom implementation
+            builder.RegisterType<CustomBooksMapper>().As<IBooksMapper>().SingleInstance();
         }
     }
 }
