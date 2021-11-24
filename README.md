@@ -359,3 +359,65 @@ public class AutofacModule : Module
 	}
 }
 ```
+
+### Class Inverse Mapping
+
+Case of class inverse mapping is mainly similar to interfaces inverse mechanism. First of all, we need to mark class as partial and add inverse attributes.
+If mapping between classes need expresions, they both should be implemented - primary and invers expression methods - inverse mechanism is not able to generate it by automate. That using of inverse expression should be declared by inverse attributes: `InverseSource` and `InverseTarget`, mirror for `Source` and `Target` attribute value, and `InverseExpression` attrigute with the inverse expression method name value. On the Compentio.Example.AtructureMap.App example:
+
+```csharp
+[Mapper(ClassName = "ClassInvoiceMapper")]
+public abstract partial class InvoiceMapper
+{
+	...
+	[Mapping(Source = nameof(InvoiceDao.Items), Target = nameof(InvoiceDto.Items), Expression = nameof(ConvertToItemsDto),
+	    InverseSource = nameof(InvoiceDto.Items), InverseTarget = nameof(InvoiceDao.Items), InverseExpression = nameof(ConvertToItemsDao))]
+	[Mapping(CreateInverse = true, InverseMethodName = "MapInvoiceToDao")]
+	public abstract InvoiceDto MapInvoiceToDto(InvoiceDao source);
+	...
+	protected IEnumerable<InvoiceItemDao> ConvertToItemsDao(IEnumerable<InvoiceItemDto> items)
+	{
+	    return items.Select(i => MapInvoiceItemToDao(i)).AsEnumerable();
+	}
+
+	protected IEnumerable<InvoiceItemDto> ConvertToItemsDto(IEnumerable<InvoiceItemDao> items)
+	{
+	    return items.Select(i => MapInvoiceItemToDto(i)).AsEnumerable();
+	}
+}
+```
+
+That prepared mapping class lead to obtained proper result mapping class:
+
+```csharp
+public class ClassInvoiceMapper : InvoiceMapper
+{
+	public override Compentio.Example.StructureMap.App.Entities.InvoiceDto MapInvoiceToDto(Compentio.Example.StructureMap.App.Entities.InvoiceDao source)
+	{
+	    ...
+	    target.Items = ConvertToItemsDto(source.Items);
+	}
+
+	public override Compentio.Example.StructureMap.App.Entities.InvoiceDao MapInvoiceToDao(Compentio.Example.StructureMap.App.Entities.InvoiceDto source)
+	{
+	    ...
+	    target.Items = ConvertToItemsDao(source.Items);
+	}
+
+	public override Compentio.Example.StructureMap.App.Entities.InvoiceItemDto MapInvoiceItemToDto(Compentio.Example.StructureMap.App.Entities.InvoiceItemDao source)
+	{
+	...
+	}
+
+	public override Compentio.Example.StructureMap.App.Entities.InvoiceItemDao MapInvoiceItemToDao(Compentio.Example.StructureMap.App.Entities.InvoiceItemDto source)
+	{
+	...
+	}
+}
+
+public abstract partial class InvoiceMapper
+{
+	public abstract Compentio.Example.StructureMap.App.Entities.InvoiceDao MapInvoiceToDao(Compentio.Example.StructureMap.App.Entities.InvoiceDto source);
+	public abstract Compentio.Example.StructureMap.App.Entities.InvoiceItemDao MapInvoiceItemToDao(Compentio.Example.StructureMap.App.Entities.InvoiceItemDto source);
+}
+```
