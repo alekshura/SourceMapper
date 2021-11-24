@@ -294,3 +294,68 @@ public class StructureMapContainerBuilderFactory : IServiceProviderFactory<Conta
 	}
 }
 ```
+
+## Inverse Mapping Mechanism
+
+Inverse mapping allow to create about half of the mapper code by automate. The main goal is to define only one way mapping methods in mapper class, the second one - inverse mapping - can be created by internal mechanism.
+Due to using dependency injections, SourceMapper generate additional part of mapping class (or interface), so the source mapping class (interface) must be declared as `partial`.
+
+### Interface Inverse Mapping
+Inverse mapping is provided by using two base mapping attributes: `CreateInvers`, for turn on inverse, and `InverseMethodName`, for setting of the name of inverse method, like in example (Compentio.Example.Autofac.App):
+
+```csharp
+[Mapper]
+public partial interface IBooksMapper
+{
+	[Mapping(CreateInverse = true, InverseMethodName = "MapBookToDao")]
+	BookDto MapBookToDto(BookDao source);
+}
+```
+
+that lead to two methods implementations in mapper result class:
+
+```csharp
+public class BooksMapper : IBooksMapper
+{
+        public static BooksMapper Create() => new();
+        public virtual Compentio.Example.Autofac.App.Entities.BookDto MapBookToDto(Compentio.Example.Autofac.App.Entities.BookDao source)
+        {
+	...
+        }
+
+        public virtual Compentio.Example.Autofac.App.Entities.BookDao MapBookToDao(Compentio.Example.Autofac.App.Entities.BookDto source)
+        {
+	...
+        }
+}
+```
+
+If mapped object contain collections, mappings cant be created by automate. In this case we can create class that inherit mapper result class and override complex objects, for example:
+
+```csharp
+public class CustomBooksMapper : BooksMapper
+{
+	public override BookDao MapBookToDao(BookDto source)
+	{
+	    var result = base.MapBookToDao(source);
+	    result.LibraryAddressesDao = source.LibraryAddressesDto.Select(a => MapAddressToDao(a)).ToList();
+	    return result;
+	}
+	...
+}
+```
+
+and register it in dependency injection section
+
+```csharp
+public class AutofacModule : Module
+{
+	protected override void Load(ContainerBuilder builder)
+	{
+	    ...
+	    builder.AddMappers();
+	    // Override mapper class by custom implementation
+	    builder.RegisterType<CustomBooksMapper>().As<IBooksMapper>().SingleInstance();
+	}
+}
+```
