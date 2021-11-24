@@ -1,6 +1,7 @@
 ﻿using Compentio.SourceMapper.Attributes;
 using Compentio.SourceMapper.Tests.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Compentio.SourceMapper.Tests.Mappings
@@ -40,7 +41,7 @@ namespace Compentio.SourceMapper.Tests.Mappings
         [Mapping(Source = nameof(UserWithArrayDao.UserAddresses), Target = nameof(UserInfoWithArray.Addresses), Expression = nameof(ConvertAddresses),
             InverseSource = nameof(UserInfoWithArray.Addresses), InverseTarget = nameof(UserWithArrayDao.UserAddresses), InverseExpression = nameof(ConvertAddressesDao))]
         [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
-        public abstract UserInfoWithArray MapToDomainModel(UserWithArrayDao userWithArrayDao);
+        public abstract UserInfoWithArray MapToDomainModel(UserWithArrayDao source);
 
         protected Address[] ConvertAddresses(AddressDao[] addresses)
         {
@@ -50,6 +51,31 @@ namespace Compentio.SourceMapper.Tests.Mappings
         protected AddressDao[] ConvertAddressesDao(Address[] addresses)
         {
             return addresses.Select(a => MapFromAddress(a)).ToArray();
+        }
+
+        [Mapping(CreateInverse = true, InverseMethodName = "MapFromAddress")]
+        public abstract Address MapAddress(AddressDao source);
+
+        [Mapping(CreateInverse = true, InverseMethodName = "MapFromRegion")]
+        public abstract Region MapRegion(RegionDao source);
+    }
+
+    [Mapper(ClassName = "ClassUserDaoListMapper")]
+    public abstract partial class UserDataListMapper
+    {
+        [Mapping(Source = nameof(UserWithListDao.UserAddresses), Target = nameof(UserInfoWithList.Addresses), Expression = nameof(ConvertAddresses),
+            InverseSource = nameof(UserInfoWithList.Addresses), InverseTarget = nameof(UserWithListDao.UserAddresses), InverseExpression = nameof(ConvertAddressesDao))]
+        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        public abstract UserInfoWithList MapToDomainModel(UserWithListDao source);
+
+        protected IList<Address> ConvertAddresses(IList<AddressDao> addresses)
+        {
+            return addresses.Select(a => MapAddress(a)).ToList();
+        }
+
+        protected IList<AddressDao> ConvertAddressesDao(IList<Address> addresses)
+        {
+            return addresses.Select(a => MapFromAddress(a)).ToList();
         }
 
         [Mapping(CreateInverse = true, InverseMethodName = "MapFromAddress")]
