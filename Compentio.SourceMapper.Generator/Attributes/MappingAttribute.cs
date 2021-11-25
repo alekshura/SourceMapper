@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Compentio.SourceMapper.Attributes
 {
     /// <summary>
     /// Attirbute that defines the mapping rules for method first parameter.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class MappingAttribute : Attribute
     {

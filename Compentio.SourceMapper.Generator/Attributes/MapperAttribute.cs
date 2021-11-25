@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Compentio.SourceMapper.Attributes
 {
     /// <summary>
     /// Mark abstract class of interface with this attribute to define mapper
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct)]
     public class MapperAttribute : Attribute
     {
@@ -20,5 +22,10 @@ namespace Compentio.SourceMapper.Attributes
         /// </list>
         /// </summary>
         public string ClassName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Name of mapper to import class mapping from
+        /// </summary>
+        public string UseMapper { get; set; } = string.Empty;
     }
 }
