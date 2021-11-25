@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Processors
     {
         protected override string Modifier => "virtual";
 
-        protected override string GenerateMapperCode(IMapperMetadata mapperMetadata)
+        protected override string GenerateMapperCode(IMapperMetadata mapperMetadata, IMapperMetadata? baseMapper)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />

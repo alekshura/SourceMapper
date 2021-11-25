@@ -35,7 +35,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(methodsMetadata);
 
             // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object, null);
 
             // Assert
             result.GeneratedCode.Should().NotBeNullOrEmpty();
@@ -49,7 +49,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(methodsMetadata);
 
             // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object, null);
             var generatorResult = GetGeneratedOutput(result.GeneratedCode);
 
             // Assert
@@ -64,7 +64,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
 
             // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object, null);
 
             // Arrange
             result.GeneratedCode.Should().NotBeNullOrEmpty();
@@ -79,7 +79,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
 
             // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object, null);
 
             // Arrange
             result.Diagnostics.Should().NotContain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
@@ -94,7 +94,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
 
             // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object, null);
 
             // Arrange
             result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.ExpectedInverseMethodName);
@@ -110,7 +110,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
 
             // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object, null);
 
             // Arrange
             result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
@@ -125,7 +125,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
 
             // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object, null);
 
             // Arrange
             result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.UnexpectedError);

@@ -19,7 +19,7 @@ namespace Compentio.SourceMapper.Processors
         /// </summary>
         /// <param name="mapperMetadata"></param>
         /// <returns>Generated code and diagnostics information. See also: <seealso cref="Result"/></returns>
-        IResult GenerateCode(IMapperMetadata mapperMetadata);
+        IResult GenerateCode(IMapperMetadata mapperMetadata, IMapperMetadata? baseMapper);
     }
 
     /// <summary>
@@ -30,11 +30,11 @@ namespace Compentio.SourceMapper.Processors
     {
         private readonly List<DiagnosticsInfo> _diagnostics = new();
 
-        public IResult GenerateCode(IMapperMetadata mapperMetadata)
+        public IResult GenerateCode(IMapperMetadata mapperMetadata, IMapperMetadata? baseMapper)
         {
             try
             {
-                string code = GenerateMapperCode(mapperMetadata);
+                string code = GenerateMapperCode(mapperMetadata, baseMapper);
                 return Result.Ok(code, _diagnostics);
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace Compentio.SourceMapper.Processors
 
         protected abstract string Modifier { get; }
 
-        protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
+        protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata, IMapperMetadata? baseMapper);
 
         protected abstract string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false);
 

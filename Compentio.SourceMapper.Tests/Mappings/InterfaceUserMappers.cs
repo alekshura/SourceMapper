@@ -51,6 +51,14 @@ namespace Compentio.SourceMapper.Tests.Mappings
         }
     }
 
+    [Mapper(ClassName = "InterfaceUserDaoListMapperFrom", UseMapper = nameof(IUserDataArrayMapper))]
+    public partial interface IUserDataListMapper
+    {
+        [Mapping(Source = nameof(UserWithListDao.FirstName), Target = nameof(UserInfoWithList.Name))]
+        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        UserInfoWithList MapToDomainModel(UserWithListDao source);
+    }
+
     [Mapper(ClassName = "InterfaceUserDaoArrayMapper")]
     public partial interface IUserDataArrayMapper
     {

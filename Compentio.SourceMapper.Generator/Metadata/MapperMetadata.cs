@@ -28,6 +28,10 @@ namespace Compentio.SourceMapper.Metadata
         /// The name of the generated class with mappings
         /// </summary>
         string TargetClassName { get; }
+        /// <summary>
+        /// Name of the mapper based for
+        /// </summary>
+        string BaseMapperName { get; }
         IEnumerable<IMethodMetadata> MethodsMetadata { get; }
     }
 
@@ -61,6 +65,18 @@ namespace Compentio.SourceMapper.Metadata
                     className = $"{Name}Impl";
                 }
                 return className;
+            }
+        }
+
+        public string BaseMapperName
+        {
+            get
+            {
+                var attribute = _typeSymbol.GetAttributes().FirstOrDefault(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MapperAttribute));
+                var mapperAttribute = attribute?.NamedArguments.FirstOrDefault(arg => arg.Key == nameof(MapperAttribute.UseMapper));
+                var mapperName = mapperAttribute?.Value.Value as string;
+
+                return mapperName;
             }
         }
 
