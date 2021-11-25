@@ -13,8 +13,10 @@ namespace Compentio.SourceMapper.Processors
     {
         protected override string Modifier => "virtual";
 
-        protected override string GenerateMapperCode(IMapperMetadata mapperMetadata, IMapperMetadata? baseMapper)
+        protected override string GenerateMapperCode(IMapperMetadata mapperMetadata)
         {
+            var baseMapperClassName = string.IsNullOrEmpty(mapperMetadata.BaseMapperName) ? string.Empty : _baseMapperMetadata?.TargetClassName + ",";
+
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
 
@@ -24,7 +26,7 @@ namespace Compentio.SourceMapper.Processors
             {(string.IsNullOrWhiteSpace(mapperMetadata?.Namespace) ? null : $"namespace {mapperMetadata?.Namespace}")}
             {{
                [ExcludeFromCodeCoverage]
-               public class {mapperMetadata?.TargetClassName} : {mapperMetadata?.Name}
+               public class {mapperMetadata?.TargetClassName} : {baseMapperClassName} {mapperMetadata?.Name}
                {{
                   public static {mapperMetadata?.TargetClassName} Create() => new();
 
@@ -42,8 +44,10 @@ namespace Compentio.SourceMapper.Processors
         {
             if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata))
             {
+                var baseMapperName = string.IsNullOrEmpty(mapperMetadata.BaseMapperName) ? string.Empty : ": " + mapperMetadata.BaseMapperName;
+
                 return $@"
-                public partial interface {mapperMetadata?.Name}
+                public partial interface {mapperMetadata?.Name} {baseMapperName}
                 {{
                     { GenerateInterfaceMethods(mapperMetadata) }
                 }}

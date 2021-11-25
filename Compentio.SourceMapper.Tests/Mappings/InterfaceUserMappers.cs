@@ -51,12 +51,13 @@ namespace Compentio.SourceMapper.Tests.Mappings
         }
     }
 
-    [Mapper(ClassName = "InterfaceUserDaoListMapperFrom", UseMapper = nameof(IUserDataArrayMapper))]
-    public partial interface IUserDataListMapper
+    [Mapper(ClassName = "InterfaceWithBaseMapper", UseMapper = nameof(IUserDataArrayMapper))]
+    public partial interface IUserDataDaoWithBaseMapper
     {
-        [Mapping(Source = nameof(UserWithListDao.FirstName), Target = nameof(UserInfoWithList.Name))]
+        [Mapping(Source = nameof(UserDataDao.FirstName), Target = nameof(UserInfo.Name))]
+        [Mapping(Source = nameof(UserDataDao.UserAddress), Target = nameof(UserInfo.Address))]
         [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
-        UserInfoWithList MapToDomainModel(UserWithListDao source);
+        UserInfo MapToDomainModel(UserDataDao source);
     }
 
     [Mapper(ClassName = "InterfaceUserDaoArrayMapper")]

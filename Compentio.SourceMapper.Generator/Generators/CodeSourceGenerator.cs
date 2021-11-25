@@ -32,7 +32,7 @@ namespace Compentio.SourceMapper.Generators
             {
                 var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapper);
 
-                var baseMapper = _sourcesMetadata.Mappers.Where(m => m.Name == mapper.BaseMapperName).SingleOrDefault();
+                var baseMapper = _sourcesMetadata.Mappers.SingleOrDefault(m => m.Name == mapper.BaseMapperName);
 
                 var result = processorStrategy.GenerateCode(mapper, baseMapper);
 

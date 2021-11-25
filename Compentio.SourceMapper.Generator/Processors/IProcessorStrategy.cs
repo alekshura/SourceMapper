@@ -29,12 +29,15 @@ namespace Compentio.SourceMapper.Processors
     internal abstract class AbstractProcessorStrategy : IProcessorStrategy
     {
         private readonly List<DiagnosticsInfo> _diagnostics = new();
+        protected IMapperMetadata? _baseMapperMetadata { get; set; }
 
         public IResult GenerateCode(IMapperMetadata mapperMetadata, IMapperMetadata? baseMapper)
         {
+            _baseMapperMetadata = baseMapper;
+
             try
             {
-                string code = GenerateMapperCode(mapperMetadata, baseMapper);
+                string code = GenerateMapperCode(mapperMetadata);
                 return Result.Ok(code, _diagnostics);
             }
             catch (Exception ex)
@@ -45,7 +48,7 @@ namespace Compentio.SourceMapper.Processors
 
         protected abstract string Modifier { get; }
 
-        protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata, IMapperMetadata? baseMapper);
+        protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
 
         protected abstract string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false);
 
@@ -139,6 +142,12 @@ namespace Compentio.SourceMapper.Processors
         {
             var method = GetDefinedMethod(sourceMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
 
+            // Check that method can be used from other/base mapper
+            if (method is null && _baseMapperMetadata is not null)
+            {
+                method = GetDefinedMethodFromBaseMapper(matchedSourceMember, matchedTargetMember, inverseMapping);
+            }
+
             if (method is not null)
             {
                 if (inverseMapping)
@@ -153,6 +162,12 @@ namespace Compentio.SourceMapper.Processors
 
             return string.Empty;
         }
+
+        protected IMethodMetadata? GetDefinedMethodFromBaseMapper(IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
+        {
+            return GetDefinedMethod(_baseMapperMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
+        }
+
 
         protected IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
         {
