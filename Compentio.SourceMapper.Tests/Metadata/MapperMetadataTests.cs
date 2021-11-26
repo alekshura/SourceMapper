@@ -22,6 +22,8 @@ namespace Compentio.SourceMapper.Tests.Metadata
 
         protected override string FakeInterfaceName => "FakeInterfaceName";
 
+        protected override string FakeBaseMapperName => "FakeBaseMapperName";
+
         public MapperMetadataTests()
         {
             _fixture = new Fixture()
@@ -138,6 +140,33 @@ namespace Compentio.SourceMapper.Tests.Metadata
 
             // Assert
             mapperMetadata.Location.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Instance_Class_NotEmptyMethodsMetadata()
+        {
+            // Arrange
+            _mockTypeSymbol.Setup(t => t.GetMembers()).Returns(GetFakeClassMethods(FakeClassSourceCode));
+
+            // Act
+            var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);
+
+            // Assert
+            mapperMetadata.MethodsMetadata.Should().NotBeNull();
+            mapperMetadata.MethodsMetadata.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public void Instance_Class_NotEmptyBaseMapperName()
+        {
+            // Arrange
+            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetFakeClassAttributeData(FakeClassSourceCode));
+
+            // Act
+            var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);
+
+            // Assert
+            mapperMetadata.BaseMapperName.Should().Be(FakeBaseMapperName);
         }
     }
 }

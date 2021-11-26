@@ -10,6 +10,16 @@ namespace Compentio.SourceMapper.Tests.Metadata
         protected abstract string FakeNamespace { get; }
         protected abstract string FakeClassName { get; }
         protected abstract string FakeInterfaceName { get; }
+        protected abstract string FakeBaseMapperName { get; }
+
+        protected ImmutableArray<ISymbol> GetFakeClassMethods(string sourceCode)
+        {
+            var compilation = GetFakeCompilation(sourceCode);
+
+            INamedTypeSymbol fakeClass = compilation.GetTypeByMetadataName($"{FakeNamespace}.{FakeClassName}");
+
+            return fakeClass.GetMembers();
+        }
 
         protected ImmutableArray<AttributeData> GetFakeClassAttributeData(string sourceCode)
         {
@@ -43,17 +53,13 @@ namespace {FakeNamespace}
 {{
     using System;
 
-    [Mapper(ClassName = ""{FakeClassName}"")]
+    [Mapper(ClassName = ""{FakeClassName}"", UseMapper = ""{FakeBaseMapperName}"")]
     public abstract partial class {FakeClassName}
     {{
+        public abstract FakeTypeDto FakeMethodName(FakeTypeDao fake);
     }}
 
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct)]
-    public class MapperAttribute : Attribute
-    {{
-        public string ClassName {{ get; set; }} = string.Empty;
-        public string UseMapper {{ get; set; }} = string.Empty;
-    }}
+    {MapperAttributeClassCode}
 }}
 ";
 
@@ -68,12 +74,7 @@ namespace {FakeNamespace}
     {{
     }}
 
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct)]
-    public class MapperAttribute : Attribute
-    {{
-        public string ClassName {{ get; set; }} = string.Empty;
-        public string UseMapper {{ get; set; }} = string.Empty;
-    }}
+    {MapperAttributeClassCode}
 }}
 ";
 
@@ -88,13 +89,16 @@ namespace {FakeNamespace}
     {{
     }}
 
+    {MapperAttributeClassCode}
+}}
+";
+        private static string MapperAttributeClassCode => $@"
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct)]
     public class MapperAttribute : Attribute
     {{
         public string ClassName {{ get; set; }} = string.Empty;
         public string UseMapper {{ get; set; }} = string.Empty;
     }}
-}}
 ";
     }
 }
