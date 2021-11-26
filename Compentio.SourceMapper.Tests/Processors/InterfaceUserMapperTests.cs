@@ -236,5 +236,57 @@ namespace Compentio.SourceMapper.Tests.Processors
 
             mappingResult.UserAddresses.Should().NotBeNull();
         }
+
+        [Fact]
+        public void Mapper_Dao_With_Other_Mapper_Converts()
+        {
+            // Arrange 
+            var _userMapperInterface = new InterfaceWithBaseMapper();
+            var userDataDao = _fixture.Create<UserDataDao>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDomainModel(userDataDao);
+
+            // Assert
+            mappingResult.Id.Should().NotBe((int)userDataDao.UserId);
+
+            mappingResult.Name.Should().Be(userDataDao.FirstName);
+            mappingResult.BirthDate.Should().Be(userDataDao.BirthDate);
+
+            mappingResult.Address.Should().NotBeNull();
+            mappingResult.Address.City.Should().Be(userDataDao.UserAddress.City);
+            mappingResult.Address.House.Should().Be(userDataDao.UserAddress.House);
+            mappingResult.Address.Street.Should().Be(userDataDao.UserAddress.Street);
+
+            mappingResult.Address.Region.Should().NotBeNull();
+            mappingResult.Address.Region.State.Should().Be(userDataDao.UserAddress.Region.State);
+            mappingResult.Address.Region.District.Should().Be(userDataDao.UserAddress.Region.District);
+        }
+
+        [Fact]
+        public void Mapper_Info_With_Other_Mapper_Converts()
+        {
+            // Arrange
+            var userMapperInterface = new InterfaceWithBaseMapper();
+            var userInfo = _fixture.Create<UserInfo>();
+
+            // Act
+            var mappingResult = userMapperInterface.MapToDatabaseModel(userInfo);
+
+            // Assert
+            mappingResult.UserId.Should().NotBe(userInfo.Id);
+
+            mappingResult.FirstName.Should().Be(userInfo.Name);
+            mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
+
+            mappingResult.UserAddress.Should().NotBeNull();
+            mappingResult.UserAddress.City.Should().Be(userInfo.Address.City);
+            mappingResult.UserAddress.House.Should().Be(userInfo.Address.House);
+            mappingResult.UserAddress.Street.Should().Be(userInfo.Address.Street);
+
+            mappingResult.UserAddress.Region.Should().NotBeNull();
+            mappingResult.UserAddress.Region.State.Should().Be(userInfo.Address.Region.State);
+            mappingResult.UserAddress.Region.District.Should().Be(userInfo.Address.Region.District);
+        }
     }
 }

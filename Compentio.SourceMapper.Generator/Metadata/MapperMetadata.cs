@@ -32,6 +32,9 @@ namespace Compentio.SourceMapper.Metadata
         /// Name of the mapper based for
         /// </summary>
         string BaseMapperName { get; }
+        /// <summary>
+        /// Collection of containing methods metadata
+        /// </summary>
         IEnumerable<IMethodMetadata> MethodsMetadata { get; }
     }
 
