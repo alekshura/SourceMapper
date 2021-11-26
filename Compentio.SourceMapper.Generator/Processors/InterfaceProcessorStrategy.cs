@@ -42,10 +42,10 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialInterface(IMapperMetadata mapperMetadata)
         {
-            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata))
-            {
-                var baseMapperName = string.IsNullOrEmpty(mapperMetadata.BaseMapperName) ? string.Empty : ": " + mapperMetadata.BaseMapperName;
+            var baseMapperName = string.IsNullOrEmpty(mapperMetadata.BaseMapperName) ? string.Empty : ": " + mapperMetadata.BaseMapperName;
 
+            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata) || !string.IsNullOrEmpty(mapperMetadata.BaseMapperName))
+            {                
                 return $@"
                 public partial interface {mapperMetadata?.Name} {baseMapperName}
                 {{
