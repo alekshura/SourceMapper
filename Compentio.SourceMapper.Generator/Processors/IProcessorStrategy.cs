@@ -69,6 +69,13 @@ namespace Compentio.SourceMapper.Processors
             return methodsStringBuilder.ToString();
         }
 
+        protected string GenerateMethodsFromBaseMapper()
+        {
+            if (_baseMapperMetadata is null || _baseMapperMetadata.MethodsMetadata is null) return string.Empty;
+
+            return GenerateMethods(_baseMapperMetadata);
+        }
+
         protected string GenerateRegularMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
             return @$"public {Modifier} {methodMetadata.FullName}

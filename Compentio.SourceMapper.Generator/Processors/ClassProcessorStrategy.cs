@@ -27,6 +27,7 @@ namespace Compentio.SourceMapper.Processors
                public class {mapperMetadata.TargetClassName} : {mapperMetadata.Name}
                {{
                    { GenerateMethods(mapperMetadata) }
+                   { GenerateMethodsFromBaseMapper() }
                }}
 
                 { GeneratePartialClass(mapperMetadata) }
@@ -38,10 +39,12 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialClass(IMapperMetadata mapperMetadata)
         {
-            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata))
+            var baseMapperName = string.IsNullOrEmpty(mapperMetadata.BaseMapperName) ? string.Empty : ": " + mapperMetadata.BaseMapperName;
+
+            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata) || !string.IsNullOrEmpty(mapperMetadata.BaseMapperName))
             {
                 return $@"
-                public abstract partial class {mapperMetadata?.Name}
+                public abstract partial class {mapperMetadata?.Name} {baseMapperName}
                 {{
                     { GeneratePartialClassMethods(mapperMetadata) }
                 }}
