@@ -60,6 +60,33 @@ namespace Compentio.SourceMapper.Tests.Mappings
         public abstract Region MapRegion(RegionDao source);
     }
 
+    [Mapper(ClassName = "ClassUserDaoWithBaseMapper", UseMapper = nameof(UserDataArrayMapper))]
+    public abstract partial class UserDataWithBaseMapper
+    {
+        [Mapping(Source = nameof(UserDataDao.UserId), Target = nameof(UserInfo.Id), Expression = nameof(ConvertUserId),
+            InverseSource = nameof(UserInfo.Id), InverseTarget = nameof(UserDataDao.UserId), InverseExpression = nameof(ConvertId))]
+        [Mapping(Target = nameof(UserInfo.Name), Expression = nameof(ConvertUserName))]
+        [Mapping(Source = nameof(UserDataDao.UserGender), Target = nameof(UserInfo.Sex), Expression = nameof(ConvertUserGender),
+            InverseSource = nameof(UserInfo.Sex), InverseTarget = nameof(UserDataDao.UserGender), InverseExpression = nameof(ConvertSex))]
+        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        [Mapping(Source = nameof(UserDataDao.UserAddress), Target = nameof(UserInfo.Address))]
+        public abstract UserInfo MapToDomainModel(UserDataDao source);
+
+        protected static int ConvertUserId(long id)
+        {
+            return Convert.ToInt32(id);
+        }
+
+        protected static long ConvertId(int id)
+        {
+            return Convert.ToInt64(id);
+        }
+
+        protected static string ConvertUserName(UserDataDao userDao) => $"{userDao.FirstName} {userDao.LastName}";
+        protected readonly Func<UserGender, Sex> ConvertUserGender = gender => gender == UserGender.Female ? Sex.W : Sex.M;
+        protected readonly Func<Sex, UserGender> ConvertSex = sex => sex == Sex.M ? UserGender.Male : UserGender.Female;
+    }
+
     [Mapper(ClassName = "ClassUserDaoListMapper")]
     public abstract partial class UserDataListMapper
     {
