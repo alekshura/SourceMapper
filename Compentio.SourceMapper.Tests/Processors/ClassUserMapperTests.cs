@@ -181,5 +181,22 @@ namespace Compentio.SourceMapper.Tests.Processors
             mappingResult.UserAddress.Region.State.Should().Be(userInfo.Address.Region.State);
             mappingResult.UserAddress.Region.District.Should().Be(userInfo.Address.Region.District);
         }
+
+        [Fact]
+        public void Mapper_User_Dao_List_With_Base_Mapper()
+        {
+            // Arrange 
+            var userMapperClass = new ClassUserListWithBaseMapper();
+            var userDao = _fixture.Build<UserDataWithListDao>()
+                .Create();
+
+            // Act
+            var mappingResult = userMapperClass.MapToDto(userDao);
+            var addresses = userDao.UserAddresses.Select(a => userMapperClass.MapAddress(a)).ToList();
+
+            // Assert
+            mappingResult.Addresses.Should().NotBeEmpty();
+            mappingResult.Addresses.Should().BeEquivalentTo(addresses);
+        }
     }
 }

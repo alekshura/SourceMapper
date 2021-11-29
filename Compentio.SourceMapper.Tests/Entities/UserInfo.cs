@@ -30,5 +30,11 @@ namespace Compentio.SourceMapper.Tests.Entities
         public DateTime BirthDate { get; set; }
     }
 
+    public class UserDataInfoWithList
+    {
+        public int Id { get; set; }
+        public IList<Address> Addresses { get; set; }
+    }
+
     public enum Sex { M, W }
 }

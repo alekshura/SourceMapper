@@ -45,5 +45,11 @@ namespace Compentio.SourceMapper.Tests.Entities
         public DateTime BirthDate { get; set; }
     }
 
+    public class UserDataWithListDao
+    {
+        public long UserId { get; set; }
+        public IList<AddressDao> UserAddresses { get; set; }
+    }
+
     public enum UserGender { Female, Male }
 }
