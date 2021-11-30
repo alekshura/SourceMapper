@@ -14,9 +14,8 @@ namespace Compentio.Example.StructureMap.App.Mapper
         [Mapping(Source = nameof(InvoiceDao.NetValue), Target = nameof(InvoiceDto.NetAmount))]
         [Mapping(Source = nameof(InvoiceDao.TaxValue), Target = nameof(InvoiceDto.TaxAmount))]
         [Mapping(Source = nameof(InvoiceDao.GrossValue), Target = nameof(InvoiceDto.GrossAmount))]
-        [Mapping(Source = nameof(InvoiceDao.Items), Target = nameof(InvoiceDto.Items), Expression = nameof(ConvertToItemsDto),
-            InverseSource = nameof(InvoiceDto.Items), InverseTarget = nameof(InvoiceDao.Items), InverseExpression = nameof(ConvertToItemsDao))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapInvoiceToDao")]
+        [Mapping(Source = nameof(InvoiceDao.Items), Target = nameof(InvoiceDto.Items), Expression = nameof(ConvertToItems))]
+        [InverseMapping(InverseMethodName = "MapInvoiceToDao")]
         public abstract InvoiceDto MapInvoiceToDto(InvoiceDao source);
 
         [Mapping(Source = nameof(InvoiceItemDao.InvNum), Target = nameof(InvoiceItemDto.InvoiceNumber))]
@@ -24,15 +23,10 @@ namespace Compentio.Example.StructureMap.App.Mapper
         [Mapping(Source = nameof(InvoiceItemDao.NetValue), Target = nameof(InvoiceItemDto.NetAmount))]
         [Mapping(Source = nameof(InvoiceItemDao.TaxValue), Target = nameof(InvoiceItemDto.TaxAmount))]
         [Mapping(Source = nameof(InvoiceItemDao.GrossValue), Target = nameof(InvoiceItemDto.GrossAmount))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapInvoiceItemToDao")]
+        [InverseMapping(InverseMethodName = "MapInvoiceItemToDao")]
         public abstract InvoiceItemDto MapInvoiceItemToDto(InvoiceItemDao source);
 
-        protected IEnumerable<InvoiceItemDao> ConvertToItemsDao(IEnumerable<InvoiceItemDto> items)
-        {
-            return items.Select(i => MapInvoiceItemToDao(i)).AsEnumerable();
-        }
-
-        protected IEnumerable<InvoiceItemDto> ConvertToItemsDto(IEnumerable<InvoiceItemDao> items)
+        protected IEnumerable<InvoiceItemDto> ConvertToItems(IEnumerable<InvoiceItemDao> items)
         {
             return items.Select(i => MapInvoiceItemToDto(i)).AsEnumerable();
         }

@@ -86,21 +86,6 @@ namespace Compentio.SourceMapper.Tests.Processors
         }
 
         [Fact]
-        public void GenerateCode_ReportEmptyInverseMethodName()
-        {
-            // Arrange
-            var methodMetadata = GetValidMethodWithAttributes(_mockMappingAttribute);
-            _mockMappingAttribute.Setup(m => m.InverseMethodName).Returns(string.Empty);
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
-
-            // Act
-            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
-
-            // Arrange
-            result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.ExpectedInverseMethodName);
-        }
-
-        [Fact]
         public void GenerateCode_UnmatchedData_ReportNotMapped()
         {
             // Arrange
@@ -134,14 +119,16 @@ namespace Compentio.SourceMapper.Tests.Processors
         private Mock<IMethodMetadata> GetValidMethodWithAttributes(Mock<MappingAttribute> mockMappingAttribute)
         {
             var mockMethodMetadata = _fixture.Create<Mock<IMethodMetadata>>();
-            var sourceParameters = mockMethodMetadata.Object.Parameters.First();
+            var mockProperty = _fixture.Create<Mock<IPropertyMetadata>>();
+            mockProperty.Setup(p => p.IsClass).Returns(false);
+            var mockTypeMetadata = _fixture.Create<Mock<ITypeMetadata>>();
+            mockTypeMetadata.Setup(t => t.Properties).Returns(new List<IPropertyMetadata> { mockProperty.Object });
+            var sourceParameters = mockTypeMetadata.Object;
             var mockParameters = GetValidMethodParameters(sourceParameters);
 
             mockMethodMetadata.Setup(m => m.Parameters).Returns(new List<ITypeMetadata> { mockParameters.Object });
             mockMethodMetadata.Setup(m => m.ReturnType).Returns(mockParameters.Object);
             mockMethodMetadata.Setup(m => m.MappingAttributes).Returns(new List<MappingAttribute> { mockMappingAttribute.Object });
-
-            mockMappingAttribute.Setup(m => m.CreateInverse).Returns(true);
 
             return mockMethodMetadata;
         }

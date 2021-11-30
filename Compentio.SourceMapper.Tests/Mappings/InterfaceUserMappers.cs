@@ -8,11 +8,11 @@ namespace Compentio.SourceMapper.Tests.Mappings
     public partial interface IUserDaoMapper
     {
         [Mapping(Source = nameof(UserDao.FirstName), Target = nameof(UserInfo.Name))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         UserInfo MapToDomainModel(UserDao source);
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromAddress")]
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
         Address MapAddress(UserDao source);
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromRegion")]
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
         Region MapRegion(UserDao source);
     }
 
@@ -21,13 +21,13 @@ namespace Compentio.SourceMapper.Tests.Mappings
     {
         [Mapping(Source = nameof(UserDataDao.FirstName), Target = nameof(UserInfo.Name))]
         [Mapping(Source = nameof(UserDataDao.UserAddress), Target = nameof(UserInfo.Address))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         UserInfo MapToDomainModel(UserDataDao source);
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromAddress")]
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
         Address MapAddress(AddressDao addressDao);
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromRegion")]
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
         Region MapRegion(RegionDao regionDao);
     }
 
@@ -55,13 +55,13 @@ namespace Compentio.SourceMapper.Tests.Mappings
     public partial interface IUserDataArrayMapper
     {
         [Mapping(Source = nameof(UserWithArrayDao.FirstName), Target = nameof(UserInfoWithArray.Name))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         UserInfoWithArray MapToDomainModel(UserWithArrayDao userWithArrayDao);
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromAddress")]
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
         Address MapAddress(AddressDao addressDao);
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromRegion")]
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
         Region MapRegion(RegionDao regionDao);
     }
 

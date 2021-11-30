@@ -64,11 +64,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialClassMethod(IMethodMetadata methodMetadata)
         {
-            var inverseMethodName = GetInverseMethodName(methodMetadata);
-
-            if (!string.IsNullOrEmpty(inverseMethodName)) inverseMethodName = $"public abstract {inverseMethodName};";
-
-            return inverseMethodName;
+            return $"public abstract {AttributesMatchers.GetInverseMethodFullName(methodMetadata)};";
         }
 
         protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
@@ -83,10 +79,12 @@ namespace Compentio.SourceMapper.Processors
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
                 var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
 
-                var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping);
+                var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
 
                 if (!string.IsNullOrEmpty(expressionMapping))
                 {
+                    if (inverseMapping) continue;
+
                     mappingsStringBuilder.Append(expressionMapping);
                     continue;
                 }
@@ -97,36 +95,7 @@ namespace Compentio.SourceMapper.Processors
             return mappingsStringBuilder.ToString();
         }
 
-        private string MapExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping = false)
-        {
-            if (inverseMapping)
-                return MapInverseExpression(expressionAttribute, parameter, matchedSourceMember, matchedTargetMember);
-            else
-                return MapRegularExpression(expressionAttribute, parameter, matchedSourceMember, matchedTargetMember);
-        }
-
-        private string MapInverseExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
-        {
-            var mapping = new StringBuilder();
-
-            if (string.IsNullOrEmpty(expressionAttribute?.InverseExpression) || string.IsNullOrEmpty(expressionAttribute?.InverseTarget)) return mapping.ToString();
-
-            if (expressionAttribute is not null && matchedSourceMember is not null)
-            {
-                mapping.AppendLine($"target.{expressionAttribute?.InverseTarget} = {expressionAttribute?.InverseExpression}({parameter.Name}.{matchedTargetMember.Name});");
-                return mapping.ToString();
-            }
-
-            if (expressionAttribute is not null && matchedTargetMember is not null && matchedSourceMember is null)
-            {
-                mapping.AppendLine($"target.{expressionAttribute?.InverseTarget} = {expressionAttribute?.InverseExpression}({parameter.Name});");
-                return mapping.ToString();
-            }
-
-            return mapping.ToString();
-        }
-
-        private string MapRegularExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
+        private string MapExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
         {
             var mapping = new StringBuilder();
 

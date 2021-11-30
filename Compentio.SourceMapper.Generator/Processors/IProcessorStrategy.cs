@@ -54,7 +54,7 @@ namespace Compentio.SourceMapper.Processors
 
             foreach (var methodMetadata in sourceMetadata.MethodsMetadata)
             {
-                methodsStringBuilder.Append(GenerateRegularMethod(sourceMetadata, methodMetadata));
+                methodsStringBuilder.Append(GenerateMethod(sourceMetadata, methodMetadata));
 
                 if (AttributesMatchers.IsInverseMethod(methodMetadata))
                 {
@@ -65,7 +65,7 @@ namespace Compentio.SourceMapper.Processors
             return methodsStringBuilder.ToString();
         }
 
-        protected string GenerateRegularMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
+        protected string GenerateMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
             return @$"public {Modifier} {methodMetadata.FullName}
             {{
@@ -82,22 +82,17 @@ namespace Compentio.SourceMapper.Processors
 
         protected string GenerateInverseMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
-            var inverseMethodFullName = GetInverseMethodName(methodMetadata);
+            return @$"public {Modifier} {AttributesMatchers.GetInverseMethodFullName(methodMetadata)}
+            {{
+                if ({methodMetadata.Parameters.First().Name} == null)
+                    return null;
 
-            if (string.IsNullOrEmpty(inverseMethodFullName))
-                return inverseMethodFullName;
-            else
-                return @$"public {Modifier} {inverseMethodFullName}
-                {{
-                    if ({methodMetadata.Parameters.First().Name} == null)
-                        return null;
+                var target = new {methodMetadata.Parameters.First().FullName}();
 
-                    var target = new {methodMetadata.Parameters.First().FullName}();
+                {GenerateMappings(sourceMetadata, methodMetadata, true)}
 
-                    {GenerateMappings(sourceMetadata, methodMetadata, true)}
-
-                    return target;
-                }}";
+                return target;
+            }}";
         }
 
         protected string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping = false)
@@ -141,7 +136,7 @@ namespace Compentio.SourceMapper.Processors
             if (method is not null)
             {
                 if (inverseMapping)
-                    return $"target.{matchedTargetMember?.Name} = {AttributesMatchers.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
+                    return $"target.{matchedTargetMember?.Name} = {method.InverseMethodName}({parameter.Name}.{matchedSourceMember.Name});";
                 else
                     return $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
             }
@@ -161,60 +156,16 @@ namespace Compentio.SourceMapper.Processors
 
                 if (originalMethod == null) return originalMethod;
 
-                try
+                if (!string.IsNullOrEmpty(originalMethod.InverseMethodName))
                 {
-                    if (!string.IsNullOrEmpty(AttributesMatchers.GetInverseMethodName(originalMethod)))
-                    {
-                        return originalMethod;
-                    }
-
-                    return null;
+                    return originalMethod;
                 }
-                catch (InvalidOperationException)
-                {
-                    ReportMultipleInternalMethodName(originalMethod);
 
-                    return null;
-                }
-                catch (Exception exception)
-                {
-                    ReportInternalMethodNameError(exception, originalMethod);
-
-                    return null;
-                }
+                return null;
             }
             else
             {
                 return sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
-            }
-        }
-
-        protected string GetInverseMethodName(IMethodMetadata methodMetadata)
-        {
-            try
-            {
-                var inverseMethodName = AttributesMatchers.GetInverseMethodName(methodMetadata);
-
-                if (string.IsNullOrEmpty(inverseMethodName))
-                {
-                    ReportEmptyInverseMethodName(methodMetadata);
-
-                    return inverseMethodName;
-                }
-
-                return AttributesMatchers.GetInverseMethodFullName(methodMetadata, inverseMethodName);
-            }
-            catch (InvalidOperationException)
-            {
-                ReportMultipleInternalMethodName(methodMetadata);
-
-                return string.Empty;
-            }
-            catch (Exception exception)
-            {
-                ReportInternalMethodNameError(exception, methodMetadata);
-
-                return string.Empty;
             }
         }
 
@@ -224,24 +175,6 @@ namespace Compentio.SourceMapper.Processors
             {
                 DiagnosticDescriptor = SourceMapperDescriptors.PropertyIsNotMapped,
                 Metadata = metadata
-            });
-        }
-
-        protected void ReportEmptyInverseMethodName(IMethodMetadata methodMetadata)
-        {
-            _diagnostics.Add(new DiagnosticsInfo
-            {
-                DiagnosticDescriptor = SourceMapperDescriptors.ExpectedInverseMethodName,
-                Metadata = methodMetadata
-            });
-        }
-
-        protected void ReportMultipleInternalMethodName(IMethodMetadata methodMetadata)
-        {
-            _diagnostics.Add(new DiagnosticsInfo
-            {
-                DiagnosticDescriptor = SourceMapperDescriptors.MultipleInverseMethodName,
-                Metadata = methodMetadata
             });
         }
 

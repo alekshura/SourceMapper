@@ -12,12 +12,10 @@ namespace Compentio.SourceMapper.Tests.Mappings
     [Mapper(ClassName = "ClassUserDaoMapper")]
     public abstract partial class UserMapper
     {
-        [Mapping(Source = nameof(UserDao.UserId), Target = nameof(UserInfo.Id), Expression = nameof(ConvertUserId), 
-            InverseSource = nameof(UserInfo.Id), InverseTarget = nameof(UserDao.UserId), InverseExpression = nameof(ConvertId))]
-        [Mapping(Target = nameof(UserInfo.Name), Expression = nameof(ConvertUserName))]
-        [Mapping(Source = nameof(UserDao.UserGender), Target = nameof(UserInfo.Sex), Expression = nameof(ConvertUserGender),
-            InverseSource = nameof(UserInfo.Sex), InverseTarget = nameof(UserDao.UserGender), InverseExpression = nameof(ConvertSex))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        [Mapping(Source = nameof(UserDao.UserId), Target = nameof(UserInfo.Id), Expression = nameof(ConvertUserId))]
+        [Mapping(Source = nameof(UserDao.UserGender), Target = nameof(UserInfo.Sex), Expression = nameof(ConvertUserGender))]
+        [Mapping(Source = nameof(UserDao), Target = nameof(UserInfo.Name), Expression = nameof(ConvertUserName))]
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         public abstract UserInfo MapToDomainModel(UserDao source);
 
         protected static int ConvertUserId(long id)
@@ -31,6 +29,7 @@ namespace Compentio.SourceMapper.Tests.Mappings
         }
 
         protected static string ConvertUserName(UserDao userDao) => $"{userDao.FirstName} {userDao.LastName}";
+
         protected readonly Func<UserGender, Sex> ConvertUserGender = gender => gender == UserGender.Female ? Sex.W : Sex.M;
         protected readonly Func<Sex, UserGender> ConvertSex = sex => sex == Sex.M ? UserGender.Male : UserGender.Female;
     }
@@ -38,9 +37,8 @@ namespace Compentio.SourceMapper.Tests.Mappings
     [Mapper(ClassName = "ClassUserDaoArrayMapper")]
     public abstract partial class UserDataArrayMapper
     {
-        [Mapping(Source = nameof(UserWithArrayDao.UserAddresses), Target = nameof(UserInfoWithArray.Addresses), Expression = nameof(ConvertAddresses),
-            InverseSource = nameof(UserInfoWithArray.Addresses), InverseTarget = nameof(UserWithArrayDao.UserAddresses), InverseExpression = nameof(ConvertAddressesDao))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        [Mapping(Source = nameof(UserWithArrayDao.UserAddresses), Target = nameof(UserInfoWithArray.Addresses), Expression = nameof(ConvertAddresses))]
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         public abstract UserInfoWithArray MapToDomainModel(UserWithArrayDao source);
 
         protected Address[] ConvertAddresses(AddressDao[] addresses)
@@ -53,19 +51,28 @@ namespace Compentio.SourceMapper.Tests.Mappings
             return addresses.Select(a => MapFromAddress(a)).ToArray();
         }
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromAddress")]
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
         public abstract Address MapAddress(AddressDao source);
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromRegion")]
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
         public abstract Region MapRegion(RegionDao source);
+    }
+
+    public class CustomClassUserDaoArrayMapper : ClassUserDaoArrayMapper
+    {
+        public override UserWithArrayDao MapToDatabaseModel(UserInfoWithArray source)
+        {
+            var result = base.MapToDatabaseModel(source);
+            result.UserAddresses = ConvertAddressesDao(source.Addresses);
+            return result;
+        }
     }
 
     [Mapper(ClassName = "ClassUserDaoListMapper")]
     public abstract partial class UserDataListMapper
     {
-        [Mapping(Source = nameof(UserWithListDao.UserAddresses), Target = nameof(UserInfoWithList.Addresses), Expression = nameof(ConvertAddresses),
-            InverseSource = nameof(UserInfoWithList.Addresses), InverseTarget = nameof(UserWithListDao.UserAddresses), InverseExpression = nameof(ConvertAddressesDao))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDatabaseModel")]
+        [Mapping(Source = nameof(UserWithListDao.UserAddresses), Target = nameof(UserInfoWithList.Addresses), Expression = nameof(ConvertAddresses))]
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         public abstract UserInfoWithList MapToDomainModel(UserWithListDao source);
 
         protected IList<Address> ConvertAddresses(IList<AddressDao> addresses)
@@ -78,10 +85,20 @@ namespace Compentio.SourceMapper.Tests.Mappings
             return addresses.Select(a => MapFromAddress(a)).ToList();
         }
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromAddress")]
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
         public abstract Address MapAddress(AddressDao source);
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapFromRegion")]
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
         public abstract Region MapRegion(RegionDao source);
+    }
+
+    public class CustomClassUserDaoListMapper : ClassUserDaoListMapper
+    {
+        public override UserWithListDao MapToDatabaseModel(UserInfoWithList source)
+        {
+            var result = base.MapToDatabaseModel(source);
+            result.UserAddresses = ConvertAddressesDao(source.Addresses);
+            return result;
+        }
     }
 }

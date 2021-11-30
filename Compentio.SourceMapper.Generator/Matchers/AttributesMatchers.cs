@@ -45,7 +45,7 @@ namespace Compentio.SourceMapper.Matchers
         /// <returns></returns>
         internal static bool AnyInverseMethod(IEnumerable<IMethodMetadata> methodsMetadata)
         {
-            return methodsMetadata.Any(m => m.MappingAttributes != null && IsInverseMethod(m));
+            return methodsMetadata.Any(m => IsInverseMethod(m));
         }
 
         /// <summary>
@@ -55,22 +55,7 @@ namespace Compentio.SourceMapper.Matchers
         /// <returns></returns>
         internal static bool IsInverseMethod(IMethodMetadata methodMetadata)
         {
-            return methodMetadata.MappingAttributes.Any(a => a.CreateInverse);
-        }
-
-        /// <summary>
-        /// Get inverse method name from method attribute
-        /// </summary>
-        /// <param name="methodMetadata">Method metadata</param>
-        /// <returns></returns>
-        internal static string GetInverseMethodName(IMethodMetadata methodMetadata)
-        {
-            var methodNameAttribute = methodMetadata.MappingAttributes.SingleOrDefault(a => !string.IsNullOrEmpty(a.InverseMethodName));
-
-            if (methodNameAttribute == null)
-                return string.Empty;
-
-            return methodNameAttribute.InverseMethodName;
+            return !string.IsNullOrEmpty(methodMetadata.InverseMethodName);
         }
 
         /// <summary>
@@ -78,10 +63,10 @@ namespace Compentio.SourceMapper.Matchers
         /// </summary>
         /// <param name="methodMetadata">Method metadata</param>
         /// <returns></returns>
-        internal static string GetInverseMethodFullName(IMethodMetadata methodMetadata, string inverseMethodName)
+        internal static string GetInverseMethodFullName(IMethodMetadata methodMetadata)
         {
             var inverseMethodFullName =
-                $"{methodMetadata.Parameters.First().FullName} {inverseMethodName} ({methodMetadata.ReturnType.FullName} {methodMetadata.Parameters.First().Name})";
+                $"{methodMetadata.Parameters.First().FullName} {methodMetadata.InverseMethodName} ({methodMetadata.ReturnType.FullName} {methodMetadata.Parameters.First().Name})";
 
             return inverseMethodFullName;
         }

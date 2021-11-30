@@ -54,9 +54,9 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Assert
             mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
             mappingResult.UserGender.Should().Be(UserGender.Female);
-            mappingResult.UserId.Should().Be(userInfo.Id);
 
             // Not mapped
+            mappingResult.UserId.Should().NotBe(userInfo.Id);
             mappingResult.FirstName.Should().BeNullOrEmpty();
             mappingResult.LastName.Should().BeNullOrEmpty();
         }
@@ -82,13 +82,14 @@ namespace Compentio.SourceMapper.Tests.Processors
         public void Mapper_User_Info_With_Array()
         {
             // Arrange 
-            var userMapperClass = new ClassUserDaoArrayMapper();
+            var userMapperClass = new CustomClassUserDaoArrayMapper();
             var userInfo = _fixture.Build<UserInfoWithArray>()
                 .Create();
 
             // Act
             var mappingResult = userMapperClass.MapToDatabaseModel(userInfo);
             var addresses = userInfo.Addresses.Select(a => userMapperClass.MapFromAddress(a)).ToArray();
+
 
             // Assert
             mappingResult.UserAddresses.Should().NotBeEmpty();
@@ -116,7 +117,7 @@ namespace Compentio.SourceMapper.Tests.Processors
         public void Mapper_User_Info_With_List()
         {
             // Arrange 
-            var userMapperClass = new ClassUserDaoListMapper();
+            var userMapperClass = new CustomClassUserDaoListMapper();
             var userInfo = _fixture.Build<UserInfoWithList>()
                 .Create();
 
