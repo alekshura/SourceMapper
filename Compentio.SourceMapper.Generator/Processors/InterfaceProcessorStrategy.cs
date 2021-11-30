@@ -1,5 +1,4 @@
-﻿using Compentio.SourceMapper.Attributes;
-using Compentio.SourceMapper.Matchers;
+﻿using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using System.Linq;
 using System.Text;
@@ -18,7 +17,6 @@ namespace Compentio.SourceMapper.Processors
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
 
-            using System;
             using System.Diagnostics.CodeAnalysis;
 
             {(string.IsNullOrWhiteSpace(mapperMetadata?.Namespace) ? null : $"namespace {mapperMetadata?.Namespace}")}
@@ -40,7 +38,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialInterface(IMapperMetadata mapperMetadata)
         {
-            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata))
+            if (AttributesMatchers.AnyInverseMethod(mapperMetadata.MethodsMetadata))
             {
                 return $@"
                 public partial interface {mapperMetadata?.Name}
@@ -57,7 +55,7 @@ namespace Compentio.SourceMapper.Processors
         {
             var methodsStringBuilder = new StringBuilder();
 
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttribute.IsInverseMethod(m)))
+            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => AttributesMatchers.IsInverseMethod(m)))
             {
                 methodsStringBuilder.AppendLine(GenerateInterfaceMethod(methodMetadata));
             }

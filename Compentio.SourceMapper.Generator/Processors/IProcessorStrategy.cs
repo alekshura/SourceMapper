@@ -1,5 +1,4 @@
-﻿using Compentio.SourceMapper.Attributes;
-using Compentio.SourceMapper.Diagnostics;
+﻿using Compentio.SourceMapper.Diagnostics;
 using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using System;
@@ -57,7 +56,7 @@ namespace Compentio.SourceMapper.Processors
             {
                 methodsStringBuilder.Append(GenerateRegularMethod(sourceMetadata, methodMetadata));
 
-                if (InverseAttribute.IsInverseMethod(methodMetadata))
+                if (AttributesMatchers.IsInverseMethod(methodMetadata))
                 {
                     methodsStringBuilder.AppendLine(GenerateInverseMethod(sourceMetadata, methodMetadata));
                 }
@@ -142,7 +141,7 @@ namespace Compentio.SourceMapper.Processors
             if (method is not null)
             {
                 if (inverseMapping)
-                    return $"target.{matchedTargetMember?.Name} = {InverseAttribute.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
+                    return $"target.{matchedTargetMember?.Name} = {AttributesMatchers.GetInverseMethodName(method)}({parameter.Name}.{matchedSourceMember.Name});";
                 else
                     return $"target.{matchedTargetMember?.Name} = {method.Name}({parameter.Name}.{matchedSourceMember.Name});";
             }
@@ -164,7 +163,7 @@ namespace Compentio.SourceMapper.Processors
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(InverseAttribute.GetInverseMethodName(originalMethod)))
+                    if (!string.IsNullOrEmpty(AttributesMatchers.GetInverseMethodName(originalMethod)))
                     {
                         return originalMethod;
                     }
@@ -194,7 +193,7 @@ namespace Compentio.SourceMapper.Processors
         {
             try
             {
-                var inverseMethodName = InverseAttribute.GetInverseMethodName(methodMetadata);
+                var inverseMethodName = AttributesMatchers.GetInverseMethodName(methodMetadata);
 
                 if (string.IsNullOrEmpty(inverseMethodName))
                 {
@@ -203,7 +202,7 @@ namespace Compentio.SourceMapper.Processors
                     return inverseMethodName;
                 }
 
-                return InverseAttribute.GetInverseMethodFullName(methodMetadata, inverseMethodName);
+                return AttributesMatchers.GetInverseMethodFullName(methodMetadata, inverseMethodName);
             }
             catch (InvalidOperationException)
             {

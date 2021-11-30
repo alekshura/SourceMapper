@@ -18,7 +18,6 @@ namespace Compentio.SourceMapper.Processors
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
 
-            using System;
             using System.Diagnostics.CodeAnalysis;
 
             { $"namespace {mapperMetadata.Namespace}"}
@@ -38,7 +37,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialClass(IMapperMetadata mapperMetadata)
         {
-            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata))
+            if (AttributesMatchers.AnyInverseMethod(mapperMetadata.MethodsMetadata))
             {
                 return $@"
                 public abstract partial class {mapperMetadata?.Name}
@@ -55,7 +54,7 @@ namespace Compentio.SourceMapper.Processors
         {
             var methodsStringBuilder = new StringBuilder();
 
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttribute.IsInverseMethod(m)))
+            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => AttributesMatchers.IsInverseMethod(m)))
             {
                 methodsStringBuilder.AppendLine(GeneratePartialClassMethod(methodMetadata));
             }

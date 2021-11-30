@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using FluentAssertions;
 using Moq;
@@ -8,15 +9,15 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Compentio.SourceMapper.Tests.Attributes
+namespace Compentio.SourceMapper.Tests.Matchers
 {
-    public class InverseAttributeTests
+    public class AttributesMatchersTests
     {
         private readonly IFixture _fixture;
         private readonly Mock<IMethodMetadata> _mockMethodMetadata;
         private readonly Mock<MappingAttribute> _mockMappingAttribute;
 
-        public InverseAttributeTests()
+        public AttributesMatchersTests()
         {
             _fixture = new Fixture()
                            .Customize(new AutoMoqCustomization { ConfigureMembers = true })
@@ -33,7 +34,7 @@ namespace Compentio.SourceMapper.Tests.Attributes
             _mockMethodMetadata.Setup(m => m.MappingAttributes).Returns(new List<MappingAttribute> { _mockMappingAttribute.Object });
 
             // Act
-            var result = InverseAttribute.AnyInverseMethod(new List<IMethodMetadata> { _mockMethodMetadata.Object });
+            var result = AttributesMatchers.AnyInverseMethod(new List<IMethodMetadata> { _mockMethodMetadata.Object });
 
             // Assert
             result.Should().BeTrue();
@@ -46,7 +47,7 @@ namespace Compentio.SourceMapper.Tests.Attributes
             _mockMethodMetadata.Setup(m => m.MappingAttributes).Returns((List<MappingAttribute>)null);
 
             // Act
-            var result = InverseAttribute.AnyInverseMethod(new List<IMethodMetadata> { _mockMethodMetadata.Object });
+            var result = AttributesMatchers.AnyInverseMethod(new List<IMethodMetadata> { _mockMethodMetadata.Object });
 
             // Assert
             result.Should().BeFalse();
@@ -60,7 +61,7 @@ namespace Compentio.SourceMapper.Tests.Attributes
             _mockMethodMetadata.Setup(m => m.MappingAttributes).Returns(new List<MappingAttribute> { _mockMappingAttribute.Object });
 
             // Act
-            var result = InverseAttribute.IsInverseMethod(_mockMethodMetadata.Object);
+            var result = AttributesMatchers.IsInverseMethod(_mockMethodMetadata.Object);
 
             // Assert
             result.Should().BeTrue();
@@ -74,7 +75,7 @@ namespace Compentio.SourceMapper.Tests.Attributes
             _mockMethodMetadata.Setup(m => m.MappingAttributes).Returns(new List<MappingAttribute> { _mockMappingAttribute.Object });
 
             // Act
-            var result = InverseAttribute.GetInverseMethodName(_mockMethodMetadata.Object);
+            var result = AttributesMatchers.GetInverseMethodName(_mockMethodMetadata.Object);
 
             //Assert
             result.Should().NotBeNullOrEmpty();
@@ -88,7 +89,7 @@ namespace Compentio.SourceMapper.Tests.Attributes
             _mockMethodMetadata.Setup(m => m.MappingAttributes).Returns(new List<MappingAttribute> { _mockMappingAttribute.Object });
 
             // Act
-            var result = InverseAttribute.GetInverseMethodName(_mockMethodMetadata.Object);
+            var result = AttributesMatchers.GetInverseMethodName(_mockMethodMetadata.Object);
 
             //Assert
             result.Should().BeNullOrEmpty();
@@ -108,7 +109,7 @@ namespace Compentio.SourceMapper.Tests.Attributes
             });
 
             // Act
-            Action result = () => InverseAttribute.GetInverseMethodName(_mockMethodMetadata.Object);
+            Action result = () => AttributesMatchers.GetInverseMethodName(_mockMethodMetadata.Object);
 
             //Assert
             result.Should().Throw<InvalidOperationException>();
@@ -118,7 +119,7 @@ namespace Compentio.SourceMapper.Tests.Attributes
         public void GetInverseMethodFullName_ValidData_ReturnFullName()
         {
             // Act
-            var result = InverseAttribute.GetInverseMethodFullName(_mockMethodMetadata.Object, "InverseMethodName");
+            var result = AttributesMatchers.GetInverseMethodFullName(_mockMethodMetadata.Object, "InverseMethodName");
 
             // Assert
             result.Should().NotBeNullOrEmpty();
