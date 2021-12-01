@@ -1,4 +1,5 @@
 ﻿using Compentio.SourceMapper.Diagnostics;
+using Compentio.SourceMapper.Helpers;
 using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using System;
@@ -42,6 +43,11 @@ namespace Compentio.SourceMapper.Processors
             }
         }
 
+        /// <summary>
+        /// Methods additional keyword modifier (virtual/override), related to interface or class methods implementations mechanism.
+        /// For interfaces, methods should to be virtual for further override possibility.
+        /// In case of classes, methods should override methods from mappings source class.
+        /// </summary>
         protected abstract string Modifier { get; }
 
         protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
@@ -97,7 +103,7 @@ namespace Compentio.SourceMapper.Processors
 
         protected string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping = false)
         {
-            if (inverseMapping) PropertyMetadata.Swap(ref matchedSourceMember, ref matchedTargetMember);
+            if (inverseMapping) ObjectHelper.Swap(ref matchedSourceMember, ref matchedTargetMember);
 
             if (matchedTargetMember is null && matchedSourceMember is not null)
             {
@@ -152,16 +158,7 @@ namespace Compentio.SourceMapper.Processors
         {
             if (inverseMapping)
             {
-                var originalMethod = sourceMetadata.MatchDefinedMethod(matchedTargetMember, matchedSourceMember);
-
-                if (originalMethod == null) return originalMethod;
-
-                if (!string.IsNullOrEmpty(originalMethod.InverseMethodName))
-                {
-                    return originalMethod;
-                }
-
-                return null;
+                return sourceMetadata.MatchDefinedMethod(matchedTargetMember, matchedSourceMember);
             }
             else
             {

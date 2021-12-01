@@ -56,12 +56,5 @@ namespace Compentio.SourceMapper.Metadata
         }
 
         public Location? Location => _propertySymbol.Locations.FirstOrDefault();
-
-        public static void Swap(ref IPropertyMetadata sourcePropertyMetadata, ref IPropertyMetadata targetPropertyMetadata)
-        {
-            var tempPropertyMetadata = sourcePropertyMetadata;
-            sourcePropertyMetadata = targetPropertyMetadata;
-            targetPropertyMetadata = tempPropertyMetadata;
-        }
     }
 }

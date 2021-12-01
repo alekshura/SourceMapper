@@ -112,20 +112,5 @@ namespace Compentio.SourceMapper.Tests.Metadata
             // Assert
             propertyMetadata.Properties.Should().BeEmpty();
         }
-
-        [Fact]
-        public void Swap_CorrectlySwapMetadata()
-        {
-            // Arrange
-            var sourceMetadata = _mockSourcePropertyMetadata.Object;
-            var targetMetadata = _mockTargetPropertyMetadata.Object;
-
-            // Act
-            PropertyMetadata.Swap(ref sourceMetadata, ref targetMetadata);
-
-            // Assert
-            sourceMetadata.Should().BeSameAs(_mockTargetPropertyMetadata.Object);
-            targetMetadata.Should().BeSameAs(_mockSourcePropertyMetadata.Object);
-        }
     }
 }
