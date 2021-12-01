@@ -66,7 +66,7 @@ namespace Compentio.SourceMapper.Metadata
 
         public string FullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFullNameFormat)}";
 
-        public virtual IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
+        public IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
                     .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))
                     .Select(attribute =>
                     {

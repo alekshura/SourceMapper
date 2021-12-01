@@ -68,7 +68,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Act
             var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
-            // Arrange
+            // Assert
             result.GeneratedCode.Should().NotBeNullOrEmpty();
             result.GeneratedCode.Should().Contain($"public abstract partial class {_sourceMetadataMock.Object.Name}");
         }
@@ -83,7 +83,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Act
             var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
-            // Arrange
+            // Assert
             result.Diagnostics.Should().NotContain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
         }
 
@@ -100,7 +100,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Act
             var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
-            // Arrange
+            // Assert
             result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
         }
 
@@ -115,17 +115,22 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Act
             var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
-            // Arrange
+            // Assert
             result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.UnexpectedError);
         }
 
         private Mock<IMethodMetadata> GetValidMethodWithAttributes(Mock<MappingAttribute> mockMappingAttribute)
         {
             var mockMethodMetadata = _fixture.Create<Mock<IMethodMetadata>>();
+
+            // Create new method property
             var mockProperty = _fixture.Create<Mock<IPropertyMetadata>>();
             mockProperty.Setup(p => p.IsClass).Returns(false);
+
+            // Inject property
             var mockTypeMetadata = _fixture.Create<Mock<ITypeMetadata>>();
             mockTypeMetadata.Setup(t => t.Properties).Returns(new List<IPropertyMetadata> { mockProperty.Object });
+
             var sourceParameters = mockTypeMetadata.Object;
             var mockParameters = GetValidMethodParameters(sourceParameters);
 

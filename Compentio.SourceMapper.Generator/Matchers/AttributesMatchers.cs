@@ -17,6 +17,7 @@ namespace Compentio.SourceMapper.Matchers
         {
             return attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name);
         }
+
         /// <summary>
         /// Method searches for <see cref="MappingAttribute"/> that Target and Source property matches target member and attribute has not empty <see cref="MappingAttribute.Expression"/> value
         /// If it is <c>null</c> than searches matching <see cref="MappingAttribute"/> only by <see cref="MappingAttribute.Target"/> and <see cref="MappingAttribute.Expression"/> values
@@ -27,8 +28,8 @@ namespace Compentio.SourceMapper.Matchers
         /// <returns></returns>
         internal static MappingAttribute MatchExpressionAttribute(this IEnumerable<MappingAttribute> attributes, IPropertyMetadata targetProperty, IPropertyMetadata sourceProperty)
         {
-            var matchedExpressionAttribute = attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name 
-                && attribute?.Source == sourceProperty?.Name 
+            var matchedExpressionAttribute = attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name
+                && attribute?.Source == sourceProperty?.Name
                 && !string.IsNullOrEmpty(attribute?.Expression));
 
             if (matchedExpressionAttribute is null)

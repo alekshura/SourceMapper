@@ -177,15 +177,5 @@ namespace Compentio.SourceMapper.Processors
                 Metadata = metadata
             });
         }
-
-        protected void ReportInternalMethodNameError(Exception exception, IMethodMetadata methodMetadata)
-        {
-            _diagnostics.Add(new DiagnosticsInfo
-            {
-                DiagnosticDescriptor = SourceMapperDescriptors.UnexpectedError,
-                Metadata = methodMetadata,
-                Exception = exception
-            });
-        }
     }
 }
