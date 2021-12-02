@@ -1,5 +1,4 @@
-﻿using Compentio.SourceMapper.Attributes;
-using Compentio.SourceMapper.Matchers;
+﻿using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using System.Linq;
 using System.Text;
@@ -20,7 +19,6 @@ namespace Compentio.SourceMapper.Processors
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
 
-            using System;
             using System.Diagnostics.CodeAnalysis;
 
             {(string.IsNullOrWhiteSpace(mapperMetadata?.Namespace) ? null : $"namespace {mapperMetadata?.Namespace}")}
@@ -44,8 +42,8 @@ namespace Compentio.SourceMapper.Processors
         {
             var baseMapperName = string.IsNullOrEmpty(mapperMetadata.BaseMapperName) ? string.Empty : ": " + mapperMetadata.BaseMapperName;
 
-            if (InverseAttribute.AnyInverseMethod(mapperMetadata.MethodsMetadata) || !string.IsNullOrEmpty(mapperMetadata.BaseMapperName))
-            {                
+            if (AttributesMatchers.AnyInverseMethod(mapperMetadata.MethodsMetadata) || !string.IsNullOrEmpty(baseMapperName) )
+            {
                 return $@"
                 public partial interface {mapperMetadata?.Name} {baseMapperName}
                 {{
@@ -61,7 +59,7 @@ namespace Compentio.SourceMapper.Processors
         {
             var methodsStringBuilder = new StringBuilder();
 
-            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => InverseAttribute.IsInverseMethod(m)))
+            foreach (var methodMetadata in sourceMetadata.MethodsMetadata.Where(m => AttributesMatchers.IsInverseMethod(m)))
             {
                 methodsStringBuilder.AppendLine(GenerateInterfaceMethod(methodMetadata));
             }
@@ -71,11 +69,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GenerateInterfaceMethod(IMethodMetadata methodMetadata)
         {
-            var inverseMethodName = GetInverseMethodName(methodMetadata);
-
-            if (!string.IsNullOrEmpty(inverseMethodName)) inverseMethodName += ";";
-
-            return inverseMethodName;
+            return $"{AttributesMatchers.GetInverseMethodFullName(methodMetadata)};";
         }
 
         protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)

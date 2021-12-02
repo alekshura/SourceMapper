@@ -1,7 +1,4 @@
-﻿using Compentio.SourceMapper.Diagnostics;
-using Compentio.SourceMapper.Metadata;
-using System;
-using System.Collections.Generic;
+﻿using Compentio.SourceMapper.Metadata;
 using System.Text;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
@@ -20,12 +17,12 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
             { $"namespace Compentio.SourceMapper.DependencyInjection"}
             {{
                public static class {sourcesMetadata.DependencyInjection.DependencyInjectionClassName}
-               {{                  
+               {{
                    public static ContainerBuilder AddMappers(this ContainerBuilder builder)
                    {{
                         { GenerateBuilder(sourcesMetadata) }
                         return builder;
-                   }}                                  
+                   }}
                }}
             }}
             ";

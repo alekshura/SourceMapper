@@ -301,13 +301,13 @@ Inverse mapping allow to create about half of the mapper code by automate. The m
 Due to using dependency injections, SourceMapper generate additional part of mapping class (or interface), so the source mapping class (interface) must be declared as `partial`.
 
 ### Interface Inverse Mapping
-Inverse mapping is provided by using two base mapping attributes: `CreateInvers`, for turn on inverse, and `InverseMethodName`, for setting of the name of inverse method, like in example (Compentio.Example.Autofac.App):
+Inverse mapping is provided by using inverse mapping attributes, where the name of the inverse method is required, like in example (Compentio.Example.Autofac.App):
 
 ```csharp
 [Mapper]
 public partial interface IBooksMapper
 {
-	[Mapping(CreateInverse = true, InverseMethodName = "MapBookToDao")]
+	[InverseMapping(InverseMethodName = "MapBookToDao")]
 	BookDto MapBookToDto(BookDao source);
 }
 ```
@@ -330,7 +330,7 @@ public class BooksMapper : IBooksMapper
 }
 ```
 
-If mapped object contain collections, mappings cant be created by automate. In this case we can create class that inherit mapper result class and override complex objects, for example:
+If mapped object contain collections or other complex fields/expressions, mappings cant be created by automate. In this case we can create class that inherit mapper result class and override complex objects, for example:
 
 ```csharp
 public class CustomBooksMapper : BooksMapper
@@ -362,24 +362,20 @@ public class AutofacModule : Module
 
 ### Class Inverse Mapping
 
-Case of class inverse mapping is mainly similar to interfaces inverse mechanism. First of all, we need to mark class as partial and add inverse attributes.
-If mapping between classes need expresions, they both should be implemented - primary and invers expression methods - inverse mechanism is not able to generate it by automate. That using of inverse expression should be declared by inverse attributes: `InverseSource` and `InverseTarget`, mirror for `Source` and `Target` attribute value, and `InverseExpression` attrigute with the inverse expression method name value. On the Compentio.Example.AtructureMap.App example:
+Case of class inverse mapping is mainly similar to interfaces inverse mechanism. First of all, we need to mark class as partial and add inverse attribute with the name for inverse method.
+If mapping between classes need expresions, they both - primary and invers expression methods - should be implemented by developer. Inverse mechanism is not able to generate it by automate. On the Compentio.Example.AtructureMap.App example:
 
 ```csharp
 [Mapper(ClassName = "ClassInvoiceMapper")]
 public abstract partial class InvoiceMapper
 {
 	...
-	[Mapping(Source = nameof(InvoiceDao.Items), Target = nameof(InvoiceDto.Items), Expression = nameof(ConvertToItemsDto),
-	    InverseSource = nameof(InvoiceDto.Items), InverseTarget = nameof(InvoiceDao.Items), InverseExpression = nameof(ConvertToItemsDao))]
-	[Mapping(CreateInverse = true, InverseMethodName = "MapInvoiceToDao")]
+	[InverseMapping(InverseMethodName = "MapInvoiceToDao")]
 	public abstract InvoiceDto MapInvoiceToDto(InvoiceDao source);
 	...
-	protected IEnumerable<InvoiceItemDao> ConvertToItemsDao(IEnumerable<InvoiceItemDto> items)
-	{
-	    return items.Select(i => MapInvoiceItemToDao(i)).AsEnumerable();
-	}
-
+	[InverseMapping(InverseMethodName = "MapInvoiceItemToDao")]
+        public abstract InvoiceItemDto MapInvoiceItemToDto(InvoiceItemDao source);
+	
 	protected IEnumerable<InvoiceItemDto> ConvertToItemsDto(IEnumerable<InvoiceItemDao> items)
 	{
 	    return items.Select(i => MapInvoiceItemToDto(i)).AsEnumerable();
@@ -401,7 +397,6 @@ public class ClassInvoiceMapper : InvoiceMapper
 	public override Compentio.Example.StructureMap.App.Entities.InvoiceDao MapInvoiceToDao(Compentio.Example.StructureMap.App.Entities.InvoiceDto source)
 	{
 	    ...
-	    target.Items = ConvertToItemsDao(source.Items);
 	}
 
 	public override Compentio.Example.StructureMap.App.Entities.InvoiceItemDto MapInvoiceItemToDto(Compentio.Example.StructureMap.App.Entities.InvoiceItemDao source)
@@ -421,3 +416,5 @@ public abstract partial class InvoiceMapper
 	public abstract Compentio.Example.StructureMap.App.Entities.InvoiceItemDao MapInvoiceItemToDao(Compentio.Example.StructureMap.App.Entities.InvoiceItemDto source);
 }
 ```
+
+Now `ClassInvoiceMapper` can be inherited by, for example, `CustomClassInvoiceMapper` and complex methods can be overrided, similarly to interface case.

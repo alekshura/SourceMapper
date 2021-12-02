@@ -27,6 +27,11 @@ namespace Compentio.SourceMapper.Metadata
         string FullName { get; }
 
         /// <summary>
+        /// Name of the method inverse for this method related to value of <see cref="InverseMappingAttribute.InverseMethodName">
+        /// </summary>
+        string InverseMethodName { get; }
+
+        /// <summary>
         /// Attributes that used for mappings
         /// </summary>
         IEnumerable<MappingAttribute> MappingAttributes { get; }
@@ -61,32 +66,32 @@ namespace Compentio.SourceMapper.Metadata
 
         public string FullName => $"{ReturnType.FullName} {_methodSymbol?.ToDisplayString(_methodFullNameFormat)}";
 
-        public virtual IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
+        public IEnumerable<MappingAttribute> MappingAttributes => _methodSymbol.GetAttributes()
                     .Where(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MappingAttribute))
                     .Select(attribute =>
                     {
                         var sourceConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Source)).Value;
                         var targetConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Target)).Value;
                         var expressionConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.Expression)).Value;
-                        var createInverseConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.CreateInverse)).Value;
-                        var inverseMethodNameConstant = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.InverseMethodName)).Value;
-                        var inverseExpression = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.InverseExpression)).Value;
-                        var inverseSource = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.InverseSource)).Value;
-                        var inverseTarget = attribute.NamedArguments.FirstOrDefault(x => x.Key == nameof(MappingAttribute.InverseTarget)).Value;
 
                         var mappingAttr = new MappingAttribute
                         {
                             Source = sourceConstant.Value as string ?? string.Empty,
                             Target = targetConstant.Value as string ?? string.Empty,
                             Expression = expressionConstant.Value as string ?? string.Empty,
-                            CreateInverse = createInverseConstant.Value as bool? ?? false,
-                            InverseMethodName = inverseMethodNameConstant.Value as string ?? string.Empty,
-                            InverseExpression = inverseExpression.Value as string ?? string.Empty,
-                            InverseSource = inverseSource.Value as string ?? string.Empty,
-                            InverseTarget = inverseTarget.Value as string ?? string.Empty
                         };
                         return mappingAttr;
                     });
+
+        public string InverseMethodName
+        {
+            get
+            {
+                var attribute = _methodSymbol.GetAttributes().FirstOrDefault(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(InverseMappingAttribute));
+                var mapperAttribute = attribute?.NamedArguments.FirstOrDefault(arg => arg.Key == nameof(InverseMappingAttribute.InverseMethodName));
+                return mapperAttribute?.Value.Value as string;
+            }
+        }
 
         public Location? Location => _methodSymbol.Locations.FirstOrDefault();
     }

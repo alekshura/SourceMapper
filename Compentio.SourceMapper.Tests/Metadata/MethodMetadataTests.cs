@@ -24,6 +24,8 @@ namespace Compentio.SourceMapper.Tests.Metadata
 
         protected override string FakeNamespace => "Compentio.SourceMapper.Tests";
 
+        protected override string FakeInverseMethodName => "FakeInverseMethodName";
+
         public MethodMetadataTests()
         {
             _fixture = new Fixture()
@@ -104,13 +106,41 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_NotEmptyMappingAttributes()
         {
             // Arrange
-            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCode));
+            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCode, FakeMethodName));
 
             // Act
             var methodMetadata = new MethodMetadata(_mockMethodSymbol.Object);
 
+            // Assert
             methodMetadata.MappingAttributes.Should().NotBeNull();
             methodMetadata.MappingAttributes.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public void Instance_NotEmptyInverseMethodName()
+        {
+            // Arrange
+            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCodeWithInverseMapping, FakeMethodName));
+
+            // Act
+            var methodMetadata = new MethodMetadata(_mockMethodSymbol.Object);
+
+            // Assert
+            methodMetadata.InverseMethodName.Should().NotBeNullOrEmpty();
+            methodMetadata.InverseMethodName.Should().Be(FakeInverseMethodName);
+        }
+
+        [Fact]
+        public void Instance_EmptyInverseMethodName()
+        {
+            // Arrange
+            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCode, FakeMethodName));
+
+            // Act
+            var methodMetadata = new MethodMetadata(_mockMethodSymbol.Object);
+
+            // Assert
+            methodMetadata.InverseMethodName.Should().BeNullOrEmpty();
         }
     }
 }

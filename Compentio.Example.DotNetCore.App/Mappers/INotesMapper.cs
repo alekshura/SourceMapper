@@ -7,14 +7,14 @@ namespace Compentio.Example.DotNetCore.App.Mappers
     public partial interface INotesMapper
     {
         [Mapping(Source = nameof(NoteDao.PageTitle), Target = nameof(NoteDto.Title))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDao")]
+        [InverseMapping(InverseMethodName = "MapToDao")]
         NoteDto MapToDto(NoteDao source);
 
         [Mapping(Source = nameof(NoteDocumentDao.Metadata.CreatorFirstName), Target = nameof(NoteDocumentDto.Autor))]
-        [Mapping(CreateInverse = true, InverseMethodName = "MapToDao")]
+        [InverseMapping(InverseMethodName = "MapToDao")]
         NoteDocumentDto MapToDto(NoteDocumentDao source);
 
-        [Mapping(CreateInverse = true, InverseMethodName = "MapDocumentToDao")]
+        [InverseMapping(InverseMethodName = "MapDocumentToDao")]
         NoteDocumentMetadataDto MapDocumentToDto(NoteDocumentMetadataDao source);
     }
 }

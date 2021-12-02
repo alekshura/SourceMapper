@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,18 +7,20 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Object type metadata
     /// </summary>
-    interface ITypeMetadata : IMetadata
+    internal interface ITypeMetadata : IMetadata
     {
         /// <summary>
         /// Type full name
         /// </summary>
         string FullName { get; }
+
         /// <summary>
         /// Object lis of properties
         /// </summary>
         IEnumerable<IPropertyMetadata> Properties { get; }
+
         /// <summary>
-        /// Recurrent method that return flatten list of properties tree for the object 
+        /// Recurrent method that return flatten list of properties tree for the object
         /// </summary>
         /// <param name="propertyMetadata">List of properties</param>
         /// <returns></returns>
@@ -44,7 +45,7 @@ namespace Compentio.SourceMapper.Metadata
 
         public Location? Location => _parameterSymbol.Locations.FirstOrDefault();
 
-        public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) => 
+        public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) =>
             propertyMetadata.SelectMany(c => FlattenProperties(c.Properties)).Concat(propertyMetadata);
     }
 
