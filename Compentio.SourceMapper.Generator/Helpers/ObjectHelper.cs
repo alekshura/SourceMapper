@@ -3,7 +3,7 @@
     internal static class ObjectHelper
     {
         /// <summary>
-        /// Swap two reference type objects
+        /// Method to swap two reference objects of type T
         /// </summary>
         internal static void Swap<T>(ref T source, ref T target)
         {

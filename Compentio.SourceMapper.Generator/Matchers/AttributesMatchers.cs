@@ -40,7 +40,7 @@ namespace Compentio.SourceMapper.Matchers
         }
 
         /// <summary>
-        /// Check that exists any method with the inverse attribute set
+        /// Method checks is there any method marked with the <see cref="InverseMappingAttribute"/>
         /// </summary>
         /// <param name="methodsMetadata">Methods collection</param>
         /// <returns></returns>
@@ -50,7 +50,7 @@ namespace Compentio.SourceMapper.Matchers
         }
 
         /// <summary>
-        /// Check method has inverse method attribute
+        /// Method checks that the mathod has <see cref="InverseMappingAttribute"/>
         /// </summary>
         /// <param name="methodMetadata">Method metadata</param>
         /// <returns></returns>
@@ -60,7 +60,7 @@ namespace Compentio.SourceMapper.Matchers
         }
 
         /// <summary>
-        /// Get full inverse method name based on original method and inverse method name
+        /// Method returns full inverse method name based on <see cref="MethodMetadata" />
         /// </summary>
         /// <param name="methodMetadata">Method metadata</param>
         /// <returns></returns>

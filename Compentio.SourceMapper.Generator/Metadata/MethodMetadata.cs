@@ -27,7 +27,7 @@ namespace Compentio.SourceMapper.Metadata
         string FullName { get; }
 
         /// <summary>
-        /// Name of the method inverse for this method
+        /// Name of the method inverse for this method related to value of <see cref="InverseMappingAttribute.InverseMethodName">
         /// </summary>
         string InverseMethodName { get; }
 

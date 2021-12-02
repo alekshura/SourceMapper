@@ -30,6 +30,11 @@ namespace Compentio.SourceMapper.Processors
     {
         private readonly List<DiagnosticsInfo> _diagnostics = new();
 
+        /// <summary>
+        /// Method generates source code for <see cref="MapperMetadata">
+        /// </summary>
+        /// <param name="mapperMetadata"></param>
+        /// <returns>>Generated code and diagnostics information. See also: <seealso cref="Result"/></returns>
         public IResult GenerateCode(IMapperMetadata mapperMetadata)
         {
             try
