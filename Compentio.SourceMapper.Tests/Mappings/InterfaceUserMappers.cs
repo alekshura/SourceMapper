@@ -5,23 +5,29 @@ using System.Linq;
 namespace Compentio.SourceMapper.Tests.Mappings
 {
     [Mapper(ClassName = "InterfaceUserDaoMapper")]
-    public interface IUserDaoMapper
+    public partial interface IUserDaoMapper
     {
         [Mapping(Source = nameof(UserDao.FirstName), Target = nameof(UserInfo.Name))]
-        UserInfo MapToDomainModel(UserDao userDao);
-        Address MapAddress(UserDao userDao);
-        Region MapRegion(UserDao userDao);
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
+        UserInfo MapToDomainModel(UserDao source);
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
+        Address MapAddress(UserDao source);
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
+        Region MapRegion(UserDao source);
     }
 
     [Mapper(ClassName = "InterfaceUserDataDaoMapper")]
-    public interface IUserDataDaoMapper
+    public partial interface IUserDataDaoMapper
     {
         [Mapping(Source = nameof(UserDataDao.FirstName), Target = nameof(UserInfo.Name))]
         [Mapping(Source = nameof(UserDataDao.UserAddress), Target = nameof(UserInfo.Address))]
-        UserInfo MapToDomainModel(UserDataDao userDataDao);
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
+        UserInfo MapToDomainModel(UserDataDao source);
 
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
         Address MapAddress(AddressDao addressDao);
 
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
         Region MapRegion(RegionDao regionDao);
     }
 
@@ -34,16 +40,28 @@ namespace Compentio.SourceMapper.Tests.Mappings
             result.Name = $"{userDataDao.FirstName} {userDataDao.LastName}";  
             return result;
         }
+
+        public override UserDataDao MapToDatabaseModel(UserInfo source)
+        {
+            var result = base.MapToDatabaseModel(source);
+            result.UserId = source.Id;
+            result.FirstName = source.Name.Split(" ").FirstOrDefault();
+            result.LastName = source.Name.Split(" ").LastOrDefault();
+            return result;
+        }
     }
 
     [Mapper(ClassName = "InterfaceUserDaoArrayMapper")]
-    public interface IUserDataArrayMapper
+    public partial interface IUserDataArrayMapper
     {
         [Mapping(Source = nameof(UserWithArrayDao.FirstName), Target = nameof(UserInfoWithArray.Name))]
+        [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         UserInfoWithArray MapToDomainModel(UserWithArrayDao userWithArrayDao);
 
+        [InverseMapping(InverseMethodName = "MapFromAddress")]
         Address MapAddress(AddressDao addressDao);
 
+        [InverseMapping(InverseMethodName = "MapFromRegion")]
         Region MapRegion(RegionDao regionDao);
     }
 
@@ -53,6 +71,13 @@ namespace Compentio.SourceMapper.Tests.Mappings
         {
             var result = base.MapToDomainModel(userDataDao);
             result.Addresses = userDataDao.UserAddresses.Select(addressDao => base.MapAddress(addressDao)).ToArray();
+            return result;
+        }
+
+        public override UserWithArrayDao MapToDatabaseModel(UserInfoWithArray userWithArrayDao)
+        {
+            var result = base.MapToDatabaseModel(userWithArrayDao);
+            result.UserAddresses = userWithArrayDao.Addresses.Select(address => base.MapFromAddress(address)).ToArray();
             return result;
         }
     }

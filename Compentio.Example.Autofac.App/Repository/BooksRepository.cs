@@ -37,7 +37,19 @@ namespace Compentio.Example.Autofac.App.Repository
             Id = Guid.NewGuid(),
             Author = "Lem, S",
             Title = "Solaris",
-            PublishingYear = 1961
+            PublishingYear = 1961,
+            LibraryAddressesDao = new List<AddressDao>{ _addressDao, _addressDao, _addressDao }
+        };
+
+        private static readonly AddressDao _addressDao = new AddressDao()
+        {
+            City = "City",
+            Country = "Country",
+            HomeNumber = "HomeNumber",
+            Id = Guid.NewGuid(),
+            PostCode = "PostCode",
+            Region = " Region",
+            Street = "Street"
         };
     }
 }

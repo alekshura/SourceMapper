@@ -9,19 +9,22 @@ namespace Compentio.SourceMapper.Attributes
     public class MappingAttribute : Attribute
     {
         /// <summary>
-        /// The name of the source property used for mapping. 
+        /// The name of the source property used for mapping.
         /// </summary>
-        public string Source { get; set; } = string.Empty;
+        public virtual string Source { get; set; } = string.Empty;
+
         /// <summary>
         /// Te name for target property for mapping. Use it like: <c>nameof(ReturnType.PropertyName)</c>
         /// </summary>
         /// <example>nameof(ReturnType.PropertyName)</example>
-        public string Target { get; set; } = string.Empty;
+        public virtual string Target { get; set; } = string.Empty;
+
         /// <summary>
         /// Func name that can be used for additional mapping processing.
         /// Use it in classes. In interface mapping definitions it will be ignored.
         /// </summary>
-        public string Expression { get; set; } = string.Empty;
+        public virtual string Expression { get; set; } = string.Empty;
+
         /// <summary>
         /// Default constructor
         /// </summary>

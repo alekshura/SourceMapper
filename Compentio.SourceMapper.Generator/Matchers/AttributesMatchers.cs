@@ -17,6 +17,7 @@ namespace Compentio.SourceMapper.Matchers
         {
             return attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name);
         }
+
         /// <summary>
         /// Method searches for <see cref="MappingAttribute"/> that Target and Source property matches target member and attribute has not empty <see cref="MappingAttribute.Expression"/> value
         /// If it is <c>null</c> than searches matching <see cref="MappingAttribute"/> only by <see cref="MappingAttribute.Target"/> and <see cref="MappingAttribute.Expression"/> values
@@ -27,8 +28,8 @@ namespace Compentio.SourceMapper.Matchers
         /// <returns></returns>
         internal static MappingAttribute MatchExpressionAttribute(this IEnumerable<MappingAttribute> attributes, IPropertyMetadata targetProperty, IPropertyMetadata sourceProperty)
         {
-            var matchedExpressionAttribute = attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name 
-                && attribute?.Source == sourceProperty?.Name 
+            var matchedExpressionAttribute = attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name
+                && attribute?.Source == sourceProperty?.Name
                 && !string.IsNullOrEmpty(attribute?.Expression));
 
             if (matchedExpressionAttribute is null)
@@ -36,6 +37,39 @@ namespace Compentio.SourceMapper.Matchers
                 matchedExpressionAttribute = attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name && !string.IsNullOrEmpty(attribute?.Expression));
             }
             return matchedExpressionAttribute;
+        }
+
+        /// <summary>
+        /// Method checks is there any method marked with the <see cref="InverseMappingAttribute"/>
+        /// </summary>
+        /// <param name="methodsMetadata">Methods collection</param>
+        /// <returns></returns>
+        internal static bool AnyInverseMethod(IEnumerable<IMethodMetadata> methodsMetadata)
+        {
+            return methodsMetadata.Any(m => IsInverseMethod(m));
+        }
+
+        /// <summary>
+        /// Method checks that the mathod has <see cref="InverseMappingAttribute"/>
+        /// </summary>
+        /// <param name="methodMetadata">Method metadata</param>
+        /// <returns></returns>
+        internal static bool IsInverseMethod(IMethodMetadata methodMetadata)
+        {
+            return !string.IsNullOrEmpty(methodMetadata.InverseMethodName);
+        }
+
+        /// <summary>
+        /// Method returns full inverse method name based on <see cref="MethodMetadata" />
+        /// </summary>
+        /// <param name="methodMetadata">Method metadata</param>
+        /// <returns></returns>
+        internal static string GetInverseMethodFullName(IMethodMetadata methodMetadata)
+        {
+            var inverseMethodFullName =
+                $"{methodMetadata.Parameters.First().FullName} {methodMetadata.InverseMethodName} ({methodMetadata.ReturnType.FullName} {methodMetadata.Parameters.First().Name})";
+
+            return inverseMethodFullName;
         }
     }
 }

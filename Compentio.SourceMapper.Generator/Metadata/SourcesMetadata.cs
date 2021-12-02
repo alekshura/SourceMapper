@@ -1,6 +1,5 @@
 ﻿using Compentio.SourceMapper.Processors.DependencyInjection;
 using Microsoft.CodeAnalysis;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +8,7 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Encapsulates all defined mappers in assembly
     /// </summary>
-    interface ISourcesMetadata
+    internal interface ISourcesMetadata
     {
         /// <summary>
         /// Dependency injection container type used in source project
@@ -21,6 +20,7 @@ namespace Compentio.SourceMapper.Metadata
         /// </summary>
         /// <param name="mapperMetadata">mapper metadata object</param>
         void AddOrUpdate(IMapperMetadata mapperMetadata);
+
         /// <summary>
         /// List of defined mappers
         /// </summary>
@@ -32,10 +32,11 @@ namespace Compentio.SourceMapper.Metadata
         private readonly List<IMapperMetadata> _mappers = new();
         private readonly DependencyInjection _dependencyInjection;
 
-        private SourcesMetadata(IEnumerable<AssemblyIdentity> assemblies) 
+        private SourcesMetadata(IEnumerable<AssemblyIdentity> assemblies)
         {
             _dependencyInjection = new DependencyInjection(assemblies);
         }
+
         static SourcesMetadata()
         {
         }
@@ -56,7 +57,7 @@ namespace Compentio.SourceMapper.Metadata
             else
             {
                 _mappers.Add(mapperMetadata);
-            }            
+            }
         }
     }
 }

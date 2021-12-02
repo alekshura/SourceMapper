@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Compentio.Example.Autofac.App.Entities
 {
@@ -9,6 +10,6 @@ namespace Compentio.Example.Autofac.App.Entities
         public string Title { get; set; }
         public string BookDescription { get; set; }
         public int PublishingYear { get; set; }
-        public AddressDto LibraryAddress { get; set; }
+        public IList<AddressDto> LibraryAddressesDto { get; set; }
     }
 }

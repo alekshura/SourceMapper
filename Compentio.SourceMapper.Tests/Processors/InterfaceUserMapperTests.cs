@@ -37,6 +37,28 @@ namespace Compentio.SourceMapper.Tests.Processors
         }
 
         [Fact]
+        public void Mapper_User_Info_Match_Properties_And_Attributes()
+        {
+            // Arrange 
+            var _userMapperInterface = new InterfaceUserDaoMapper();
+            var userInfo = _fixture.Create<UserInfo>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDatabaseModel(userInfo);
+
+            // Assert
+            mappingResult.FirstName.Should().Be(userInfo.Name);
+            mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
+            //// Not mapped
+            mappingResult.UserId.Should().NotBe(userInfo.Id);
+            mappingResult.City.Should().BeNull();
+            mappingResult.House.Should().BeNull();
+            mappingResult.ZipCode.Should().BeNull();
+            mappingResult.District.Should().BeNull();
+            mappingResult.State.Should().BeNull();
+        }
+
+        [Fact]
         public void Mapper_User_Data_Dao_Match_Properties_And_Attributes()
         {
             // Arrange 
@@ -63,6 +85,32 @@ namespace Compentio.SourceMapper.Tests.Processors
         }
 
         [Fact]
+        public void Mapper_User_Data_Info_Match_Properties_And_Attributes()
+        {
+            // Arrange 
+            var _userMapperInterface = new InterfaceUserDataDaoMapper();
+            var userInfo = _fixture.Create<UserInfo>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDatabaseModel(userInfo);
+
+            // Assert
+            mappingResult.UserId.Should().NotBe(userInfo.Id);
+
+            mappingResult.FirstName.Should().Be(userInfo.Name);
+            mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
+
+            mappingResult.UserAddress.Should().NotBeNull();
+            mappingResult.UserAddress.City.Should().Be(userInfo.Address.City);
+            mappingResult.UserAddress.House.Should().Be(userInfo.Address.House);
+            mappingResult.UserAddress.Street.Should().Be(userInfo.Address.Street);
+
+            mappingResult.UserAddress.Region.Should().NotBeNull();
+            mappingResult.UserAddress.Region.State.Should().Be(userInfo.Address.Region.State);
+            mappingResult.UserAddress.Region.District.Should().Be(userInfo.Address.Region.District);
+        }
+
+        [Fact]
         public void Mapper_User_Data_Dao_With_Extension_In_Inherited_Class()
         {
             // Arrange 
@@ -85,6 +133,108 @@ namespace Compentio.SourceMapper.Tests.Processors
             mappingResult.Address.Region.Should().NotBeNull();
             mappingResult.Address.Region.State.Should().Be(userDataDao.UserAddress.Region.State);
             mappingResult.Address.Region.District.Should().Be(userDataDao.UserAddress.Region.District);
+        }
+
+        [Fact]
+        public void Mapper_User_Info_With_Extension_In_Inherited_Class()
+        {
+            // Arrange 
+            var _userMapperInterface = new CustomUserDataDaoMapper();
+            var userInfo = _fixture.Create<UserInfo>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDatabaseModel(userInfo);
+
+            // Assert
+            mappingResult.UserId.Should().Be(userInfo.Id);
+            mappingResult.FirstName.Should().Be(userInfo.Name);
+            mappingResult.LastName.Should().Be(userInfo.Name);
+            mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
+
+            mappingResult.UserAddress.Should().NotBeNull();
+            mappingResult.UserAddress.City.Should().Be(userInfo.Address.City);
+            mappingResult.UserAddress.House.Should().Be(userInfo.Address.House);
+            mappingResult.UserAddress.Street.Should().Be(userInfo.Address.Street);
+
+            mappingResult.UserAddress.Region.Should().NotBeNull();
+            mappingResult.UserAddress.Region.State.Should().Be(userInfo.Address.Region.State);
+            mappingResult.UserAddress.Region.District.Should().Be(userInfo.Address.Region.District);
+        }
+
+        [Fact]
+        public void Mapper_User_With_Array_Dao_Match_Properties_And_Attributes()
+        {
+            // Arrange 
+            var _userMapperInterface = new InterfaceUserDaoArrayMapper();
+            var userWithArrayDao = _fixture.Create<UserWithArrayDao>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDomainModel(userWithArrayDao);
+
+            // Assert
+            mappingResult.Id.Should().NotBe((int)userWithArrayDao.UserId);
+
+            mappingResult.Name.Should().Be(userWithArrayDao.FirstName);
+            mappingResult.BirthDate.Should().Be(userWithArrayDao.BirthDate);
+
+            mappingResult.Addresses.Should().BeNull();
+        }
+
+        [Fact]
+        public void Mapper_User_Info_With_Array_Match_Properties_And_Attributes()
+        {
+            // Arrange 
+            var _userMapperInterface = new InterfaceUserDaoArrayMapper();
+            var userInfoWithArray = _fixture.Create<UserInfoWithArray>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDatabaseModel(userInfoWithArray);
+
+            // Assert
+            mappingResult.UserId.Should().NotBe(userInfoWithArray.Id);
+
+            mappingResult.FirstName.Should().Be(userInfoWithArray.Name);
+            mappingResult.BirthDate.Should().Be(userInfoWithArray.BirthDate);
+
+            mappingResult.UserAddresses.Should().BeNull();
+        }
+
+        [Fact]
+        public void Mapper_User_With_Array_Dao_With_Extension_In_Inherited_Class()
+        {
+            // Arrange 
+            var _userMapperInterface = new CustomUserDaoArrayMapper();
+            var userWithArrayDao = _fixture.Create<UserWithArrayDao>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDomainModel(userWithArrayDao);
+
+            // Assert
+            mappingResult.Id.Should().NotBe((int)userWithArrayDao.UserId);
+
+            mappingResult.Name.Should().Be(userWithArrayDao.FirstName);
+            mappingResult.BirthDate.Should().Be(userWithArrayDao.BirthDate);
+
+            mappingResult.Addresses.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Mapper_User_Info_With_Array_With_Extension_In_Inherited_Class()
+        {
+            // Arrange 
+            var _userMapperInterface = new CustomUserDaoArrayMapper();
+            var userInfoWithArray = _fixture.Create<UserInfoWithArray>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDatabaseModel(userInfoWithArray);
+
+            // Assert
+            mappingResult.UserId.Should().NotBe(userInfoWithArray.Id);
+
+            mappingResult.FirstName.Should().Be(userInfoWithArray.Name);
+            mappingResult.BirthDate.Should().Be(userInfoWithArray.BirthDate);
+
+            mappingResult.UserAddresses.Should().NotBeNull();
         }
     }
 }

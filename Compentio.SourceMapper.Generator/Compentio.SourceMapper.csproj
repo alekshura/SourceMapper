@@ -9,8 +9,8 @@
     <Product>SourceMapper</Product>
     <Authors>Aleksander Parchomenko</Authors>
     <PackageProjectUrl>https://alekshura.github.io/SourceMapper/</PackageProjectUrl>
-    <AssemblyVersion>1.0.14.0</AssemblyVersion>
-    <FileVersion>1.0.14.0</FileVersion>
+    <AssemblyVersion>2.0.0.1</AssemblyVersion>
+    <FileVersion>2.0.0.1</FileVersion>
     <PackageId>Compentio.SourceMapper</PackageId>
     <GenerateRepositoryUrlAttribute>true</GenerateRepositoryUrlAttribute>
     <Version>1.0.14</Version>

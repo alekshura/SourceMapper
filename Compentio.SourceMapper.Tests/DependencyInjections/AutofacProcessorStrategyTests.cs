@@ -19,7 +19,7 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
         {
             _fixture = new Fixture();
             _mockSourceMetadata = _fixture.Create<Mock<ISourcesMetadata>>();
-            _mockSourceMetadata.Setup(m => m.DependencyInjection).Returns(new DependencyInjection() { DependencyInjectionType = DependencyInjectionType.Autofac });
+            _mockSourceMetadata.Setup(m => m.DependencyInjection).Returns(new SourceMapper.Processors.DependencyInjection.DependencyInjection() { DependencyInjectionType = DependencyInjectionType.Autofac });
         }
 
         [Fact]

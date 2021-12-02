@@ -11,13 +11,13 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
     {
         private readonly IFixture _fixture;
         private readonly Mock<ISourcesMetadata> _mockSourceMetadata;
-        private readonly Mock<DependencyInjection> _mockDependencyInjection;
+        private readonly Mock<SourceMapper.Processors.DependencyInjection.DependencyInjection> _mockDependencyInjection;
 
         public DependencyInjectionStrategyFactoryTests()
         {
             _fixture = new Fixture();
             _mockSourceMetadata = _fixture.Create<Mock<ISourcesMetadata>>();
-            _mockDependencyInjection = _fixture.Create<Mock<DependencyInjection>>();
+            _mockDependencyInjection = _fixture.Create<Mock<SourceMapper.Processors.DependencyInjection.DependencyInjection>>();
         }
 
         [Fact]
