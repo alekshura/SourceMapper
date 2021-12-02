@@ -52,7 +52,7 @@ namespace Compentio.SourceMapper.Processors
         }
 
         /// <summary>
-        /// Methods additional keyword modifier (virtual/override), related to interface or class methods implementations mechanism.
+        /// Methods additional keyword modifier (virtual/override), related to interface or class methods implementation mechanism.
         /// For interfaces, methods should to be virtual for further override possibility.
         /// In case of classes, methods should override methods from mappings source class.
         /// </summary>
@@ -126,7 +126,7 @@ namespace Compentio.SourceMapper.Processors
 
             if (matchedSourceMember is null || matchedTargetMember is null)
             {
-                PropertyMappingWarning(matchedSourceMember != null ? matchedSourceMember : matchedTargetMember);
+                PropertyMappingWarning(matchedSourceMember ?? matchedTargetMember);
                 return string.Empty;
             }
 
