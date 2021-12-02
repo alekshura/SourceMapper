@@ -79,12 +79,13 @@ namespace Compentio.SourceMapper.Processors
             return methodsStringBuilder.ToString();
         }
 
-		protected string GenerateMethodsFromBaseMapper()
+		    protected string GenerateMethodsFromBaseMapper()
         {
             if (_baseMapperMetadata is null || _baseMapperMetadata.MethodsMetadata is null) return string.Empty;
 
             return GenerateMethods(_baseMapperMetadata);
         }
+        
         protected string GenerateMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
             return @$"public {Modifier} {methodMetadata.FullName}
@@ -158,7 +159,7 @@ namespace Compentio.SourceMapper.Processors
             {
                 method = GetDefinedMethodFromBaseMapper(matchedSourceMember, matchedTargetMember, inverseMapping);
             }
-
+            
             if (method is not null)
             {
                 if (inverseMapping)
@@ -178,7 +179,6 @@ namespace Compentio.SourceMapper.Processors
         {
             return GetDefinedMethod(_baseMapperMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
         }
-
 
         protected IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
         {
