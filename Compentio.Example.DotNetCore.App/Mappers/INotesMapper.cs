@@ -17,4 +17,11 @@ namespace Compentio.Example.DotNetCore.App.Mappers
         [InverseMapping(InverseMethodName = "MapDocumentToDao")]
         NoteDocumentMetadataDto MapDocumentToDto(NoteDocumentMetadataDao source);
     }
+
+    [Mapper(UseMapper = nameof(INotesMapper))]
+    public partial interface INotesDataMapper
+    {
+        [InverseMapping(InverseMethodName = "MapDataToDao")]
+        NoteDataDto MapDataToDto(NoteDataDao source);
+    }
 }
