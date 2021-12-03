@@ -418,3 +418,89 @@ public abstract partial class InvoiceMapper
 ```
 
 Now `ClassInvoiceMapper` can be inherited by, for example, `CustomClassInvoiceMapper` and complex methods can be overrided, similarly to interface case.
+
+## Use mapping from another Mapper
+
+In case, when we have a few mappers, for example:
+
+```csharp
+[Mapper]
+public partial interface IUserDataMapper
+{
+     UserInfo MapToDomainModel(UserDataDao source);
+     ...
+}
+```
+
+and
+
+```csharp
+[Mapper]
+public interface IUserDataArrayMapper
+{
+     UserInfoWithArray MapToDomainModel(UserWithArrayDao userWithArrayDao);
+     ...
+}
+```
+
+and all the classes, `UserInfo`, `UserDataDao`, `UserInfoWithArray` and `UserWithArrayDao` contains `Address` and `AddressDao` object to be mapped, we can inject defined mapping from `IUserDataArrayMapper` mapper into `IUserDataMapper` mapper. To do this, we can add `UseMapper` property for mapper attributes with the name of injected mapper like:
+
+```csharp
+[Mapper(ClassName = "UserDataDaoMapper", UseMapper = nameof(IUserDataArrayMapper))]
+public partial interface IUserDataDaoMapper
+{
+	...
+}
+```
+
+Then, if `IUserDataArrayMapper` contains definition of mapping  `Address` and `AddressDao`, it will be used in `UserDataMapper` mapper implementation:
+
+```csharp
+public class UserDataDaoMapper : UserDaoArrayMapper, IUserDataMapper
+{
+	public virtual Compentio.SourceMapper.Tests.Entities.UserInfo MapToDomainModel(Compentio.SourceMapper.Tests.Entities.UserDataDao source)
+	{
+	    ...
+	    target.Address = MapAddress(source.UserAddress);
+	    ...
+	}
+}
+
+public partial interface IUserDataMapper : IUserDataArrayMapper
+{
+	Compentio.SourceMapper.Tests.Entities.UserDataDao MapToDatabaseModel(Compentio.SourceMapper.Tests.Entities.UserInfo source);
+}
+```
+
+For the class case, all the implemented methods from used mapper are injected into target mapper, like in example:
+
+```csharp
+public class ClassUserDataMapper : UserDataMapper
+{
+	public override Compentio.SourceMapper.Tests.Entities.UserInfo MapToDomainModel(Compentio.SourceMapper.Tests.Entities.UserDataDao source)
+	{
+	    	...
+		target.Address = MapAddress(source.UserAddress);		
+	}
+
+	public override Compentio.SourceMapper.Tests.Entities.UserInfoWithArray MapToDomainModel(Compentio.SourceMapper.Tests.Entities.UserWithArrayDao source)
+	{
+		...
+	}
+
+	public override Compentio.SourceMapper.Tests.Entities.Address MapAddress(Compentio.SourceMapper.Tests.Entities.AddressDao source)
+	{
+		...
+	}
+
+	public override Compentio.SourceMapper.Tests.Entities.Region MapRegion(Compentio.SourceMapper.Tests.Entities.RegionDao source)
+	{
+		...
+	}
+}
+
+public abstract partial class UserDataMapper : UserDataArrayMapper
+{
+	...
+}
+```
