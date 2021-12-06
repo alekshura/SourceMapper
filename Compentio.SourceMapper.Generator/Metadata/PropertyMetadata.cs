@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Compentio.SourceMapper.Attributes;
+using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,17 +8,24 @@ namespace Compentio.SourceMapper.Metadata
     /// <summary>
     /// Encapsulates a property that is mapped
     /// </summary>
-    interface IPropertyMetadata : IMetadata
+    internal interface IPropertyMetadata : IMetadata
     {
         /// <summary>
         /// Full name with namespace of the property
         /// </summary>
         string FullName { get; }
+
         /// <summary>
         /// Indicates whether the property is user defined class or no
         /// </summary>
         /// <see cref="Properties"/>
         bool IsClass { get; }
+
+        /// <summary>
+        /// Indicate that property should be ignored during mapping generating
+        /// </summary>
+        bool IgnoreInMapping { get; }
+
         /// <summary>
         /// List of properties. It is empty in a case when the property is not user defined class: <c>IsClass == false</c>
         /// </summary>
@@ -44,17 +52,26 @@ namespace Compentio.SourceMapper.Metadata
 
         public IEnumerable<IPropertyMetadata> Properties
         {
-            get 
+            get
             {
                 if (!IsClass)
                     return Enumerable.Empty<IPropertyMetadata>();
 
-                return   _propertySymbol.Type.GetMembers()
+                return _propertySymbol.Type.GetMembers()
                     .Where(member => member.Kind == SymbolKind.Property && !member.IsStatic)
                     .Select(member => new PropertyMetadata(member as IPropertySymbol));
             }
         }
 
         public Location? Location => _propertySymbol.Locations.FirstOrDefault();
+
+        public bool IgnoreInMapping
+        {
+            get
+            {
+                var attribute = _propertySymbol.GetAttributes().FirstOrDefault(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(IgnoreMapping));
+                return attribute != null;
+            }
+        }
     }
 }
