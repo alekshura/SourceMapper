@@ -74,11 +74,11 @@ namespace Compentio.SourceMapper.Processors
             var targetMemebers = methodMetadata.ReturnType.Properties;
 
             foreach (var targetMember in targetMemebers)
-            {
+            {                
                 var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
-                if (matchedSourceMember?.IgnoreInMapping is true) continue;
+                if (matchedSourceMember?.IgnoreInMapping is true || matchedTargetMember?.IgnoreInMapping is true) continue;
 
                 var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
                 var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
