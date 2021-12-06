@@ -6,7 +6,7 @@ namespace Compentio.SourceMapper.Attributes
     /// Attribute that ignore field/property/method during mapping creating
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = false)]
-    public class IgnoreMapping : Attribute
+    public class IgnoreMappingAttribute : Attribute
     {
     }
 }

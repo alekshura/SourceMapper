@@ -69,7 +69,7 @@ namespace Compentio.SourceMapper.Metadata
         {
             get
             {
-                var attribute = _propertySymbol.GetAttributes().FirstOrDefault(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(IgnoreMapping));
+                var attribute = _propertySymbol.GetAttributes().FirstOrDefault(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(IgnoreMappingAttribute));
                 return attribute != null;
             }
         }
