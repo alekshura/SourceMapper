@@ -9,22 +9,24 @@ using Xunit;
 
 namespace Compentio.SourceMapper.Tests.Metadata
 {
-    public class PropertyMetadataTests
+    public class PropertyMetadataTests : PropertyMetadataTestBase
     {
         private readonly IFixture _fixture;
-        private readonly Mock<IPropertyMetadata> _mockSourcePropertyMetadata;
-        private readonly Mock<IPropertyMetadata> _mockTargetPropertyMetadata;
         private readonly Mock<IPropertySymbol> _mockPropertySymbol;
         private readonly Mock<Location> _mockLocation;
         private readonly Mock<ISymbol> _mockSymbol;
+
+        protected override string FakeNamespace => "FakeNamespace";
+
+        protected override string FakeClassName => "FakeClassName";
+
+        protected override string FakeMethodName => "FakeMethodName";
 
         public PropertyMetadataTests()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization { ConfigureMembers = true })
                 .Customize(new SupportMutableValueTypesCustomization());
-            _mockSourcePropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
-            _mockTargetPropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
             _mockPropertySymbol = _fixture.Create<Mock<IPropertySymbol>>();
             _mockLocation = _fixture.Create<Mock<Location>>();
             _mockSymbol = _fixture.Create<Mock<ISymbol>>();
@@ -111,6 +113,19 @@ namespace Compentio.SourceMapper.Tests.Metadata
 
             // Assert
             propertyMetadata.Properties.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void InstanceForClass_ValidIgnoreInMapping()
+        {
+            // Arrange
+            _mockPropertySymbol.Setup(p => p.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCode, FakeMethodName));
+
+            // Act
+            var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);
+
+            // Assert
+            propertyMetadata.IgnoreInMapping.Should().BeTrue();
         }
     }
 }
