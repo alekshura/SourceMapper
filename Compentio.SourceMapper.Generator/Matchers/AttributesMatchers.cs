@@ -71,5 +71,16 @@ namespace Compentio.SourceMapper.Matchers
 
             return inverseMethodFullName;
         }
+
+        /// <summary>
+        /// Metchod checks that property metadata should be ignored during mapping due to <see cref="IgnoreMappingAttribute"/>
+        /// </summary>
+        /// <param name="sourcePropertyMetadata"></param>
+        /// <param name="targetPropertyMetadata"></param>
+        /// <returns></returns>
+        internal static bool IgnorePropertyMapping(IPropertyMetadata? sourcePropertyMetadata, IPropertyMetadata? targetPropertyMetadata)
+        {
+            return (sourcePropertyMetadata?.IgnoreInMapping is true || targetPropertyMetadata?.IgnoreInMapping is true) ;
+        }
     }
 }

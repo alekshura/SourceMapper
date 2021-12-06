@@ -79,7 +79,7 @@ namespace Compentio.SourceMapper.Processors
                 var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
-                if (matchedSourceMember?.IgnoreInMapping is true || matchedTargetMember?.IgnoreInMapping is true) continue;
+                if (AttributesMatchers.IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
 
                 mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
             }
