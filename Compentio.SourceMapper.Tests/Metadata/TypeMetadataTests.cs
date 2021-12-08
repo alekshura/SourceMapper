@@ -96,6 +96,21 @@ namespace Compentio.SourceMapper.Tests.Metadata
         }
 
         [Fact]
+        public void Instanc_EmptyProperties()
+        {
+            // Arrange
+            _mockTypeSymbol.Setup(t => t.GetMembers()).Returns(ImmutableArray.Create(_mockSymbol.Object));
+            _mockSymbol.Setup(s => s.Kind).Returns(SymbolKind.ErrorType);
+            _mockSymbol.Setup(s => s.IsStatic).Returns(true);
+
+            // Act
+            var typeMetadata = new TypeMetadata(_mockTypeSymbol.Object);
+
+            // Assert
+            typeMetadata.Properties.Should().BeEmpty();
+        }
+
+        [Fact]
         public void FlattenProperties_ValidFlatten()
         {
             // Arrange
