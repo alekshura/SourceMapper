@@ -154,8 +154,8 @@ public abstract class NotesClassMapper
 
 ## Ignore mapping
 
-If for any reason part of the class/interface properties should not be mapped, `Ignore Mapping` attribute should be used for that.
-Added `Ignore Mapping` causes that both source and target property during mapping generation will be omitted, not generating any linked map and not reporting any warning in diagnostics.
+If for any reason part of the class/interface properties should not be mapped, `IgnoreMapping` attribute should be used for that.
+Added `IgnoreMapping` causes that both source and target property during mapping generation will be omitted, not generating any linked map and not reporting any warning in diagnostics.
 If we have two classes `NoteDao` and `NoteDto` 
 
 ```csharp
@@ -188,7 +188,6 @@ public class NoteDto
 	public long Id { get; set; }
 	public string Title { get; set; }
 	public string Description { get; set; }
-	public NoteDocumentDto Document { get; set; }
 }
 ```
 
