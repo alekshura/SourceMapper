@@ -152,6 +152,73 @@ public abstract class NotesClassMapper
 `Expression` - it is a name of mapping function, that can be used for additional properties mapping. 
 > It must be `public` or `protected`, since it is used in generated mapper class that implements abstract mapping class.
 
+## Ignore mapping
+
+If for any reason part of the class/interface properties should not be mapped, `Ignore Mapping` attribute should be used for that.
+Added `Ignore Mapping` causes that both source and target property during mapping generation will be omitted, not generating any linked map and not reporting any warning in diagnostics.
+If we have two classes `NoteDao` and `NoteDto` 
+
+```csharp
+public class NoteDao
+{
+	public long Id { get; set; }
+	public string PageTitle { get; set; }
+	public string Description { get; set; }
+
+	[IgnoreMapping]
+	public DateTime ValidFrom { get; set; }
+
+	[IgnoreMapping]
+	public DateTime ValidTo { get; set; }
+
+	[IgnoreMapping]
+	public string CreatedBy { get; set; }
+
+	[IgnoreMapping]
+	public DateTime Created { get; set; }
+
+	[IgnoreMapping]
+	public DateTime Modified { get; set; }
+}
+```
+
+```csharp
+public class NoteDto
+{
+	public long Id { get; set; }
+	public string Title { get; set; }
+	public string Description { get; set; }
+	public NoteDocumentDto Document { get; set; }
+}
+```
+
+and we need to map only matched fields, the mapper class `NotesClassMapper` lead to creating proper mapping result class `NotesMappings` without any warning:
+
+```csharp
+[Mapper(ClassName = "NotesMappings")]
+public abstract partial class NotesClassMapper
+{
+	[Mapping(Source = nameof(NoteDao.PageTitle), Target = nameof(NoteDto.Title))]
+	public abstract NoteDto MapToDto(NoteDao source);
+}
+```
+
+```csharp
+public class NotesMappings : NotesClassMapper
+{
+	public override Compentio.Example.DotNetCore.App.Entities.NoteDto MapToDto(Compentio.Example.DotNetCore.App.Entities.NoteDao source)
+	{
+		if (source == null)
+			return null;
+		var target = new Compentio.Example.DotNetCore.App.Entities.NoteDto();
+		target.Id = source.Id;
+		target.Title = source.PageTitle;
+		target.Description = source.Description;
+		return target;
+	}
+}
+```
+
 ### Mapping collections
 Lets assume we need to map two entities:
 
@@ -196,6 +263,7 @@ public abstract class UserMapper
 ```
 
 For more examples see [Wiki examples](https://github.com/alekshura/SourceMapper/wiki/Examples#mapping-collections).
+
 
 ## Dependency injection
 The `Compentio.SourceMapper` searches for 3 main dependency container packages (`Microsoft.Extensions.DependencyInjection`, `Autofac.Extensions.DependencyInjection`, and `StructureMap.Microsoft.DependencyInjection`) and generates extension code. If there no any container packages found, Dependency Injection extension class is not generated.
