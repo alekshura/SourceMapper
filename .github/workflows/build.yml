@@ -44,5 +44,5 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"alekshura_SourceMapper" /o:"alekshura" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build Compentio.SourceMapper.sln
-          dotnet test "Compentio.SourceMapper.Tests\Compentio.SourceMapper.Tests.csproj" --collect:"XPlat Code Coverage" --results-directory TestResults\ --logger "trx;LogFileName=unittests.trx" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          dotnet test /p:CollectCoverage=true --settings Compentio.SourceMapper.Tests\coverlet.runsettings
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
