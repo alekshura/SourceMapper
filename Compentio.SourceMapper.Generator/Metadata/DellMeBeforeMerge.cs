@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Compentio.SourceMapper.Metadata
 {
@@ -13,27 +12,22 @@ namespace Compentio.SourceMapper.Metadata
             _propertySymbol = propertySymbol;
         }
 
-        public string Name => _propertySymbol.Name;
+        public string Name => throw new System.NotImplementedException();
 
-        public string FullName => Type.FullName;
+        public string FullName => throw new System.NotImplementedException();
 
-        public bool IsClass => _propertySymbol.Type.SpecialType == SpecialType.None && _propertySymbol.Type.TypeKind == TypeKind.Class;
+        public bool IsClass => throw new System.NotImplementedException();
 
-        private ITypeMetadata Type => new TypeMetadata(_propertySymbol.Type);
+        private ITypeMetadata Type => throw new System.NotImplementedException();
 
         public IEnumerable<IPropertyMetadata> Properties
         {
             get
             {
-                if (!IsClass)
-                    return Enumerable.Empty<IPropertyMetadata>();
-
-                return _propertySymbol.Type.GetMembers()
-                    .Where(member => member.Kind == SymbolKind.Property && !member.IsStatic)
-                    .Select(member => new PropertyMetadata(member as IPropertySymbol));
+                throw new System.NotImplementedException();
             }
         }
 
-        public Location? Location => _propertySymbol.Locations.FirstOrDefault();
+        public Location? Location => throw new System.NotImplementedException();
     }
 }
