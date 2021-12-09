@@ -23,9 +23,10 @@ namespace Compentio.Example.Autofac.App.Services
 
         public async Task<BookDto> CreateBook(BookDto book)
         {
-            var bookDao = _booksMapper.MapBookToDao(book);
-            var bookResult = await _booksRepository.CreateBook(bookDao);
-            return _booksMapper.MapBookToDto(bookResult);
+            //var bookDao = _booksMapper.MapBookToDao(book);
+            //var bookResult = await _booksRepository.CreateBook(bookDao);
+            //return _booksMapper.MapBookToDto(bookResult);
+            return null;
         }
 
         public async Task<BookDto> GetBook(Guid bookId)
@@ -42,9 +43,10 @@ namespace Compentio.Example.Autofac.App.Services
 
         public async Task<BookDto> UpdateBook(BookDto book)
         {
-            var bookDao = _booksMapper.MapBookToDao(book);
-            var updateResult = await _booksRepository.UpdateBook(bookDao);
-            return _booksMapper.MapBookToDto(updateResult);
+            //var bookDao = _booksMapper.MapBookToDao(book);
+            //var updateResult = await _booksRepository.UpdateBook(bookDao);
+            //return _booksMapper.MapBookToDto(updateResult);
+            return null;
         }
     }
 }

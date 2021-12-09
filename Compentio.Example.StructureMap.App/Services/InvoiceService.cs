@@ -23,9 +23,10 @@ namespace Compentio.Example.StructureMap.App.Services
 
         public async Task<InvoiceDto> CreateInvoice(InvoiceDto invoice)
         {
-            var invoiceDao = _invoiceMapper.MapInvoiceToDao(invoice);
-            var invoiceResult = await _invoiceRepository.CreateInvoice(invoiceDao);
-            return _invoiceMapper.MapInvoiceToDto(invoiceResult);
+            //var invoiceDao = _invoiceMapper.MapInvoiceToDao(invoice);
+            //var invoiceResult = await _invoiceRepository.CreateInvoice(invoiceDao);
+            //return _invoiceMapper.MapInvoiceToDto(invoiceResult);
+            return null;
         }
 
         public async Task<InvoiceDto> GetInvoice(Guid invoiceId)
@@ -42,9 +43,10 @@ namespace Compentio.Example.StructureMap.App.Services
 
         public async Task<InvoiceDto> UpdateInvoice(InvoiceDto invoice)
         {
-            var invoiceDao = _invoiceMapper.MapInvoiceToDao(invoice);
-            var updateResult = await _invoiceRepository.UpdateInvoice(invoiceDao);
-            return _invoiceMapper.MapInvoiceToDto(updateResult);
+            //var invoiceDao = _invoiceMapper.MapInvoiceToDao(invoice);
+            //var updateResult = await _invoiceRepository.UpdateInvoice(invoiceDao);
+            //return _invoiceMapper.MapInvoiceToDto(updateResult);
+            return null;
         }
     }
 }

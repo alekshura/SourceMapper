@@ -32,9 +32,10 @@ namespace Compentio.Example.DotNetCore.App.Services
 
         public async Task<NoteDto> CreateNote(NoteDto note)
         {
-            var noteDao = _mapper.MapToDao(note);
-            var result = await _repository.CreateNote(noteDao);
-            return _mapper.MapToDto(result);
+            //var noteDao = _mapper.MapToDao(note);
+            //var result = await _repository.CreateNote(noteDao);
+            //return _mapper.MapToDto(result);
+            return null;
         }
 
         public async Task<NoteDto> GetNote(long noteId)
@@ -51,9 +52,10 @@ namespace Compentio.Example.DotNetCore.App.Services
 
         public async Task<NoteDto> UpdateNote(NoteDto note)
         {
-            var noteDao = _mapper.MapToDao(note);
-            var result = await _repository.UpdateNote(noteDao);
-            return _mapper.MapToDto(result);
+            //var noteDao = _mapper.MapToDao(note);
+            //var result = await _repository.UpdateNote(noteDao);
+            //return _mapper.MapToDto(result);
+            return null;
         }
     }
 }

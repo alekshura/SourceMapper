@@ -10,11 +10,11 @@ namespace Compentio.Example.DotNetCore.App.Mappers
     public abstract partial class NotesClassMapper
     {
         [Mapping(Source = nameof(NoteDao.PageTitle), Target = nameof(NoteDto.Title))]
-        [InverseMapping(InverseMethodName = "MapToDao")]
+        //[InverseMapping(InverseMethodName = "MapToDao")]
         public abstract NoteDto MapToDto(NoteDao source);
 
         [Mapping(Target = nameof(NoteDocumentDto.Autor), Expression = nameof(ConvertAuthor))]
-        [InverseMapping(InverseMethodName = "MapToDao")]
+        //[InverseMapping(InverseMethodName = "MapToDao")]
         public abstract NoteDocumentDto MapToDto(NoteDocumentDao source);
 
         protected readonly Func<NoteDocumentDao, string> ConvertAuthor = s => s.Metadata.CreatorFirstName + s.Metadata.CreatorLastName;

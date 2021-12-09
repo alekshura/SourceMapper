@@ -15,7 +15,7 @@ namespace Compentio.Example.StructureMap.App.Mapper
         [Mapping(Source = nameof(InvoiceDao.TaxValue), Target = nameof(InvoiceDto.TaxAmount))]
         [Mapping(Source = nameof(InvoiceDao.GrossValue), Target = nameof(InvoiceDto.GrossAmount))]
         [Mapping(Source = nameof(InvoiceDao.Items), Target = nameof(InvoiceDto.Items), Expression = nameof(ConvertToItems))]
-        [InverseMapping(InverseMethodName = "MapInvoiceToDao")]
+        //[InverseMapping(InverseMethodName = "MapInvoiceToDao")]
         public abstract InvoiceDto MapInvoiceToDto(InvoiceDao source);
 
         [Mapping(Source = nameof(InvoiceItemDao.InvNum), Target = nameof(InvoiceItemDto.InvoiceNumber))]
@@ -23,7 +23,7 @@ namespace Compentio.Example.StructureMap.App.Mapper
         [Mapping(Source = nameof(InvoiceItemDao.NetValue), Target = nameof(InvoiceItemDto.NetAmount))]
         [Mapping(Source = nameof(InvoiceItemDao.TaxValue), Target = nameof(InvoiceItemDto.TaxAmount))]
         [Mapping(Source = nameof(InvoiceItemDao.GrossValue), Target = nameof(InvoiceItemDto.GrossAmount))]
-        [InverseMapping(InverseMethodName = "MapInvoiceItemToDao")]
+        //[InverseMapping(InverseMethodName = "MapInvoiceItemToDao")]
         public abstract InvoiceItemDto MapInvoiceItemToDto(InvoiceItemDao source);
 
         protected IEnumerable<InvoiceItemDto> ConvertToItems(IEnumerable<InvoiceItemDao> items)
