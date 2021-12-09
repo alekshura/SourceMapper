@@ -18,8 +18,6 @@ namespace Compentio.Example.Autofac.App
             builder.RegisterType<BooksService>().As<IBooksService>().InstancePerDependency();
             builder.RegisterType<BooksRepository>().As<IBooksRepository>().SingleInstance();
             builder.AddMappers();
-            // Override mapper class by custom implementation
-            builder.RegisterType<CustomBooksMapper>().As<IBooksMapper>().SingleInstance();
         }
     }
 }

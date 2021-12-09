@@ -79,24 +79,6 @@ namespace Compentio.SourceMapper.Tests.Processors
         }
 
         [Fact]
-        public void Mapper_User_Info_With_Array()
-        {
-            // Arrange 
-            var userMapperClass = new CustomClassUserDaoArrayMapper();
-            var userInfo = _fixture.Build<UserInfoWithArray>()
-                .Create();
-
-            // Act
-            var mappingResult = userMapperClass.MapToDatabaseModel(userInfo);
-            var addresses = userInfo.Addresses.Select(a => userMapperClass.MapFromAddress(a)).ToArray();
-
-
-            // Assert
-            mappingResult.UserAddresses.Should().NotBeEmpty();
-            mappingResult.UserAddresses.Should().BeEquivalentTo(addresses);
-        }
-
-        [Fact]
         public void Mapper_User_Data_Dao_With_List()
         {
             // Arrange 
@@ -111,23 +93,6 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Assert
             mappingResult.Addresses.Should().NotBeEmpty();
             mappingResult.Addresses.Should().BeEquivalentTo(addresses);
-        }
-
-        [Fact]
-        public void Mapper_User_Info_With_List()
-        {
-            // Arrange 
-            var userMapperClass = new CustomClassUserDaoListMapper();
-            var userInfo = _fixture.Build<UserInfoWithList>()
-                .Create();
-
-            // Act
-            var mappingResult = userMapperClass.MapToDatabaseModel(userInfo);
-            var addresses = userInfo.Addresses.Select(a => userMapperClass.MapFromAddress(a)).ToList();
-
-            // Assert
-            mappingResult.UserAddresses.Should().NotBeEmpty();
-            mappingResult.UserAddresses.Should().BeEquivalentTo(addresses);
         }
     }
 }

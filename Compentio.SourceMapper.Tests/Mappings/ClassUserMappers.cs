@@ -58,16 +58,6 @@ namespace Compentio.SourceMapper.Tests.Mappings
         public abstract Region MapRegion(RegionDao source);
     }
 
-    public class CustomClassUserDaoArrayMapper : ClassUserDaoArrayMapper
-    {
-        public override UserWithArrayDao MapToDatabaseModel(UserInfoWithArray source)
-        {
-            var result = base.MapToDatabaseModel(source);
-            result.UserAddresses = ConvertAddressesDao(source.Addresses);
-            return result;
-        }
-    }
-
     [Mapper(ClassName = "ClassUserDaoListMapper")]
     public abstract partial class UserDataListMapper
     {
@@ -90,15 +80,5 @@ namespace Compentio.SourceMapper.Tests.Mappings
 
         [InverseMapping(InverseMethodName = "MapFromRegion")]
         public abstract Region MapRegion(RegionDao source);
-    }
-
-    public class CustomClassUserDaoListMapper : ClassUserDaoListMapper
-    {
-        public override UserWithListDao MapToDatabaseModel(UserInfoWithList source)
-        {
-            var result = base.MapToDatabaseModel(source);
-            result.UserAddresses = ConvertAddressesDao(source.Addresses);
-            return result;
-        }
     }
 }
