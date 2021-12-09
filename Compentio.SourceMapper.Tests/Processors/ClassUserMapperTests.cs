@@ -1,98 +1,98 @@
-﻿using AutoFixture;
-using AutoFixture.AutoMoq;
-using Compentio.SourceMapper.Tests.Entities;
-using Compentio.SourceMapper.Tests.Mappings;
-using System.Linq;
-using FluentAssertions;
-using Xunit;
+﻿//using AutoFixture;
+//using AutoFixture.AutoMoq;
+//using Compentio.SourceMapper.Tests.Entities;
+//using Compentio.SourceMapper.Tests.Mappings;
+//using System.Linq;
+//using FluentAssertions;
+//using Xunit;
 
-namespace Compentio.SourceMapper.Tests.Processors
-{
-    public class ClassUserMapperTests
-    {
-        private readonly IFixture _fixture;
+//namespace Compentio.SourceMapper.Tests.Processors
+//{
+//    public class ClassUserMapperTests
+//    {
+//        private readonly IFixture _fixture;
 
-        public ClassUserMapperTests()
-        {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization { ConfigureMembers = true })
-                .Customize(new SupportMutableValueTypesCustomization());         
-        }
+//        public ClassUserMapperTests()
+//        {
+//            _fixture = new Fixture()
+//                .Customize(new AutoMoqCustomization { ConfigureMembers = true })
+//                .Customize(new SupportMutableValueTypesCustomization());         
+//        }
 
 
-        [Fact]
-        public void Mapper_User_Dao_Match_Converters()
-        {
-            // Arrange 
-            var userMapperClass = new ClassUserDaoMapper();
-            var userDao = _fixture.Build<UserDao>()
-                .With(p => p.UserGender, UserGender.Female)
-                .Create();
+//        [Fact]
+//        public void Mapper_User_Dao_Match_Converters()
+//        {
+//            // Arrange 
+//            var userMapperClass = new ClassUserDaoMapper();
+//            var userDao = _fixture.Build<UserDao>()
+//                .With(p => p.UserGender, UserGender.Female)
+//                .Create();
 
-            // Act
-            var mappingResult = userMapperClass.MapToDomainModel(userDao);
+//            // Act
+//            var mappingResult = userMapperClass.MapToDomainModel(userDao);
 
-            // Assert
-            mappingResult.Name.Should().Be($"{userDao.FirstName} {userDao.LastName}");
-            mappingResult.BirthDate.Should().Be(userDao.BirthDate);
-            mappingResult.Id.Should().Be((int)userDao.UserId);
-            mappingResult.Sex.Should().Be(Sex.W);            
-        }
+//            // Assert
+//            mappingResult.Name.Should().Be($"{userDao.FirstName} {userDao.LastName}");
+//            mappingResult.BirthDate.Should().Be(userDao.BirthDate);
+//            mappingResult.Id.Should().Be((int)userDao.UserId);
+//            mappingResult.Sex.Should().Be(Sex.W);            
+//        }
 
-        [Fact]
-        public void Mapper_User_Info_Match_Converters()
-        {
-            // Arrange 
-            var userMapperClass = new ClassUserDaoMapper();
-            var userInfo = _fixture.Build<UserInfo>()
-                .With(p => p.Sex, Sex.W)
-                .Create();
+//        [Fact]
+//        public void Mapper_User_Info_Match_Converters()
+//        {
+//            // Arrange 
+//            var userMapperClass = new ClassUserDaoMapper();
+//            var userInfo = _fixture.Build<UserInfo>()
+//                .With(p => p.Sex, Sex.W)
+//                .Create();
 
-            // Act
-            var mappingResult = userMapperClass.MapToDatabaseModel(userInfo);
+//            // Act
+//            var mappingResult = userMapperClass.MapToDatabaseModel(userInfo);
 
-            // Assert
-            mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
-            mappingResult.UserGender.Should().Be(UserGender.Female);
+//            // Assert
+//            mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
+//            mappingResult.UserGender.Should().Be(UserGender.Female);
 
-            // Not mapped
-            mappingResult.UserId.Should().NotBe(userInfo.Id);
-            mappingResult.FirstName.Should().BeNullOrEmpty();
-            mappingResult.LastName.Should().BeNullOrEmpty();
-        }
+//            // Not mapped
+//            mappingResult.UserId.Should().NotBe(userInfo.Id);
+//            mappingResult.FirstName.Should().BeNullOrEmpty();
+//            mappingResult.LastName.Should().BeNullOrEmpty();
+//        }
 
-        [Fact]
-        public void Mapper_User_Data_Dao_With_Array()
-        {
-            // Arrange 
-            var userMapperClass = new ClassUserDaoArrayMapper();
-            var userDao = _fixture.Build<UserWithArrayDao>()
-                .Create();
+//        [Fact]
+//        public void Mapper_User_Data_Dao_With_Array()
+//        {
+//            // Arrange 
+//            var userMapperClass = new ClassUserDaoArrayMapper();
+//            var userDao = _fixture.Build<UserWithArrayDao>()
+//                .Create();
 
-            // Act
-            var mappingResult = userMapperClass.MapToDomainModel(userDao);
-            var addresses = userDao.UserAddresses.Select(a => userMapperClass.MapAddress(a)).ToArray();
+//            // Act
+//            var mappingResult = userMapperClass.MapToDomainModel(userDao);
+//            var addresses = userDao.UserAddresses.Select(a => userMapperClass.MapAddress(a)).ToArray();
 
-            // Assert
-            mappingResult.Addresses.Should().NotBeEmpty();
-            mappingResult.Addresses.Should().BeEquivalentTo(addresses);
-        }
+//            // Assert
+//            mappingResult.Addresses.Should().NotBeEmpty();
+//            mappingResult.Addresses.Should().BeEquivalentTo(addresses);
+//        }
 
-        [Fact]
-        public void Mapper_User_Data_Dao_With_List()
-        {
-            // Arrange 
-            var userMapperClass = new ClassUserDaoListMapper();
-            var userDao = _fixture.Build<UserWithListDao>()
-                .Create();
+//        [Fact]
+//        public void Mapper_User_Data_Dao_With_List()
+//        {
+//            // Arrange 
+//            var userMapperClass = new ClassUserDaoListMapper();
+//            var userDao = _fixture.Build<UserWithListDao>()
+//                .Create();
 
-            // Act
-            var mappingResult = userMapperClass.MapToDomainModel(userDao);
-            var addresses = userDao.UserAddresses.Select(a => userMapperClass.MapAddress(a)).ToList();
+//            // Act
+//            var mappingResult = userMapperClass.MapToDomainModel(userDao);
+//            var addresses = userDao.UserAddresses.Select(a => userMapperClass.MapAddress(a)).ToList();
 
-            // Assert
-            mappingResult.Addresses.Should().NotBeEmpty();
-            mappingResult.Addresses.Should().BeEquivalentTo(addresses);
-        }
-    }
-}
+//            // Assert
+//            mappingResult.Addresses.Should().NotBeEmpty();
+//            mappingResult.Addresses.Should().BeEquivalentTo(addresses);
+//        }
+//    }
+//}
