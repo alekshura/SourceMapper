@@ -23,14 +23,14 @@ namespace Compentio.SourceMapper.Metadata
 
     internal class ExternalMappersMetadata : IExternalMappersMetadata
     {
-        private IEnumerable<IAssemblySymbol> _assemblySymbols;
+        private readonly IEnumerable<IAssemblySymbol> _assemblySymbols;
 
         public ExternalMappersMetadata(IEnumerable<IAssemblySymbol> assemblySymbols)
         {
             _assemblySymbols = assemblySymbols;
         }
 
-        public IEnumerable<IAssemblySymbol> ExternalAssemblies => _assemblySymbols.Where(a => !a.Identity.HasPublicKey);
+        public IEnumerable<IAssemblySymbol> ExternalAssemblies => _assemblySymbols?.Where(a => !a.Identity.HasPublicKey);
 
         public IEnumerable<IMapperMetadata> ExternalMappers
         {
@@ -43,10 +43,13 @@ namespace Compentio.SourceMapper.Metadata
                     nSpaceCollection.AddRange(GetNamespaces(assembly.GlobalNamespace.GetNamespaceMembers()));
                 }
 
-                var typesCollection = nSpaceCollection.SelectMany(n => n.GetTypeMembers());
-                var mappersCollection = typesCollection.Where(t => t.GetAttributes().Any(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MapperAttribute)));
+                var typesCollection = nSpaceCollection?.SelectMany(n => n.GetTypeMembers());
+                var mappersCollection = typesCollection?.Where(t => t.GetAttributes().Any(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MapperAttribute)));
 
-                return mappersCollection.Select(t => { return new MapperMetadata(t); });
+                return mappersCollection?.Select(t => 
+                { 
+                    return new MapperMetadata(t); 
+                });
             }
         }
 
