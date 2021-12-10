@@ -19,6 +19,8 @@ namespace Compentio.SourceMapper.Generators
         /// <param name="context"></param>
         public void Execute(GeneratorExecutionContext context)
         {
+            var externalMappersMetadata = new ExternalMappersMetadata(context.Compilation.SourceModule.ReferencedAssemblySymbols);
+
             if (context.SyntaxReceiver is null)
             {
                 throw new ArgumentNullException(nameof(context), $"{nameof(context.SyntaxReceiver)} could not be null");
