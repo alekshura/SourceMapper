@@ -16,7 +16,7 @@ namespace Compentio.SourceMapper.Metadata
         IEnumerable<IAssemblySymbol> ExternalAssemblies { get; }
 
         /// <summary>
-        /// Collection of referenced mappers 
+        /// Collection of referenced mappers <see cref="MapperMetadata"/>
         /// </summary>
         IEnumerable<IMapperMetadata> ExternalMappers { get; }
     }
@@ -46,9 +46,9 @@ namespace Compentio.SourceMapper.Metadata
                 var typesCollection = nSpaceCollection?.SelectMany(n => n.GetTypeMembers());
                 var mappersCollection = typesCollection?.Where(t => t.GetAttributes().Any(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MapperAttribute)));
 
-                return mappersCollection?.Select(t => 
-                { 
-                    return new MapperMetadata(t); 
+                return mappersCollection?.Select(t =>
+                {
+                    return new MapperMetadata(t);
                 });
             }
         }
@@ -59,8 +59,8 @@ namespace Compentio.SourceMapper.Metadata
 
             foreach (var nSpace in namespaceSymbols)
             {
-                resultSymbols.AddRange(GetNamespaces(nSpace.GetNamespaceMembers()));
                 resultSymbols.Add(nSpace);
+                resultSymbols.AddRange(GetNamespaces(nSpace.GetNamespaceMembers()));
             }
 
             return resultSymbols;
