@@ -1,30 +1,27 @@
-﻿using AutoFixture;
-using Compentio.SourceMapper.Metadata;
+﻿using Compentio.SourceMapper.Metadata;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
-using Moq;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Compentio.SourceMapper.Tests.Metadata
 {
-    public class ExternalMappersMetadataTests
+    public class ExternalMappersMetadataTests : ExternalMappersMetadataTestBase
     {
-        private readonly IFixture _fixture;
-        private readonly Mock<IAssemblySymbol> _mockAssembly;
-        private const string FakeAssemblyName = "FakeAssemblyName";
+        protected override string FakeNamespace => "FakeNamespace";
 
-        public ExternalMappersMetadataTests()
-        {
-            _fixture = new Fixture();
-            _mockAssembly = _fixture.Create<Mock<IAssemblySymbol>>();
-        }
+        protected override string FakeClassName => "FakeClassName";
+
+        protected override string FakeInterfaceName => "FakeInterfaceName";
+
+        protected override string FakeAssemblyName => "FakeAssemblyName";
 
         [Fact]
         public void Instance_ExternalAssemblies_NotEmpty()
         {
             // Arrange
-            _mockAssembly.Setup(a => a.Identity).Returns(GetFakeAssemblyIdentity());
+            _mockAssembly.Setup(a => a.Identity).Returns(GetFakeAssemblyIdentity(FakeAssemblyName));
 
             // Act
             var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
@@ -44,9 +41,18 @@ namespace Compentio.SourceMapper.Tests.Metadata
             externalMappersMetadata.ExternalAssemblies.Should().BeNull();
         }
 
-        private static AssemblyIdentity GetFakeAssemblyIdentity()
+        [Fact]
+        public void Instance_ExternalMappers_NotEmpty()
         {
-            return new AssemblyIdentity(FakeAssemblyName);
+            // Arrange
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetFakeClassAttributeData(FakeSourceCode));
+
+            // Act
+            var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
+
+            // Assert
+            externalMappersMetadata.ExternalMappers.Should().NotBeNull();
+            externalMappersMetadata.ExternalMappers.Should().NotBeEmpty();
         }
     }
 }
