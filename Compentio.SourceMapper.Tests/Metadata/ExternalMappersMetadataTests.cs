@@ -54,5 +54,37 @@ namespace Compentio.SourceMapper.Tests.Metadata
             externalMappersMetadata.ExternalMappers.Should().NotBeNull();
             externalMappersMetadata.ExternalMappers.Should().NotBeEmpty();
         }
+
+        [Fact]
+        public void Instance_ClassExternalMappers_NotEmpty()
+        {
+            // Arrange
+            _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Class);
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetFakeClassAttributeData(FakeClassSourceCode));
+
+            // Act
+            var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
+
+            // Assert
+            externalMappersMetadata.ExternalMappers.Should().NotBeNull();
+            externalMappersMetadata.ExternalMappers.Should().NotBeEmpty();
+            externalMappersMetadata.ExternalMappers.First().TypeKind.Should().Be(TypeKind.Class);
+        }
+
+        [Fact]
+        public void Instance_InterfaceExternalMappers_NotEmpty()
+        {
+            // Arrange
+            _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Interface);
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetFakeInterfaceAttributeData(FakeInterfaceSourceCode));
+
+            // Act
+            var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
+
+            // Assert
+            externalMappersMetadata.ExternalMappers.Should().NotBeNull();
+            externalMappersMetadata.ExternalMappers.Should().NotBeEmpty();
+            externalMappersMetadata.ExternalMappers.First().TypeKind.Should().Be(TypeKind.Interface);
+        }
     }
 }
