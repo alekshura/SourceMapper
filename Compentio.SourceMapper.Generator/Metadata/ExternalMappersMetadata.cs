@@ -30,7 +30,7 @@ namespace Compentio.SourceMapper.Metadata
             _assemblySymbols = assemblySymbols;
         }
 
-        public IEnumerable<IAssemblySymbol> ExternalAssemblies => _assemblySymbols?.Where(a => !a.Identity.HasPublicKey);
+        public IEnumerable<IAssemblySymbol> ExternalAssemblies => _assemblySymbols?.Where(a => a.Identity?.HasPublicKey == false);
 
         public IEnumerable<IMapperMetadata> ExternalMappers
         {
