@@ -48,7 +48,7 @@ namespace Compentio.SourceMapper.Metadata
 
                 return mappersCollection?.Select(t =>
                 {
-                    return new MapperMetadata(t);
+                    return new MapperMetadata(t, true);
                 });
             }
         }

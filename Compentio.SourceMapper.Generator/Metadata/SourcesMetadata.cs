@@ -22,6 +22,12 @@ namespace Compentio.SourceMapper.Metadata
         void AddOrUpdate(IMapperMetadata mapperMetadata);
 
         /// <summary>
+        /// Add list of mapper metadatas. <see cref="MapperMetadata">
+        /// </summary>
+        /// <param name="mapperMetadatas"></param>
+        void AddRange(IEnumerable<IMapperMetadata> mapperMetadatas);
+
+        /// <summary>
         /// List of defined mappers
         /// </summary>
         IReadOnlyCollection<IMapperMetadata> Mappers { get; }
@@ -57,6 +63,14 @@ namespace Compentio.SourceMapper.Metadata
             else
             {
                 _mappers.Add(mapperMetadata);
+            }
+        }
+
+        public void AddRange(IEnumerable<IMapperMetadata> mapperMetadatas)
+        {
+            foreach(var mapper in mapperMetadatas)
+            {
+                AddOrUpdate(mapper);
             }
         }
     }

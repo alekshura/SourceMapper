@@ -41,6 +41,7 @@ namespace Compentio.SourceMapper.Generators
 
                 sourcesMetadata.AddOrUpdate(new MapperMetadata(mapperType));
             }
+            sourcesMetadata.AddRange(externalMappersMetadata.ExternalMappers);
 
             var sourceGenerator = new CodeSourceGenerator(sourcesMetadata);
             sourceGenerator.GenerateMappings(context);
