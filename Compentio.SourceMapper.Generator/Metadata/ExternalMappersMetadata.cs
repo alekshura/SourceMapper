@@ -13,12 +13,12 @@ namespace Compentio.SourceMapper.Metadata
         /// <summary>
         /// Collection of referenced non public assemblies (only from current solution)
         /// </summary>
-        IEnumerable<IAssemblySymbol> ExternalAssemblies { get; }
+        IReadOnlyCollection<IAssemblySymbol> ExternalAssemblies { get; }
 
         /// <summary>
         /// Collection of referenced mappers <see cref="MapperMetadata"/>
         /// </summary>
-        IEnumerable<IMapperMetadata> ExternalMappers { get; }
+        IReadOnlyCollection<IMapperMetadata> ExternalMappers { get; }
     }
 
     internal class ExternalMappersMetadata : IExternalMappersMetadata
@@ -30,9 +30,9 @@ namespace Compentio.SourceMapper.Metadata
             _assemblySymbols = assemblySymbols;
         }
 
-        public IEnumerable<IAssemblySymbol> ExternalAssemblies => _assemblySymbols?.Where(a => a.Identity?.HasPublicKey == false);
+        public IReadOnlyCollection<IAssemblySymbol> ExternalAssemblies => _assemblySymbols?.Where(a => a.Identity?.HasPublicKey == false).ToList().AsReadOnly();
 
-        public IEnumerable<IMapperMetadata> ExternalMappers
+        public IReadOnlyCollection<IMapperMetadata> ExternalMappers
         {
             get
             {
@@ -49,7 +49,7 @@ namespace Compentio.SourceMapper.Metadata
                 return mappersCollection?.Select(t =>
                 {
                     return new MapperMetadata(t, true);
-                });
+                }).ToList().AsReadOnly();
             }
         }
 
