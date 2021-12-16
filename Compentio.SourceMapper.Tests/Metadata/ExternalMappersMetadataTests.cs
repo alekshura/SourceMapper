@@ -9,19 +9,19 @@ namespace Compentio.SourceMapper.Tests.Metadata
 {
     public class ExternalMappersMetadataTests : ExternalMappersMetadataTestBase
     {
-        protected override string FakeNamespace => "FakeNamespace";
+        protected override string MockNamespace => "MockNamespace";
 
-        protected override string FakeClassName => "FakeClassName";
+        protected override string MockClassName => "MockClassName";
 
-        protected override string FakeInterfaceName => "FakeInterfaceName";
+        protected override string MockInterfaceName => "MockInterfaceName";
 
-        protected override string FakeAssemblyName => "FakeAssemblyName";
+        protected override string MockAssemblyName => "MockAssemblyName";
 
         [Fact]
         public void Instance_ExternalAssemblies_NotEmpty()
         {
             // Arrange
-            _mockAssembly.Setup(a => a.Identity).Returns(GetFakeAssemblyIdentity(FakeAssemblyName));
+            _mockAssembly.Setup(a => a.Identity).Returns(GetAssemblyIdentityMock(MockAssemblyName));
 
             // Act
             var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
@@ -45,7 +45,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_ExternalMappers_NotEmpty()
         {
             // Arrange
-            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetFakeClassAttributeData(FakeSourceCode));
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetClassAttributeDataMock(MockSourceCode));
 
             // Act
             var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
@@ -60,7 +60,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         {
             // Arrange
             _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Class);
-            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetFakeClassAttributeData(FakeClassSourceCode));
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetClassAttributeDataMock(MockClassSourceCode));
 
             // Act
             var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
@@ -76,7 +76,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         {
             // Arrange
             _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Interface);
-            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetFakeInterfaceAttributeData(FakeInterfaceSourceCode));
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetInterfaceAttributeDataMock(MockInterfaceSourceCode));
 
             // Act
             var externalMappersMetadata = new ExternalMappersMetadata(new List<IAssemblySymbol> { _mockAssembly.Object });
