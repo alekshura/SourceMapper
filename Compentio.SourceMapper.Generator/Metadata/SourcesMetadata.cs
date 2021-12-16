@@ -68,7 +68,9 @@ namespace Compentio.SourceMapper.Metadata
 
         public void AddRange(IEnumerable<IMapperMetadata> mapperMetadatas)
         {
-            foreach(var mapper in mapperMetadatas)
+            if (mapperMetadatas is null) return;
+
+            foreach(var mapper in (mapperMetadatas))
             {
                 AddOrUpdate(mapper);
             }
