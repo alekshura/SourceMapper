@@ -16,11 +16,11 @@ namespace Compentio.SourceMapper.Tests.Metadata
         private readonly Mock<Location> _mockLocation;
         private readonly Mock<ISymbol> _mockSymbol;
 
-        protected override string FakeNamespace => "FakeNamespace";
+        protected override string MockNamespace => "MockNamespace";
 
-        protected override string FakeClassName => "FakeClassName";
+        protected override string MockClassName => "MockClassName";
 
-        protected override string FakeMethodName => "FakeMethodName";
+        protected override string MockMethodName => "MockMethodName";
 
         public PropertyMetadataTests()
         {
@@ -119,7 +119,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void InstanceForClass_ValidIgnoreInMapping()
         {
             // Arrange
-            _mockPropertySymbol.Setup(p => p.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCode, FakeMethodName));
+            _mockPropertySymbol.Setup(p => p.GetAttributes()).Returns(GetAttributeDataMock(MockSourceCode, MockMethodName));
 
             // Act
             var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);

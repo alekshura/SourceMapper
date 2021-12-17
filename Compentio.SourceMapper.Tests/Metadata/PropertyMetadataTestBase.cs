@@ -8,24 +8,24 @@ namespace Compentio.SourceMapper.Tests.Metadata
 {
     public abstract class PropertyMetadataTestBase
     {
-        protected abstract string FakeNamespace { get; }
-        protected abstract string FakeClassName { get; }
-        protected abstract string FakeMethodName { get; }
+        protected abstract string MockNamespace { get; }
+        protected abstract string MockClassName { get; }
+        protected abstract string MockMethodName { get; }
 
-        protected ImmutableArray<AttributeData> GetFakeAttributeData(string sourceCode, string methodName)
+        protected ImmutableArray<AttributeData> GetAttributeDataMock(string sourceCode, string methodName)
         {
-            var compilation = GetFakeCompilation(sourceCode);
+            var compilation = GetCompilationMock(sourceCode);
 
-            INamedTypeSymbol fakeClass = compilation.GetTypeByMetadataName($"{FakeNamespace}.{FakeClassName}");
-            IMethodSymbol fakeMethod = fakeClass.GetMembers(methodName).First() as IMethodSymbol;
-            IParameterSymbol fakeParameter = fakeMethod.Parameters.First();
-            IPropertySymbol fakeProperty = fakeParameter.Type.GetMembers()
+            var fakeClass = compilation.GetTypeByMetadataName($"{MockNamespace}.{MockClassName}");
+            var fakeMethod = fakeClass.GetMembers(methodName).First() as IMethodSymbol;
+            var fakeParameter = fakeMethod.Parameters.First();
+            var fakeProperty = fakeParameter.Type.GetMembers()
                 .Where(member => member as IPropertySymbol is not null).First() as IPropertySymbol;
 
             return fakeProperty.GetAttributes();
         }
 
-        protected Compilation GetFakeCompilation(string sourceCode)
+        protected Compilation GetCompilationMock(string sourceCode)
         {
             return CSharpCompilation.Create("PropertyMetadataTestBase",
                 new[] { CSharpSyntaxTree.ParseText(sourceCode) },
@@ -33,18 +33,18 @@ namespace Compentio.SourceMapper.Tests.Metadata
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
         }
 
-        protected string FakeSourceCode => @$"
+        protected string MockSourceCode => @$"
 
-namespace {FakeNamespace}
+namespace {MockNamespace}
 {{
     using System;
 
-    public abstract class {FakeClassName}
+    public abstract class {MockClassName}
     {{
-        public abstract FakeTypeDto {FakeMethodName}(FakeTypeDao fake);
+        public abstract MockTypeDto {MockMethodName}(MockTypeDao fake);
     }}
 
-    public class FakeTypeDao
+    public class MockTypeDao
     {{
         [IgnoreMapping]
         public virtual string PropertyToIgnore {{ get; set; }}
