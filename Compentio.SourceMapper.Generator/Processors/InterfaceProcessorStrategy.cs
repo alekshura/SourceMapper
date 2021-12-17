@@ -65,7 +65,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GenerateInterfaceMethod(IMethodMetadata methodMetadata)
         {
-            return $"{AttributesMatchers.GetInverseMethodFullName(methodMetadata)};";
+            return $"{GetInverseMethodFullName(methodMetadata)};";
         }
 
         protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
@@ -79,7 +79,7 @@ namespace Compentio.SourceMapper.Processors
                 var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
-                if (AttributesMatchers.IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
+                if (IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
 
                 mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
             }

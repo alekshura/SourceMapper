@@ -148,43 +148,5 @@ namespace Compentio.SourceMapper.Tests.Matchers
             // Assert
             result.Should().BeNull();
         }
-
-        [Fact]
-        public void IgnorePropertyMapping_IgnoreDueToSourceMetadata()
-        {
-            // Arrange
-            _mockSourcePropertyMetadata.Setup(s => s.IgnoreInMapping).Returns(true);
-            _mockTargetPropertyMetadata.Setup(t => t.IgnoreInMapping).Returns(false);
-
-            // Act
-            var result = AttributesMatchers.IgnorePropertyMapping(_mockSourcePropertyMetadata.Object, _mockTargetPropertyMetadata.Object);
-
-            // Assert
-            result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void IgnorePropertyMapping_IgnoreDueToTargetMetadata()
-        {
-            // Arrange
-            _mockSourcePropertyMetadata.Setup(s => s.IgnoreInMapping).Returns(false);
-            _mockTargetPropertyMetadata.Setup(t => t.IgnoreInMapping).Returns(true);
-
-            // Act
-            var result = AttributesMatchers.IgnorePropertyMapping(_mockSourcePropertyMetadata.Object, _mockTargetPropertyMetadata.Object);
-
-            // Assert
-            result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void IgnorePropertyMapping_NullProperties_ReturnFalse()
-        {
-            // Act
-            var result = AttributesMatchers.IgnorePropertyMapping(null, null);
-
-            // Assert
-            result.Should().BeFalse();
-        }
     }
 }

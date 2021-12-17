@@ -22,7 +22,7 @@ namespace Compentio.SourceMapper.Metadata
         bool IsClass { get; }
 
         /// <summary>
-        /// Indicate that property should be ignored during mapping generating
+        /// Indicate that property should be ignored during mapping generating, due to <see cref="IgnoreMappingAttribute">
         /// </summary>
         bool IgnoreInMapping { get; }
 
@@ -65,6 +65,9 @@ namespace Compentio.SourceMapper.Metadata
 
         public Location? Location => _propertySymbol.Locations.FirstOrDefault();
 
+        /// <summary>
+        /// Indicate that property should be ignored during mapping generating, due to <see cref="IgnoreMappingAttribute">
+        /// </summary>
         public bool IgnoreInMapping
         {
             get

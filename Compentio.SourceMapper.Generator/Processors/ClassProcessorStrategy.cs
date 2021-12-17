@@ -64,7 +64,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialClassMethod(IMethodMetadata methodMetadata)
         {
-            return $"public abstract {AttributesMatchers.GetInverseMethodFullName(methodMetadata)};";
+            return $"public abstract {GetInverseMethodFullName(methodMetadata)};";
         }
 
         protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
@@ -78,7 +78,7 @@ namespace Compentio.SourceMapper.Processors
                 var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
                 var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
-                if (AttributesMatchers.IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
+                if (IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
 
                 var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
                 var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);

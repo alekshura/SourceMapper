@@ -58,29 +58,5 @@ namespace Compentio.SourceMapper.Matchers
         {
             return !string.IsNullOrEmpty(methodMetadata.InverseMethodName);
         }
-
-        /// <summary>
-        /// Method returns full inverse method name based on <see cref="MethodMetadata" />
-        /// </summary>
-        /// <param name="methodMetadata">Method metadata</param>
-        /// <returns></returns>
-        internal static string GetInverseMethodFullName(IMethodMetadata methodMetadata)
-        {
-            var inverseMethodFullName =
-                $"{methodMetadata.Parameters.First().FullName} {methodMetadata.InverseMethodName} ({methodMetadata.ReturnType.FullName} {methodMetadata.Parameters.First().Name})";
-
-            return inverseMethodFullName;
-        }
-
-        /// <summary>
-        /// Metchod checks that property metadata should be ignored during mapping due to <see cref="IgnoreMappingAttribute"/>
-        /// </summary>
-        /// <param name="sourcePropertyMetadata"></param>
-        /// <param name="targetPropertyMetadata"></param>
-        /// <returns></returns>
-        internal static bool IgnorePropertyMapping(IPropertyMetadata? sourcePropertyMetadata, IPropertyMetadata? targetPropertyMetadata)
-        {
-            return (sourcePropertyMetadata?.IgnoreInMapping is true || targetPropertyMetadata?.IgnoreInMapping is true) ;
-        }
     }
 }
