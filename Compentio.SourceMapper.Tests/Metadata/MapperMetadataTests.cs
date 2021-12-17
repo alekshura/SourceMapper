@@ -16,11 +16,11 @@ namespace Compentio.SourceMapper.Tests.Metadata
         private readonly Mock<INamespaceSymbol> _mockNamespaceSymbol;
         private readonly Mock<Location> _mockLocation;
 
-        protected override string FakeClassName => "FakeClassName";
+        protected override string MockClassName => "MockClassName";
 
-        protected override string FakeNamespace => "Compentio.SourceMapper.Tests";
+        protected override string MockNamespace => "Compentio.SourceMapper.Tests";
 
-        protected override string FakeInterfaceName => "FakeInterfaceName";
+        protected override string MockInterfaceName => "MockInterfaceName";
 
         public MapperMetadataTests()
         {
@@ -49,27 +49,27 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_Class_ValidTargetClassName()
         {
             // Arrange
-            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetFakeClassAttributeData(FakeClassSourceCode));
+            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetClassAttributeDataMock(MockClassSourceCode));
 
             // Act
             var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);
 
             // Assert
-            mapperMetadata.TargetClassName.Should().Be(FakeClassName);
+            mapperMetadata.TargetClassName.Should().Be(MockClassName);
         }
 
         [Fact]
         public void Instance_Interface_ValidTargetClassName()
         {
             // Arrange
-            _mockTypeSymbol.Setup(t => t.Name).Returns(FakeInterfaceName);
-            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetFakeInterfaceAttributeData(FakeInterfaceSourceCode));
+            _mockTypeSymbol.Setup(t => t.Name).Returns(MockInterfaceName);
+            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetInterfaceAttributeDataMock(MockInterfaceSourceCode));
 
             // Act
             var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);
 
             // Assert
-            mapperMetadata.TargetClassName.Should().Be(FakeInterfaceName);
+            mapperMetadata.TargetClassName.Should().Be(MockInterfaceName);
         }
 
         [Fact]
@@ -77,40 +77,40 @@ namespace Compentio.SourceMapper.Tests.Metadata
         {
             // Arrange
 
-            _mockTypeSymbol.Setup(t => t.Name).Returns(FakeClassName);
-            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetFakeClassAttributeData(FakeSourceCode));
+            _mockTypeSymbol.Setup(t => t.Name).Returns(MockClassName);
+            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetClassAttributeDataMock(MockSourceCode));
 
             // Act
             var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);
 
             // Assert
-            mapperMetadata.TargetClassName.Should().Be($"{FakeClassName}Impl");
+            mapperMetadata.TargetClassName.Should().Be($"{MockClassName}Impl");
         }
 
         [Fact]
         public void Instance_ValidName()
         {
             // Arrange
-            _mockTypeSymbol.Setup(t => t.Name).Returns(FakeClassName);
+            _mockTypeSymbol.Setup(t => t.Name).Returns(MockClassName);
 
             // Act
             var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);
 
             // Assert
-            mapperMetadata.Name.Should().Be(FakeClassName);
+            mapperMetadata.Name.Should().Be(MockClassName);
         }
 
         [Fact]
         public void Instance_ValidFileName()
         {
             // Arrange
-            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetFakeClassAttributeData(FakeClassSourceCode));
+            _mockTypeSymbol.Setup(t => t.GetAttributes()).Returns(GetClassAttributeDataMock(MockClassSourceCode));
 
             // Act
             var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);
 
             // Assert
-            mapperMetadata.FileName.Should().Be($"{FakeClassName}.cs");
+            mapperMetadata.FileName.Should().Be($"{MockClassName}.cs");
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_Class_NotEmptyMethodsMetadata()
         {
             // Arrange
-            _mockTypeSymbol.Setup(t => t.GetMembers()).Returns(GetFakeClassMethods(FakeClassSourceCode));
+            _mockTypeSymbol.Setup(t => t.GetMembers()).Returns(GetClassMethodsMock(MockClassSourceCode));
 
             // Act
             var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object);

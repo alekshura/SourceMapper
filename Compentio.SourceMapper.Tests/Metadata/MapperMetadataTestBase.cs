@@ -7,38 +7,38 @@ namespace Compentio.SourceMapper.Tests.Metadata
 {
     public abstract class MapperMetadataTestBase
     {
-        protected abstract string FakeNamespace { get; }
-        protected abstract string FakeClassName { get; }
-        protected abstract string FakeInterfaceName { get; }
+        protected abstract string MockNamespace { get; }
+        protected abstract string MockClassName { get; }
+        protected abstract string MockInterfaceName { get; }
 
-        protected ImmutableArray<ISymbol> GetFakeClassMethods(string sourceCode)
+        protected ImmutableArray<ISymbol> GetClassMethodsMock(string sourceCode)
         {
-            var compilation = GetFakeCompilation(sourceCode);
+            var compilation = GetCompilationMock(sourceCode);
 
-            INamedTypeSymbol fakeClass = compilation.GetTypeByMetadataName($"{FakeNamespace}.{FakeClassName}");
+            var mockClass = compilation.GetTypeByMetadataName($"{MockNamespace}.{MockClassName}");
 
-            return fakeClass.GetMembers();
+            return mockClass.GetMembers();
         }
 
-        protected ImmutableArray<AttributeData> GetFakeClassAttributeData(string sourceCode)
+        protected ImmutableArray<AttributeData> GetClassAttributeDataMock(string sourceCode)
         {
-            var compilation = GetFakeCompilation(sourceCode);
+            var compilation = GetCompilationMock(sourceCode);
 
-            INamedTypeSymbol fakeClass = compilation.GetTypeByMetadataName($"{FakeNamespace}.{FakeClassName}");
+            var mockClass = compilation.GetTypeByMetadataName($"{MockNamespace}.{MockClassName}");
 
-            return fakeClass.GetAttributes();
+            return mockClass.GetAttributes();
         }
 
-        protected ImmutableArray<AttributeData> GetFakeInterfaceAttributeData(string sourceCode)
+        protected ImmutableArray<AttributeData> GetInterfaceAttributeDataMock(string sourceCode)
         {
-            var compilation = GetFakeCompilation(sourceCode);
+            var compilation = GetCompilationMock(sourceCode);
 
-            INamedTypeSymbol fakeClass = compilation.GetTypeByMetadataName($"{FakeNamespace}.{FakeInterfaceName}");
+            var mockInterface = compilation.GetTypeByMetadataName($"{MockNamespace}.{MockInterfaceName}");
 
-            return fakeClass.GetAttributes();
+            return mockInterface.GetAttributes();
         }
 
-        protected Compilation GetFakeCompilation(string sourceCode)
+        protected Compilation GetCompilationMock(string sourceCode)
         {
             return CSharpCompilation.Create("MapperMetadataTestBase",
                 new[] { CSharpSyntaxTree.ParseText(sourceCode) },
@@ -46,37 +46,37 @@ namespace Compentio.SourceMapper.Tests.Metadata
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
         }
 
-        protected string FakeClassSourceCode => @$"
-namespace {FakeNamespace}
+        protected string MockClassSourceCode => @$"
+namespace {MockNamespace}
 {{
     using System;
-    [Mapper(ClassName = ""{FakeClassName}"")]
-    public abstract partial class {FakeClassName}
+    [Mapper(ClassName = ""{MockClassName}"")]
+    public abstract partial class {MockClassName}
     {{
-        public abstract FakeTypeDto FakeMethodName(FakeTypeDao fake);
+        public abstract MockTypeDto MockMethodName(MockTypeDao mock);
     }}
     {MapperAttributeClassCode}
 }}
 ";
 
-        protected string FakeInterfaceSourceCode => @$"
-namespace {FakeNamespace}
+        protected string MockInterfaceSourceCode => @$"
+namespace {MockNamespace}
 {{
     using System;
-    [Mapper(ClassName = ""{FakeInterfaceName}"")]
-    public partial interface {FakeInterfaceName}
+    [Mapper(ClassName = ""{MockInterfaceName}"")]
+    public partial interface {MockInterfaceName}
     {{
     }}
     {MapperAttributeClassCode}
 }}
 ";
 
-        protected string FakeSourceCode => @$"
-namespace {FakeNamespace}
+        protected string MockSourceCode => @$"
+namespace {MockNamespace}
 {{
     using System;
     [Mapper]
-    public partial class {FakeClassName}
+    public partial class {MockClassName}
     {{
     }}
     {MapperAttributeClassCode}

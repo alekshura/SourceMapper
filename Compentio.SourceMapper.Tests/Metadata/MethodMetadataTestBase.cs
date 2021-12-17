@@ -8,22 +8,22 @@ namespace Compentio.SourceMapper.Tests.Metadata
 {
     public abstract class MethodMetadataTestBase
     {
-        protected abstract string FakeNamespace { get; }
-        protected abstract string FakeClassName { get; }
-        protected abstract string FakeMethodName { get; }
-        protected abstract string FakeInverseMethodName { get; }
+        protected abstract string MockNamespace { get; }
+        protected abstract string MockClassName { get; }
+        protected abstract string MockMethodName { get; }
+        protected abstract string MockInverseMethodName { get; }
 
-        protected ImmutableArray<AttributeData> GetFakeAttributeData(string sourceCode, string methodName)
+        protected ImmutableArray<AttributeData> GetAttributeDataMock(string sourceCode, string methodName)
         {
-            var compilation = GetFakeCompilation(sourceCode);
+            var compilation = GetCompilationMock(sourceCode);
 
-            INamedTypeSymbol fakeClass = compilation.GetTypeByMetadataName($"{FakeNamespace}.{FakeClassName}");
-            IMethodSymbol fakeMethod = fakeClass.GetMembers(methodName).First() as IMethodSymbol;
+            var fakeClass = compilation.GetTypeByMetadataName($"{MockNamespace}.{MockClassName}");
+            var fakeMethod = fakeClass.GetMembers(methodName).First() as IMethodSymbol;
 
             return fakeMethod.GetAttributes();
         }
 
-        protected Compilation GetFakeCompilation(string sourceCode)
+        protected Compilation GetCompilationMock(string sourceCode)
         {
             return CSharpCompilation.Create("MethodMetadataTestBase",
                 new[] { CSharpSyntaxTree.ParseText(sourceCode) },
@@ -31,33 +31,33 @@ namespace Compentio.SourceMapper.Tests.Metadata
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
         }
 
-        protected string FakeSourceCode => @$"
+        protected string MockSourceCode => @$"
 
-namespace {FakeNamespace}
+namespace {MockNamespace}
 {{
     using System;
 
-    public abstract class {FakeClassName}
+    public abstract class {MockClassName}
     {{
-        [Mapping(Source = nameof(FakeTypeDao.FakeProperty), Target = nameof(FakeTypeDto.PropertyFake))]
-        public abstract FakeTypeDto {FakeMethodName}(FakeTypeDao fake);
+        [Mapping(Source = nameof(MockTypeDao.MockProperty), Target = nameof(MockTypeDto.PropertyMock))]
+        public abstract MockTypeDto {MockMethodName}(MockTypeDao mock);
     }}
 
     {MappingAttributeSourceCode}
 }}
 ";
 
-        protected string FakeSourceCodeWithInverseMapping => @$"
+        protected string MockSourceCodeWithInverseMapping => @$"
 
-namespace {FakeNamespace}
+namespace {MockNamespace}
 {{
     using System;
 
-    public abstract class {FakeClassName}
+    public abstract class {MockClassName}
     {{
-        [Mapping(Source = nameof(FakeTypeDao.FakeProperty), Target = nameof(FakeTypeDto.PropertyFake))]
-        [InverseMapping(InverseMethodName = ""{FakeInverseMethodName}""]
-        public abstract FakeTypeDto {FakeMethodName}(FakeTypeDao fake);
+        [Mapping(Source = nameof(MockTypeDao.MockProperty), Target = nameof(MockTypeDto.PropertyMock))]
+        [InverseMapping(InverseMethodName = ""{MockInverseMethodName}""]
+        public abstract MockTypeDto {MockMethodName}(MockTypeDao mock);
     }}
 
     {MappingAttributeSourceCode}
