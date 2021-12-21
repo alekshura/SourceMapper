@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Compentio.SourceMapper.Tests.Metadata
@@ -15,6 +16,12 @@ namespace Compentio.SourceMapper.Tests.Metadata
         private const string DotNetCoreAssemblyName = "Microsoft.Extensions.DependencyInjection";
         private const string StructureMapAssemblyName = "StructureMap.Microsoft.DependencyInjection";
         private readonly Mock<IMapperMetadata> _mockMapperMetadata;
+
+        protected override string MockNamespace => "MockNamespace";
+
+        protected override string MockClassName => "MockClassName";
+
+        protected override string MockInterfaceName => "MockInterfaceName";
 
         protected override string MockAssemblyName => "MockAssemblyName";
 
@@ -129,6 +136,56 @@ namespace Compentio.SourceMapper.Tests.Metadata
             // Assert
             sourcesMetadata.Mappers.Should().NotBeNullOrEmpty();
             sourcesMetadata.Mappers.Should().ContainSingle();
+        }
+
+        [Fact]
+        public void Instance_ReferencedMappers_NotEmpty()
+        {
+            // Arrange
+            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+
+            // Act
+            var sourcesMetadata = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
+
+            // Assert
+            sourcesMetadata.Mappers.Should().NotBeNull();
+            sourcesMetadata.Mappers.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public void Instance_ClassReferencedMappers_NotEmpty()
+        {
+            // Arrange
+            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+
+            _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Class);
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetClassAttributeDataMock(MockClassSourceCode));
+
+            // Act
+            var sourcesMetadata = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
+
+            // Assert
+            sourcesMetadata.Mappers.Should().NotBeNull();
+            sourcesMetadata.Mappers.Should().NotBeEmpty();
+            sourcesMetadata.Mappers.First().TypeKind.Should().Be(TypeKind.Class);
+        }
+
+        [Fact]
+        public void Instance_InterfaceReferencedMappers_NotEmpty()
+        {
+            // Arrange
+            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+
+            _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Interface);
+            _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetInterfaceAttributeDataMock(MockInterfaceSourceCode));
+
+            // Act
+            var sourcesMetadata = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
+
+            // Assert
+            sourcesMetadata.Mappers.Should().NotBeNull();
+            sourcesMetadata.Mappers.Should().NotBeEmpty();
+            sourcesMetadata.Mappers.First().TypeKind.Should().Be(TypeKind.Interface);
         }
     }
 }
