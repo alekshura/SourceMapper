@@ -19,8 +19,6 @@ namespace Compentio.SourceMapper.Generators
         /// <param name="context"></param>
         public void Execute(GeneratorExecutionContext context)
         {
-            var externalMappersMetadata = new ExternalMappersMetadata(context.Compilation.SourceModule.ReferencedAssemblySymbols);
-
             if (context.SyntaxReceiver is null)
             {
                 throw new ArgumentNullException(nameof(context), $"{nameof(context.SyntaxReceiver)} could not be null");
@@ -29,7 +27,7 @@ namespace Compentio.SourceMapper.Generators
             if (context.SyntaxReceiver is not MappersSyntaxReceiver receiver)
                 return;
 
-            var sourcesMetadata = SourcesMetadata.Create(context.Compilation.ReferencedAssemblyNames);
+            var sourcesMetadata = SourcesMetadata.Create(context.Compilation.ReferencedAssemblyNames, context.Compilation.SourceModule.ReferencedAssemblySymbols);
 
             foreach (var typeDeclaration in receiver.Candidates)
             {
@@ -41,7 +39,6 @@ namespace Compentio.SourceMapper.Generators
 
                 sourcesMetadata.AddOrUpdate(new MapperMetadata(mapperType));
             }
-            sourcesMetadata.AddRange(externalMappersMetadata.ExternalMappers);
 
             var sourceGenerator = new CodeSourceGenerator(sourcesMetadata);
             sourceGenerator.GenerateMappings(context);

@@ -29,9 +29,9 @@ namespace Compentio.SourceMapper.Metadata
         /// </summary>
         string TargetClassName { get; }
         /// <summary>
-        /// Determine that mapper is from external assembly
+        /// Determine that mapper is from referenced assembly
         /// </summary>
-        bool IsExternal { get; }
+        bool IsReferenced { get; }
 
         IEnumerable<IMethodMetadata> MethodsMetadata { get; }
     }
@@ -39,12 +39,12 @@ namespace Compentio.SourceMapper.Metadata
     internal class MapperMetadata : IMapperMetadata
     {
         private readonly ITypeSymbol _typeSymbol;
-        private readonly bool _isExternal;
+        private readonly bool _isReferenced;
 
-        public MapperMetadata(ITypeSymbol typeSymbol, bool isExternal = false)
+        public MapperMetadata(ITypeSymbol typeSymbol, bool isReferenced = false)
         {
             _typeSymbol = typeSymbol;
-            _isExternal = isExternal;
+            _isReferenced = isReferenced;
         }
         public TypeKind TypeKind => _typeSymbol.TypeKind;
         public string FileName => $"{TargetClassName}.cs";
@@ -71,7 +71,7 @@ namespace Compentio.SourceMapper.Metadata
             }
         }
 
-        public bool IsExternal => _isExternal;
+        public bool IsReferenced => _isReferenced;
 
         public IEnumerable<IMethodMetadata> MethodsMetadata => _typeSymbol.GetMembers()
                     .Where(field => field.Kind == SymbolKind.Method && field.IsAbstract)

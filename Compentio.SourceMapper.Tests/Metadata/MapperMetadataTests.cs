@@ -161,7 +161,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
             var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object, true);
 
             // Assert
-            mapperMetadata.IsExternal.Should().BeTrue();
+            mapperMetadata.IsReferenced.Should().BeTrue();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Compentio.SourceMapper.Generators
 
         internal void GenerateMappings(GeneratorExecutionContext context)
         {
-            foreach (var mapper in _sourcesMetadata.Mappers.Where(m => !m.IsExternal))
+            foreach (var mapper in _sourcesMetadata.Mappers.Where(m => !m.IsReferenced))
             {
                 var processorStrategy = ProcessorStrategyFactory.GetStrategy(mapper);
 
