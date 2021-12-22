@@ -18,13 +18,13 @@ namespace Compentio.SourceMapper.Tests.Metadata
         private readonly Mock<IParameterSymbol> _mockParameterSymbol;
         private readonly Mock<Location> _mockLocation;
 
-        protected override string FakeClassName => "FakeClassName";
+        protected override string MockClassName => "MockClassName";
 
-        protected override string FakeMethodName => "FakeMethodName";
+        protected override string MockMethodName => "MockMethodName";
 
-        protected override string FakeNamespace => "Compentio.SourceMapper.Tests";
+        protected override string MockNamespace => "Compentio.SourceMapper.Tests";
 
-        protected override string FakeInverseMethodName => "FakeInverseMethodName";
+        protected override string MockInverseMethodName => "MockInverseMethodName";
 
         public MethodMetadataTests()
         {
@@ -106,7 +106,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_NotEmptyMappingAttributes()
         {
             // Arrange
-            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCode, FakeMethodName));
+            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetAttributeDataMock(MockSourceCode, MockMethodName));
 
             // Act
             var methodMetadata = new MethodMetadata(_mockMethodSymbol.Object);
@@ -120,21 +120,21 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_NotEmptyInverseMethodName()
         {
             // Arrange
-            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCodeWithInverseMapping, FakeMethodName));
+            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetAttributeDataMock(MockSourceCodeWithInverseMapping, MockMethodName));
 
             // Act
             var methodMetadata = new MethodMetadata(_mockMethodSymbol.Object);
 
             // Assert
             methodMetadata.InverseMethodName.Should().NotBeNullOrEmpty();
-            methodMetadata.InverseMethodName.Should().Be(FakeInverseMethodName);
+            methodMetadata.InverseMethodName.Should().Be(MockInverseMethodName);
         }
 
         [Fact]
         public void Instance_EmptyInverseMethodName()
         {
             // Arrange
-            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetFakeAttributeData(FakeSourceCode, FakeMethodName));
+            _mockMethodSymbol.Setup(m => m.GetAttributes()).Returns(GetAttributeDataMock(MockSourceCode, MockMethodName));
 
             // Act
             var methodMetadata = new MethodMetadata(_mockMethodSymbol.Object);
