@@ -12,8 +12,6 @@ namespace Compentio.SourceMapper.Tests.Metadata
     public class PropertyMetadataTests
     {
         private readonly IFixture _fixture;
-        private readonly Mock<IPropertyMetadata> _mockSourcePropertyMetadata;
-        private readonly Mock<IPropertyMetadata> _mockTargetPropertyMetadata;
         private readonly Mock<IPropertySymbol> _mockPropertySymbol;
         private readonly Mock<Location> _mockLocation;
         private readonly Mock<ISymbol> _mockSymbol;
@@ -23,8 +21,6 @@ namespace Compentio.SourceMapper.Tests.Metadata
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization { ConfigureMembers = true })
                 .Customize(new SupportMutableValueTypesCustomization());
-            _mockSourcePropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
-            _mockTargetPropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
             _mockPropertySymbol = _fixture.Create<Mock<IPropertySymbol>>();
             _mockLocation = _fixture.Create<Mock<Location>>();
             _mockSymbol = _fixture.Create<Mock<ISymbol>>();
