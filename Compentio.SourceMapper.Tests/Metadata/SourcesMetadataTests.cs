@@ -4,7 +4,6 @@ using Compentio.SourceMapper.Processors.DependencyInjection;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Moq;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -12,9 +11,6 @@ namespace Compentio.SourceMapper.Tests.Metadata
 {
     public class SourcesMetadataTests : SourcesMetadataTestBase
     {
-        private const string AutofacAssemblyName = "Autofac.Extensions.DependencyInjection";
-        private const string DotNetCoreAssemblyName = "Microsoft.Extensions.DependencyInjection";
-        private const string StructureMapAssemblyName = "StructureMap.Microsoft.DependencyInjection";
         private readonly Mock<IMapperMetadata> _mockMapperMetadata;
 
         protected override string MockNamespace => "MockNamespace";
@@ -34,7 +30,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void DependencyInjection_DotNetCoreDependencyInjection()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(DotNetCoreAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(DotNetCoreAssemblyName);
 
             // Act
             var result = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
@@ -48,7 +44,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void DependencyInjection_AutofacDependencyInjection()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(AutofacAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(AutofacAssemblyName);
 
             // Act
             var result = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
@@ -62,7 +58,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void DependencyInjection_StructureMapDependencyInjection()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(StructureMapAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(StructureMapAssemblyName);
 
             // Act
             var result = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
@@ -76,7 +72,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void DependencyInjection_NoDependencyInjection()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(MockAssemblyName);
 
             // Act
             var result = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
@@ -90,7 +86,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void AddOrUpdate_AddMapper()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(MockAssemblyName);
 
             // Act
             var sourcesMetadata = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
@@ -104,7 +100,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void AddOrUpdate_DuplicateMappers()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(MockAssemblyName);
 
             // Act
             var sourcesMetadata = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
@@ -121,7 +117,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void AddOrUpdate_UpdateMappers()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(MockAssemblyName);
             var mockMapperMetadata = _fixture.Build<Mock<IMapperMetadata>>()
                 .WithAutoProperties()
                 .Without(n => n.DefaultValue)
@@ -142,7 +138,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_ReferencedMappers_NotEmpty()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(MockAssemblyName);
 
             // Act
             var sourcesMetadata = SourcesMetadata.Create(assemlyIdentities, _assemblySymbols);
@@ -156,7 +152,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_ClassReferencedMappers_NotEmpty()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(MockAssemblyName);
 
             _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Class);
             _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetClassAttributeDataMock(MockClassSourceCode));
@@ -174,7 +170,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         public void Instance_InterfaceReferencedMappers_NotEmpty()
         {
             // Arrange
-            var assemlyIdentities = new List<AssemblyIdentity> { GetAssemblyIdentityMock(MockAssemblyName) };
+            var assemlyIdentities = GetAssemblyIdentityCollectionMock(MockAssemblyName);
 
             _mockNamedType.Setup(n => n.TypeKind).Returns(TypeKind.Interface);
             _mockNamedType.Setup(n => n.GetAttributes()).Returns(GetInterfaceAttributeDataMock(MockInterfaceSourceCode));

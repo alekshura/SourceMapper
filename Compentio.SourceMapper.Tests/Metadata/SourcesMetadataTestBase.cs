@@ -10,6 +10,10 @@ namespace Compentio.SourceMapper.Tests.Metadata
 {
     public abstract class SourcesMetadataTestBase
     {
+        protected const string AutofacAssemblyName = "Autofac.Extensions.DependencyInjection";
+        protected const string DotNetCoreAssemblyName = "Microsoft.Extensions.DependencyInjection";
+        protected const string StructureMapAssemblyName = "StructureMap.Microsoft.DependencyInjection";
+
         protected readonly IFixture _fixture;
         protected readonly Mock<IAssemblySymbol> _mockAssembly;
         protected readonly ImmutableArray<IAssemblySymbol> _assemblySymbols;
@@ -54,6 +58,11 @@ namespace Compentio.SourceMapper.Tests.Metadata
         protected static AssemblyIdentity GetAssemblyIdentityMock(string name)
         {
             return new AssemblyIdentity(name: name);
+        }
+
+        protected static IEnumerable<AssemblyIdentity> GetAssemblyIdentityCollectionMock(string assemblyName)
+        {
+            return new List<AssemblyIdentity> { GetAssemblyIdentityMock(assemblyName) };
         }
 
         protected ImmutableArray<AttributeData> GetClassAttributeDataMock(string sourceCode)
