@@ -93,7 +93,7 @@ namespace Compentio.SourceMapper.Processors
 
         protected string GenerateInverseMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
-            return @$"public {Modifier} {AttributesMatchers.GetInverseMethodFullName(methodMetadata)}
+            return @$"public {Modifier} {methodMetadata.InverseMethodFullName}
             {{
                 if ({methodMetadata.Parameters.First().Name} == null)
                     return null;

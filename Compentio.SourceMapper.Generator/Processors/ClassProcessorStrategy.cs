@@ -64,7 +64,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GeneratePartialClassMethod(IMethodMetadata methodMetadata)
         {
-            return $"public abstract {AttributesMatchers.GetInverseMethodFullName(methodMetadata)};";
+            return $"public abstract {methodMetadata.InverseMethodFullName};";
         }
 
         protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
