@@ -35,7 +35,14 @@ namespace Compentio.SourceMapper.Metadata
         private readonly DependencyInjection _dependencyInjection;
         private readonly IEnumerable<IAssemblySymbol> _assemblySymbols;
 
-        private SourcesMetadata(IEnumerable<AssemblyIdentity> assemblyIdentities, ImmutableArray<IAssemblySymbol> assemblySymbols)
+        private SourcesMetadata(Compilation compilation)
+        {
+            _dependencyInjection = new DependencyInjection(compilation.ReferencedAssemblyNames);
+            _assemblySymbols = compilation.SourceModule.ReferencedAssemblySymbols;
+            AddReferencedMappers(_referencedMappers);
+        }
+
+        private SourcesMetadata(IEnumerable<AssemblyIdentity> assemblyIdentities, IEnumerable<IAssemblySymbol> assemblySymbols)
         {
             _dependencyInjection = new DependencyInjection(assemblyIdentities);
             _assemblySymbols = assemblySymbols;
@@ -46,7 +53,9 @@ namespace Compentio.SourceMapper.Metadata
 
         public DependencyInjection DependencyInjection => _dependencyInjection;
 
-        public static ISourcesMetadata Create(IEnumerable<AssemblyIdentity> assemblyIdentities, ImmutableArray<IAssemblySymbol> assemblySymbols) =>
+        public static ISourcesMetadata Create(Compilation compilation) => new SourcesMetadata(compilation);
+
+        public static ISourcesMetadata Create(IEnumerable<AssemblyIdentity> assemblyIdentities, IEnumerable<IAssemblySymbol> assemblySymbols) => 
             new SourcesMetadata(assemblyIdentities, assemblySymbols);
 
         public void AddOrUpdate(IMapperMetadata mapperMetadata)
@@ -78,7 +87,7 @@ namespace Compentio.SourceMapper.Metadata
 
                 foreach (var assembly in _referencedAssemblies)
                 {
-                    nSpaceCollection.AddRange(GetNamespaces(assembly.GlobalNamespace.GetNamespaceMembers()));
+                    nSpaceCollection.AddRange(FlattenNamespaces(assembly.GlobalNamespace.GetNamespaceMembers()));
                 }
 
                 var typesCollection = nSpaceCollection?.SelectMany(n => n.GetTypeMembers());
@@ -96,18 +105,8 @@ namespace Compentio.SourceMapper.Metadata
         /// </summary>
         /// <param name="namespaceSymbols"></param>
         /// <returns></returns>
-        private IEnumerable<INamespaceSymbol> GetNamespaces(IEnumerable<INamespaceSymbol> namespaceSymbols)
-        {
-            var resultSymbols = new List<INamespaceSymbol>();
-
-            foreach (var nSpace in namespaceSymbols)
-            {
-                resultSymbols.Add(nSpace);
-                resultSymbols.AddRange(GetNamespaces(nSpace.GetNamespaceMembers()));
-            }
-
-            return resultSymbols;
-        }
+        private IEnumerable<INamespaceSymbol> FlattenNamespaces(IEnumerable<INamespaceSymbol> namespaceSymbols) =>
+            namespaceSymbols.SelectMany(n =>  FlattenNamespaces(n.GetNamespaceMembers())).Concat(namespaceSymbols);
 
         /// <summary>
         /// Method that add collection of mappers <see cref="MapperMetadata">
