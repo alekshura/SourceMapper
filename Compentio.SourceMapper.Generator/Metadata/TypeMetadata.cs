@@ -15,9 +15,14 @@ namespace Compentio.SourceMapper.Metadata
         string FullName { get; }
 
         /// <summary>
-        /// Object lis of properties
+        /// Object list of properties
         /// </summary>
         IEnumerable<IPropertyMetadata> Properties { get; }
+
+        /// <summary>
+        /// Object list of fields <see cref="FieldMetadata" />
+        /// </summary>
+        IEnumerable<IFieldMetadata> Fields { get; }
 
         /// <summary>
         /// Recurrent method that return flatten list of properties tree for the object
@@ -43,6 +48,10 @@ namespace Compentio.SourceMapper.Metadata
             .Where(member => member as IPropertySymbol is not null)
             .Select(member => new PropertyMetadata(member as IPropertySymbol));
 
+        public IEnumerable<IFieldMetadata> Fields => _parameterSymbol.Type.GetMembers()
+            .Where(member => member as IFieldSymbol is not null)
+            .Select(member => new FieldMetadata(member as IFieldSymbol));
+
         public Location? Location => _parameterSymbol.Locations.FirstOrDefault();
 
         public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) =>
@@ -66,6 +75,10 @@ namespace Compentio.SourceMapper.Metadata
         public IEnumerable<IPropertyMetadata> Properties => _typeSymbol.GetMembers()
             .Where(member => member.Kind == SymbolKind.Property && !member.IsStatic)
             .Select(member => new PropertyMetadata(member as IPropertySymbol));
+
+        public IEnumerable<IFieldMetadata> Fields => _typeSymbol.GetMembers()
+            .Where(member => member.Kind == SymbolKind.Field && member.IsStatic)
+            .Select(member => new FieldMetadata(member as IFieldSymbol));
 
         public Location? Location => _typeSymbol.Locations.FirstOrDefault();
 
