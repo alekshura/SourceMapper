@@ -59,6 +59,20 @@ namespace Compentio.SourceMapper.Tests.Processors
         }
 
         [Fact]
+        public void Mapper_IgnoreMapping_SkippedPropertyMapping()
+        {
+            // Arrange 
+            var _userMapperInterface = new InterfaceUserDataDaoMapper();
+            var userDataDao = _fixture.Create<UserDataDao>();
+
+            // Act
+            var mappingResult = _userMapperInterface.MapToDomainModel(userDataDao);
+
+            // Assert
+            mappingResult.PropertyToBeIgnored.Should().BeNull();
+        }
+
+        [Fact]
         public void Mapper_User_Data_Dao_Match_Properties_And_Attributes()
         {
             // Arrange 

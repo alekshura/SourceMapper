@@ -20,10 +20,10 @@ namespace Compentio.SourceMapper.Tests.Processors
         public ClassProcessorStrategyTests()
         {
             _sourceMetadataMock = _fixture.Create<Mock<IMapperMetadata>>();
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Class);
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Name).Returns("MapperName");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.Namespace).Returns("Namespace");
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TargetClassName).Returns("TargetClassName");
-            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.TypeKind).Returns(TypeKind.Class);
             _processorStrategy = ProcessorStrategyFactory.GetStrategy(_sourceMetadataMock.Object);
         }
 
@@ -119,13 +119,28 @@ namespace Compentio.SourceMapper.Tests.Processors
             result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.UnexpectedError);
         }
 
-        private Mock<IMethodMetadata> GetValidMethodWithAttributes(Mock<MappingAttribute> mockMappingAttribute)
+        [Fact]
+        public void GenerateCode_IgnoreMapping_EmptyDiagnostics()
+        {
+            // Arrange
+            var methodMetadata = GetValidMethodWithAttributes(_mockMappingAttribute, true);
+            _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
+
+            // Act
+            var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
+
+            // Assert
+            result.Diagnostics.Should().NotContain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
+        }
+
+        private Mock<IMethodMetadata> GetValidMethodWithAttributes(Mock<MappingAttribute> mockMappingAttribute, bool ignoreInMapping = false)
         {
             var mockMethodMetadata = _fixture.Create<Mock<IMethodMetadata>>();
 
             // Create new method property
             var mockProperty = _fixture.Create<Mock<IPropertyMetadata>>();
             mockProperty.Setup(p => p.IsClass).Returns(false);
+            mockProperty.Setup(p => p.IgnoreInMapping).Returns(ignoreInMapping);
 
             // Inject property
             var mockTypeMetadata = _fixture.Create<Mock<ITypeMetadata>>();

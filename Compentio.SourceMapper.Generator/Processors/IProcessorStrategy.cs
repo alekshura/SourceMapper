@@ -171,6 +171,17 @@ namespace Compentio.SourceMapper.Processors
             }
         }
 
+        /// <summary>
+        /// Metchod checks that property metadata should be ignored during mapping due to <see cref="IgnoreMappingAttribute"/>
+        /// </summary>
+        /// <param name="sourcePropertyMetadata"></param>
+        /// <param name="targetPropertyMetadata"></param>
+        /// <returns></returns>
+        protected bool IgnorePropertyMapping(IPropertyMetadata? sourcePropertyMetadata, IPropertyMetadata? targetPropertyMetadata)
+        {
+            return (sourcePropertyMetadata?.IgnoreInMapping is true || targetPropertyMetadata?.IgnoreInMapping is true);
+        }
+
         protected void PropertyMappingWarning(IPropertyMetadata metadata)
         {
             _diagnostics.Add(new DiagnosticsInfo

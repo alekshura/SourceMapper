@@ -9,12 +9,18 @@ using Xunit;
 
 namespace Compentio.SourceMapper.Tests.Metadata
 {
-    public class PropertyMetadataTests
+    public class PropertyMetadataTests : PropertyMetadataTestBase
     {
         private readonly IFixture _fixture;
         private readonly Mock<IPropertySymbol> _mockPropertySymbol;
         private readonly Mock<Location> _mockLocation;
         private readonly Mock<ISymbol> _mockSymbol;
+
+        protected override string MockNamespace => "MockNamespace";
+
+        protected override string MockClassName => "MockClassName";
+
+        protected override string MockMethodName => "MockMethodName";
 
         public PropertyMetadataTests()
         {
@@ -107,6 +113,19 @@ namespace Compentio.SourceMapper.Tests.Metadata
 
             // Assert
             propertyMetadata.Properties.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void InstanceForClass_ValidIgnoreInMapping()
+        {
+            // Arrange
+            _mockPropertySymbol.Setup(p => p.GetAttributes()).Returns(GetAttributeDataMock(MockSourceCode, MockMethodName));
+
+            // Act
+            var propertyMetadata = new PropertyMetadata(_mockPropertySymbol.Object);
+
+            // Assert
+            propertyMetadata.IgnoreInMapping.Should().BeTrue();
         }
     }
 }
