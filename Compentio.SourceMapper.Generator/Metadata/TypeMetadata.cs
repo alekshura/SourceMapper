@@ -49,7 +49,7 @@ namespace Compentio.SourceMapper.Metadata
             .Select(member => new PropertyMetadata(member as IPropertySymbol));
 
         public IEnumerable<IFieldMetadata> Fields => _parameterSymbol.Type.GetMembers()
-            .Where(member => member as IFieldSymbol is not null)
+            .Where(member => member is IFieldSymbol && member.CanBeReferencedByName)
             .Select(member => new FieldMetadata(member as IFieldSymbol));
 
         public Location? Location => _parameterSymbol.Locations.FirstOrDefault();
@@ -77,7 +77,7 @@ namespace Compentio.SourceMapper.Metadata
             .Select(member => new PropertyMetadata(member as IPropertySymbol));
 
         public IEnumerable<IFieldMetadata> Fields => _typeSymbol.GetMembers()
-            .Where(member => member.Kind == SymbolKind.Field && member.IsStatic)
+            .Where(member => member.Kind == SymbolKind.Field && member.CanBeReferencedByName)
             .Select(member => new FieldMetadata(member as IFieldSymbol));
 
         public Location? Location => _typeSymbol.Locations.FirstOrDefault();
