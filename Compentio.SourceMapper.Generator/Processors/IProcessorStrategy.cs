@@ -93,7 +93,7 @@ namespace Compentio.SourceMapper.Processors
 
         protected string GenerateInverseMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
-            return @$"public {Modifier} {GetInverseMethodFullName(methodMetadata)}
+            return @$"public {Modifier} {methodMetadata.InverseMethodFullName}
             {{
                 if ({methodMetadata.Parameters.First().Name} == null)
                     return null;
@@ -169,19 +169,6 @@ namespace Compentio.SourceMapper.Processors
             {
                 return sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
             }
-        }
-
-        /// <summary>
-        /// Method returns full inverse method name based on <see cref="MethodMetadata" />
-        /// </summary>
-        /// <param name="methodMetadata">Method metadata</param>
-        /// <returns></returns>
-        protected string GetInverseMethodFullName(IMethodMetadata methodMetadata)
-        {
-            var inverseMethodFullName =
-                $"{methodMetadata.Parameters.First().FullName} {methodMetadata.InverseMethodName} ({methodMetadata.ReturnType.FullName} {methodMetadata.Parameters.First().Name})";
-
-            return inverseMethodFullName;
         }
 
         /// <summary>

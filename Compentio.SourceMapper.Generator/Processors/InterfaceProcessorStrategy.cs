@@ -65,7 +65,7 @@ namespace Compentio.SourceMapper.Processors
 
         private string GenerateInterfaceMethod(IMethodMetadata methodMetadata)
         {
-            return $"{GetInverseMethodFullName(methodMetadata)};";
+            return $"{methodMetadata.InverseMethodFullName};";
         }
 
         protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
