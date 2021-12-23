@@ -2,7 +2,6 @@
 using Compentio.SourceMapper.Processors.DependencyInjection;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 
 namespace Compentio.SourceMapper.Metadata
@@ -31,6 +30,9 @@ namespace Compentio.SourceMapper.Metadata
 
     internal class SourcesMetadata : ISourcesMetadata
     {
+        private const string SourceMapperApplicationName = "Compentio.SourceMapper";
+        private const string DependencyInjectionNamespace = "Compentio.SourceMapper.DependencyInjection";
+
         private readonly List<IMapperMetadata> _mappers = new();
         private readonly DependencyInjection _dependencyInjection;
         private readonly IEnumerable<IAssemblySymbol> _assemblySymbols;
@@ -74,7 +76,8 @@ namespace Compentio.SourceMapper.Metadata
         /// <summary>
         /// Collection of referenced assemblies <see cref="IAssemblySymbol" />
         /// </summary>
-        private IReadOnlyCollection<IAssemblySymbol> _referencedAssemblies => _assemblySymbols?.Where(a => a.Identity?.HasPublicKey == false).ToList().AsReadOnly();
+        private IReadOnlyCollection<IAssemblySymbol> _referencedAssemblies => _assemblySymbols?.Where(a => a.Identity?.HasPublicKey == false &&
+            a.Identity?.Name != SourceMapperApplicationName).ToList().AsReadOnly();
 
         /// <summary>
         /// Collection of referenced mappers <see cref="MapperMetadata" />
@@ -89,6 +92,8 @@ namespace Compentio.SourceMapper.Metadata
                 {
                     nSpaceCollection.AddRange(FlattenNamespaces(assembly.GlobalNamespace.GetNamespaceMembers()));
                 }
+
+                if (nSpaceCollection.Any(n => n.ToDisplayString() == DependencyInjectionNamespace)) return new List<IMapperMetadata>().AsReadOnly();
 
                 var typesCollection = nSpaceCollection?.SelectMany(n => n.GetTypeMembers());
                 var mappersCollection = typesCollection?.Where(t => t.GetAttributes().Any(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MapperAttribute)));
