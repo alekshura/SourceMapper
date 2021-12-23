@@ -9,11 +9,11 @@
     <Product>SourceMapper</Product>
     <Authors>Aleksander Parchomenko</Authors>
     <PackageProjectUrl>https://alekshura.github.io/SourceMapper/</PackageProjectUrl>
-    <AssemblyVersion>2.0.0.1</AssemblyVersion>
-    <FileVersion>2.0.0.1</FileVersion>
+    <AssemblyVersion>2.0.0.3</AssemblyVersion>
+    <FileVersion>2.0.0.3</FileVersion>
     <PackageId>Compentio.SourceMapper</PackageId>
     <GenerateRepositoryUrlAttribute>true</GenerateRepositoryUrlAttribute>
-    <Version>2.0.0.1</Version>
+    <Version>2.0.0.3</Version>
     <Description>Code generator for mappings based on attributes defined in interfaces or abstrat classes. It is based on .NetCore Source Generators engine and generates classes for mappers during build time of you project.</Description>
     <Copyright>Copyright (c) @alekshura Compentio 2021</Copyright>
     <RepositoryUrl>https://github.com/alekshura/SourceMapper</RepositoryUrl>

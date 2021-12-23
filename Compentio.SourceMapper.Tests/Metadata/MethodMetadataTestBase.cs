@@ -17,10 +17,10 @@ namespace Compentio.SourceMapper.Tests.Metadata
         {
             var compilation = GetCompilationMock(sourceCode);
 
-            var fakeClass = compilation.GetTypeByMetadataName($"{MockNamespace}.{MockClassName}");
-            var fakeMethod = fakeClass.GetMembers(methodName).First() as IMethodSymbol;
+            var mockClass = compilation.GetTypeByMetadataName($"{MockNamespace}.{MockClassName}");
+            var mockMethod = mockClass.GetMembers(methodName).First() as IMethodSymbol;
 
-            return fakeMethod.GetAttributes();
+            return mockMethod.GetAttributes();
         }
 
         protected Compilation GetCompilationMock(string sourceCode)

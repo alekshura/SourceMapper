@@ -1,4 +1,5 @@
-﻿using Compentio.SourceMapper.Processors.DependencyInjection;
+﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Processors.DependencyInjection;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,23 +30,35 @@ namespace Compentio.SourceMapper.Metadata
 
     internal class SourcesMetadata : ISourcesMetadata
     {
+        private const string SourceMapperApplicationName = "Compentio.SourceMapper";
+        private const string DependencyInjectionNamespace = "Compentio.SourceMapper.DependencyInjection";
+
         private readonly List<IMapperMetadata> _mappers = new();
         private readonly DependencyInjection _dependencyInjection;
+        private readonly IEnumerable<IAssemblySymbol> _assemblySymbols;
 
-        private SourcesMetadata(IEnumerable<AssemblyIdentity> assemblies)
+        private SourcesMetadata(Compilation compilation)
         {
-            _dependencyInjection = new DependencyInjection(assemblies);
+            _dependencyInjection = new DependencyInjection(compilation.ReferencedAssemblyNames);
+            _assemblySymbols = compilation.SourceModule.ReferencedAssemblySymbols;
+            AddReferencedMappers(_referencedMappers);
         }
 
-        static SourcesMetadata()
+        private SourcesMetadata(IEnumerable<AssemblyIdentity> assemblyIdentities, IEnumerable<IAssemblySymbol> assemblySymbols)
         {
+            _dependencyInjection = new DependencyInjection(assemblyIdentities);
+            _assemblySymbols = assemblySymbols;
+            AddReferencedMappers(_referencedMappers);
         }
 
         public IReadOnlyCollection<IMapperMetadata> Mappers => _mappers.AsReadOnly();
 
         public DependencyInjection DependencyInjection => _dependencyInjection;
 
-        public static ISourcesMetadata Create(IEnumerable<AssemblyIdentity> assemblies) => new SourcesMetadata(assemblies);
+        public static ISourcesMetadata Create(Compilation compilation) => new SourcesMetadata(compilation);
+
+        public static ISourcesMetadata Create(IEnumerable<AssemblyIdentity> assemblyIdentities, IEnumerable<IAssemblySymbol> assemblySymbols) => 
+            new SourcesMetadata(assemblyIdentities, assemblySymbols);
 
         public void AddOrUpdate(IMapperMetadata mapperMetadata)
         {
@@ -57,6 +70,60 @@ namespace Compentio.SourceMapper.Metadata
             else
             {
                 _mappers.Add(mapperMetadata);
+            }
+        }
+
+        /// <summary>
+        /// Collection of referenced assemblies <see cref="IAssemblySymbol" />
+        /// </summary>
+        private IReadOnlyCollection<IAssemblySymbol> _referencedAssemblies => _assemblySymbols?.Where(a => a.Identity?.HasPublicKey == false &&
+            a.Identity?.Name != SourceMapperApplicationName).ToList().AsReadOnly();
+
+        /// <summary>
+        /// Collection of referenced mappers <see cref="MapperMetadata" />
+        /// </summary>
+        private IReadOnlyCollection<IMapperMetadata> _referencedMappers
+        {
+            get
+            {
+                var nSpaceCollection = new List<INamespaceSymbol>();
+
+                foreach (var assembly in _referencedAssemblies)
+                {
+                    nSpaceCollection.AddRange(FlattenNamespaces(assembly.GlobalNamespace.GetNamespaceMembers()));
+                }
+
+                if (nSpaceCollection.Any(n => n.ToDisplayString() == DependencyInjectionNamespace)) return new List<IMapperMetadata>().AsReadOnly();
+
+                var typesCollection = nSpaceCollection?.SelectMany(n => n.GetTypeMembers());
+                var mappersCollection = typesCollection?.Where(t => t.GetAttributes().Any(attribute => attribute is not null && attribute.AttributeClass?.Name == nameof(MapperAttribute)));
+
+                return mappersCollection?.Select(t =>
+                {
+                    return new MapperMetadata(t, true);
+                }).ToList().AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// Method returns recursively flatt collection of <see cref="INamespaceSymbol" />
+        /// </summary>
+        /// <param name="namespaceSymbols"></param>
+        /// <returns></returns>
+        private IEnumerable<INamespaceSymbol> FlattenNamespaces(IEnumerable<INamespaceSymbol> namespaceSymbols) =>
+            namespaceSymbols.SelectMany(n =>  FlattenNamespaces(n.GetNamespaceMembers())).Concat(namespaceSymbols);
+
+        /// <summary>
+        /// Method that add collection of mappers <see cref="MapperMetadata">
+        /// </summary>
+        /// <param name="mapperMetadatas"></param>
+        private void AddReferencedMappers(IEnumerable<IMapperMetadata> mapperMetadatas)
+        {
+            if (mapperMetadatas is null) return;
+
+            foreach (var mapper in (mapperMetadatas))
+            {
+                AddOrUpdate(mapper);
             }
         }
     }

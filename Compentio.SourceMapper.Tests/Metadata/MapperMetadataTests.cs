@@ -153,5 +153,15 @@ namespace Compentio.SourceMapper.Tests.Metadata
             mapperMetadata.MethodsMetadata.Should().NotBeNull();
             mapperMetadata.MethodsMetadata.Should().NotBeEmpty();
         }
+
+        [Fact]
+        public void Instance_IsExternal_ReturnTrue()
+        {
+            // Act
+            var mapperMetadata = new MapperMetadata(_mockTypeSymbol.Object, true);
+
+            // Assert
+            mapperMetadata.IsReferenced.Should().BeTrue();
+        }
     }
 }
