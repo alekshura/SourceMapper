@@ -54,6 +54,8 @@ namespace Compentio.SourceMapper.Generators
                 return;
             }
 
+            if (!_sourcesMetadata.Mappers.Any()) return;
+
             var result = processorStrategy.GenerateCode(_sourcesMetadata);
 
             context.AddSource($"{_sourcesMetadata.DependencyInjection.DependencyInjectionClassName}.cs", SourceText.From(result.GeneratedCode, Encoding.UTF8));
