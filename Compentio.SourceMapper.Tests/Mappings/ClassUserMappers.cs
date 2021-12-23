@@ -34,6 +34,13 @@ namespace Compentio.SourceMapper.Tests.Mappings
         protected readonly Func<Sex, UserGender> ConvertSex = sex => sex == Sex.M ? UserGender.Male : UserGender.Female;
     }
 
+    [Mapper(ClassName = "ClassUserDataDaoMapper")]
+    public abstract partial class UserDataDaoMapper
+    {
+        [Mapping(Source = nameof(UserDataDao.FirstName), Target = nameof(UserInfo.Name))]
+        public abstract UserInfo MapToDomainModel(UserDataDao source);
+    }
+
     [Mapper(ClassName = "ClassUserDaoArrayMapper")]
     public abstract partial class UserDataArrayMapper
     {

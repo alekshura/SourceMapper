@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compentio.SourceMapper.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace Compentio.SourceMapper.Tests.Entities
@@ -10,6 +11,8 @@ namespace Compentio.SourceMapper.Tests.Entities
         public Sex Sex { get; set; }
         public Address Address { get; set; }
         public DateTime BirthDate { get; set; }
+        [IgnoreMapping]
+        public object PropertyToBeIgnored { get; set; }
     }
 
     public class UserInfoWithArray

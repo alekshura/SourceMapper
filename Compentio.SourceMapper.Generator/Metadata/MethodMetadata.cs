@@ -32,6 +32,11 @@ namespace Compentio.SourceMapper.Metadata
         string InverseMethodName { get; }
 
         /// <summary>
+        /// Full inverse method name based on <see cref="MethodMetadata" />
+        /// </summary>
+        string InverseMethodFullName { get; }
+
+        /// <summary>
         /// Attributes that used for mappings
         /// </summary>
         IEnumerable<MappingAttribute> MappingAttributes { get; }
@@ -93,6 +98,8 @@ namespace Compentio.SourceMapper.Metadata
             }
         }
 
-        public Location? Location => _methodSymbol.Locations.FirstOrDefault();
+        public string InverseMethodFullName => $"{Parameters.First().FullName} {InverseMethodName} ({ReturnType.FullName} {Parameters.First().Name})";
+
+        public Location? Location => _methodSymbol.Locations.FirstOrDefault();        
     }
 }

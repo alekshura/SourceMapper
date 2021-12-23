@@ -93,7 +93,7 @@ namespace Compentio.SourceMapper.Processors
 
         protected string GenerateInverseMethod(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata)
         {
-            return @$"public {Modifier} {AttributesMatchers.GetInverseMethodFullName(methodMetadata)}
+            return @$"public {Modifier} {methodMetadata.InverseMethodFullName}
             {{
                 if ({methodMetadata.Parameters.First().Name} == null)
                     return null;
@@ -169,6 +169,17 @@ namespace Compentio.SourceMapper.Processors
             {
                 return sourceMetadata.MatchDefinedMethod(matchedSourceMember, matchedTargetMember);
             }
+        }
+
+        /// <summary>
+        /// Metchod checks that property metadata should be ignored during mapping due to <see cref="IgnoreMappingAttribute"/>
+        /// </summary>
+        /// <param name="sourcePropertyMetadata"></param>
+        /// <param name="targetPropertyMetadata"></param>
+        /// <returns></returns>
+        protected bool IgnorePropertyMapping(IPropertyMetadata? sourcePropertyMetadata, IPropertyMetadata? targetPropertyMetadata)
+        {
+            return (sourcePropertyMetadata?.IgnoreInMapping is true || targetPropertyMetadata?.IgnoreInMapping is true);
         }
 
         protected void PropertyMappingWarning(IPropertyMetadata metadata)
