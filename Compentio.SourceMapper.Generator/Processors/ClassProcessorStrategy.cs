@@ -1,5 +1,4 @@
-﻿using Compentio.SourceMapper.Attributes;
-using Compentio.SourceMapper.Matchers;
+﻿using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
 using System.Linq;
 using System.Text;
@@ -65,55 +64,6 @@ namespace Compentio.SourceMapper.Processors
         private string GeneratePartialClassMethod(IMethodMetadata methodMetadata)
         {
             return $"public abstract {methodMetadata.InverseMethodFullName};";
-        }
-
-        protected override string GeneratePropertiesMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
-        {
-            var mappingsStringBuilder = new StringBuilder();
-            var sourceMembers = methodMetadata.Parameters.First().Properties;
-            var targetMemebers = methodMetadata.ReturnType.Properties;
-
-            foreach (var targetMember in targetMemebers)
-            {                
-                var matchedSourceMember = (IPropertyMetadata)sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
-                var matchedTargetMember = (IPropertyMetadata)targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
-
-                if (IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
-
-                var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
-                var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
-
-                if (!string.IsNullOrEmpty(expressionMapping))
-                {
-                    if (inverseMapping) continue;
-
-                    mappingsStringBuilder.Append(expressionMapping);
-                    continue;
-                }
-
-                mappingsStringBuilder.Append(GeneratePropertyMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
-            }
-
-            return mappingsStringBuilder.ToString();
-        }
-
-        private string MapExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
-        {
-            var mapping = new StringBuilder();
-
-            if (expressionAttribute is not null && matchedSourceMember is not null)
-            {
-                mapping.AppendLine($"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}({parameter.Name}.{matchedSourceMember.Name});");
-                return mapping.ToString();
-            }
-
-            if (expressionAttribute is not null && matchedTargetMember is not null && matchedSourceMember is null)
-            {
-                mapping.AppendLine($"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}({parameter.Name});");
-                return mapping.ToString();
-            }
-
-            return mapping.ToString();
         }
     }
 }

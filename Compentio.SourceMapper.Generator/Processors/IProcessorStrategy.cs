@@ -1,4 +1,5 @@
-﻿using Compentio.SourceMapper.Diagnostics;
+﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Diagnostics;
 using Compentio.SourceMapper.Helpers;
 using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
@@ -56,8 +57,6 @@ namespace Compentio.SourceMapper.Processors
         protected abstract string Modifier { get; }
 
         protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
-
-        protected abstract string GeneratePropertiesMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false);
 
         protected string GenerateMethods(IMapperMetadata sourceMetadata)
         {
@@ -159,6 +158,36 @@ namespace Compentio.SourceMapper.Processors
             return mapping.ToString();
         }
 
+        protected string GeneratePropertiesMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
+        {
+            var mappingsStringBuilder = new StringBuilder();
+            var sourceMembers = methodMetadata.Parameters.First().Properties;
+            var targetMemebers = methodMetadata.ReturnType.Properties;
+
+            foreach (var targetMember in targetMemebers)
+            {
+                var matchedSourceMember = (IPropertyMetadata)sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
+                var matchedTargetMember = (IPropertyMetadata)targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
+
+                if (IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
+
+                var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
+                var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
+
+                if (!string.IsNullOrEmpty(expressionMapping))
+                {
+                    if (inverseMapping) continue;
+
+                    mappingsStringBuilder.Append(expressionMapping);
+                    continue;
+                }
+
+                mappingsStringBuilder.Append(GeneratePropertyMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
+            }
+
+            return mappingsStringBuilder.ToString();
+        }
+
         protected string GeneratePropertyMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping = false)
         {
             if (inverseMapping) ObjectHelper.Swap(ref matchedSourceMember, ref matchedTargetMember);
@@ -199,6 +228,25 @@ namespace Compentio.SourceMapper.Processors
                 return $"{methodMetadata.Parameters.First().FullName}.{matchedTargetMember?.Name} = {methodMetadata.ReturnType.FullName}.{matchedSourceMember?.Name};";
             else
                 return $"{methodMetadata.ReturnType.FullName}.{matchedTargetMember?.Name} = {methodMetadata.Parameters.First().FullName}.{matchedSourceMember?.Name};";
+        }
+
+        private string MapExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember)
+        {
+            var mapping = new StringBuilder();
+
+            if (expressionAttribute is not null && matchedSourceMember is not null)
+            {
+                mapping.AppendLine($"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}({parameter.Name}.{matchedSourceMember.Name});");
+                return mapping.ToString();
+            }
+
+            if (expressionAttribute is not null && matchedTargetMember is not null && matchedSourceMember is null)
+            {
+                mapping.AppendLine($"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}({parameter.Name});");
+                return mapping.ToString();
+            }
+
+            return mapping.ToString();
         }
 
         protected string MapClass(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter, bool inverseMapping)
