@@ -28,5 +28,9 @@ namespace Compentio.SourceMapper.Diagnostics
         public static readonly DiagnosticDescriptor DependencyInjectionNotUsed =
           new("SMAP0004", "Dependency Injection not used", "No Dependency Injection mechanism used in project. '{0}'.", "Design", DiagnosticSeverity.Warning, true,
               "SourceMapper based on Dependency Injection, but no used in project.", $"{DiagnosticsDescriptorsUri}#smap0004");
+
+        public static readonly DiagnosticDescriptor FieldIsNotMapped =
+           new("SMAP0005", "Field is not mapped", "The field '{0}' is not mapped", "Design", DiagnosticSeverity.Warning, true,
+               "Source field for defined target field not found, thus field does not mapped.", $"{DiagnosticsDescriptorsUri}#smap0005");
     }    
 }

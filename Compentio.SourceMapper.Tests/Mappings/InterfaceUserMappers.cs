@@ -7,6 +7,8 @@ namespace Compentio.SourceMapper.Tests.Mappings
     [Mapper(ClassName = "InterfaceUserDaoMapper")]
     public partial interface IUserDaoMapper
     {
+        [Mapping(Source = nameof(UserDao.StringStaticValueDao), Target = nameof(UserInfo.StringStaticValueInfo))]
+        [Mapping(Source = nameof(UserDao.StringFieldValueDao), Target = nameof(UserInfo.StringFieldValueInfo))]
         [Mapping(Source = nameof(UserDao.FirstName), Target = nameof(UserInfo.Name))]
         [InverseMapping(InverseMethodName = "MapToDatabaseModel")]
         UserInfo MapToDomainModel(UserDao source);

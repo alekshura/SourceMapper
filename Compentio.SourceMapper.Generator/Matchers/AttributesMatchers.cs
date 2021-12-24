@@ -13,7 +13,7 @@ namespace Compentio.SourceMapper.Matchers
         /// <param name="attributes">Attributes collection</param>
         /// <param name="targetProperty">Target property to match</param>
         /// <returns>Matched attribute</returns>
-        internal static MappingAttribute MatchTargetAttribute(this IEnumerable<MappingAttribute> attributes, IPropertyMetadata targetProperty)
+        internal static MappingAttribute MatchTargetAttribute(this IEnumerable<MappingAttribute> attributes, IMetadata targetProperty)
         {
             return attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name);
         }
@@ -26,7 +26,7 @@ namespace Compentio.SourceMapper.Matchers
         /// <param name="targetProperty"></param>
         /// <param name="sourceProperty"></param>
         /// <returns></returns>
-        internal static MappingAttribute MatchExpressionAttribute(this IEnumerable<MappingAttribute> attributes, IPropertyMetadata targetProperty, IPropertyMetadata sourceProperty)
+        internal static MappingAttribute MatchExpressionAttribute(this IEnumerable<MappingAttribute> attributes, IMetadata targetProperty, IMetadata sourceProperty)
         {
             var matchedExpressionAttribute = attributes.FirstOrDefault(attribute => attribute?.Target == targetProperty?.Name
                 && attribute?.Source == sourceProperty?.Name

@@ -14,7 +14,7 @@ namespace Compentio.SourceMapper.Matchers
         /// <param name="mappingAttributes">Collection of all defined mapping attributes</param>
         /// <param name="targetMember">Target member</param>
         /// <returns>Matched source member</returns>
-        internal static IPropertyMetadata MatchSourceMember(this IEnumerable<IPropertyMetadata> sourceMembers, IEnumerable<MappingAttribute> mappingAttributes, IPropertyMetadata targetMember)
+        internal static IMetadata MatchSourceMember(this IEnumerable<IMetadata> sourceMembers, IEnumerable<MappingAttribute> mappingAttributes, IMetadata targetMember)
         {
             var matchedAttribute = mappingAttributes.MatchTargetAttribute(targetMember);
             var matchedSourceMember = sourceMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Source);
@@ -30,7 +30,7 @@ namespace Compentio.SourceMapper.Matchers
         /// <param name="members">Collection of source properties</param>
         /// <param name="targetMember">Target member</param>
         /// <returns>Matched source member</returns>
-        internal static IPropertyMetadata MatchSourceMember(this IEnumerable<IPropertyMetadata> members, IPropertyMetadata targetMember)
+        internal static IMetadata MatchSourceMember(this IEnumerable<IMetadata> members, IMetadata targetMember)
         {
             return members.FirstOrDefault(member => member?.Name == targetMember?.Name);
         }
@@ -41,7 +41,7 @@ namespace Compentio.SourceMapper.Matchers
         /// <param name="mappingAttributes">Collection of all defined mapping attributes</param>
         /// <param name="targetMember">Target member</param>
         /// <returns>Matched target member</returns>
-        internal static IPropertyMetadata MatchTargetMember(this IEnumerable<IPropertyMetadata> targetMembers, IEnumerable<MappingAttribute> mappingAttributes, IPropertyMetadata targetMember)
+        internal static IMetadata MatchTargetMember(this IEnumerable<IMetadata> targetMembers, IEnumerable<MappingAttribute> mappingAttributes, IMetadata targetMember)
         {
             var matchedAttribute = mappingAttributes.MatchTargetAttribute(targetMember);
             var matchedTargetMember = targetMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Target);

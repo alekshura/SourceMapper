@@ -68,7 +68,7 @@ namespace Compentio.SourceMapper.Processors
             return $"{methodMetadata.InverseMethodFullName};";
         }
 
-        protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
+        protected override string GeneratePropertiesMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
         {
             var mappingsStringBuilder = new StringBuilder();
             var sourceMembers = methodMetadata.Parameters.First().Properties;
@@ -76,12 +76,12 @@ namespace Compentio.SourceMapper.Processors
 
             foreach (var targetMember in targetMemebers)
             {
-                var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
-                var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
+                var matchedSourceMember = (IPropertyMetadata)sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
+                var matchedTargetMember = (IPropertyMetadata)targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
 
                 if (IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
 
-                mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
+                mappingsStringBuilder.Append(GeneratePropertyMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
             }
 
             return mappingsStringBuilder.ToString();
