@@ -17,19 +17,19 @@ namespace Compentio.SourceMapper.Metadata
         /// <summary>
         /// Object list of properties
         /// </summary>
-        IEnumerable<IPropertyMetadata> Properties { get; }
+        IEnumerable<IMemberMetadata> Properties { get; }
 
         /// <summary>
-        /// Object list of fields <see cref="FieldMetadata" />
+        /// Object list of fields <see cref="IMemberMetadata.IsField == true" />
         /// </summary>
-        IEnumerable<IFieldMetadata> Fields { get; }
+        IEnumerable<IMemberMetadata> Fields { get; }
 
         /// <summary>
         /// Recurrent method that return flatten list of properties tree for the object
         /// </summary>
         /// <param name="propertyMetadata">List of properties</param>
         /// <returns></returns>
-        IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata);
+        IEnumerable<IMemberMetadata> FlattenProperties(IEnumerable<IMemberMetadata> propertyMetadata);
     }
 
     internal class ParameterTypeMetadata : ITypeMetadata
@@ -44,17 +44,17 @@ namespace Compentio.SourceMapper.Metadata
         public string Name => _parameterSymbol.Name;
         public string FullName => _parameterSymbol.ToDisplayString();
 
-        public IEnumerable<IPropertyMetadata> Properties => _parameterSymbol.Type.GetMembers()
+        public IEnumerable<IMemberMetadata> Properties => _parameterSymbol.Type.GetMembers()
             .Where(member => member as IPropertySymbol is not null)
-            .Select(member => new PropertyMetadata(member as IPropertySymbol));
+            .Select(member => new MemberMetadata(member as IPropertySymbol));
 
-        public IEnumerable<IFieldMetadata> Fields => _parameterSymbol.Type.GetMembers()
+        public IEnumerable<IMemberMetadata> Fields => _parameterSymbol.Type.GetMembers()
             .Where(member => member is IFieldSymbol && member.CanBeReferencedByName && !((IFieldSymbol)member).IsConst)
-            .Select(member => new FieldMetadata(member as IFieldSymbol));
+            .Select(member => new MemberMetadata(member as IFieldSymbol));
 
         public Location? Location => _parameterSymbol.Locations.FirstOrDefault();
 
-        public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) =>
+        public IEnumerable<IMemberMetadata> FlattenProperties(IEnumerable<IMemberMetadata> propertyMetadata) =>
             propertyMetadata.SelectMany(c => FlattenProperties(c.Properties)).Concat(propertyMetadata);
     }
 
@@ -72,17 +72,17 @@ namespace Compentio.SourceMapper.Metadata
 
         public ITypeSymbol Type => _typeSymbol;
 
-        public IEnumerable<IPropertyMetadata> Properties => _typeSymbol.GetMembers()
+        public IEnumerable<IMemberMetadata> Properties => _typeSymbol.GetMembers()
             .Where(member => member.Kind == SymbolKind.Property && !member.IsStatic)
-            .Select(member => new PropertyMetadata(member as IPropertySymbol));
+            .Select(member => new MemberMetadata(member as IPropertySymbol));
 
-        public IEnumerable<IFieldMetadata> Fields => _typeSymbol.GetMembers()
+        public IEnumerable<IMemberMetadata> Fields => _typeSymbol.GetMembers()
             .Where(member => member.Kind == SymbolKind.Field && member.CanBeReferencedByName && !((IFieldSymbol)member).IsConst)
-            .Select(member => new FieldMetadata(member as IFieldSymbol));
+            .Select(member => new MemberMetadata(member as IFieldSymbol));
 
         public Location? Location => _typeSymbol.Locations.FirstOrDefault();
 
-        public IEnumerable<IPropertyMetadata> FlattenProperties(IEnumerable<IPropertyMetadata> propertyMetadata) =>
+        public IEnumerable<IMemberMetadata> FlattenProperties(IEnumerable<IMemberMetadata> propertyMetadata) =>
             propertyMetadata.SelectMany(c => FlattenProperties(c.Properties)).Concat(propertyMetadata);
     }
 }

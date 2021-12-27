@@ -15,8 +15,8 @@ namespace Compentio.SourceMapper.Tests.Matchers
         private readonly IFixture _fixture;
         private readonly Mock<IMethodMetadata> _mockMethodMetadata;
         private readonly Mock<MappingAttribute> _mockMappingAttribute;
-        private readonly Mock<IPropertyMetadata> _mockTargetPropertyMetadata;
-        private readonly Mock<IPropertyMetadata> _mockSourcePropertyMetadata;
+        private readonly Mock<IMemberMetadata> _mockTargetPropertyMetadata;
+        private readonly Mock<IMemberMetadata> _mockSourcePropertyMetadata;
 
         public AttributesMatchersTests()
         {
@@ -25,8 +25,8 @@ namespace Compentio.SourceMapper.Tests.Matchers
                            .Customize(new SupportMutableValueTypesCustomization());
             _mockMethodMetadata = _fixture.Create<Mock<IMethodMetadata>>();
             _mockMappingAttribute = _fixture.Create<Mock<MappingAttribute>>();
-            _mockTargetPropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
-            _mockSourcePropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
+            _mockTargetPropertyMetadata = _fixture.Create<Mock<IMemberMetadata>>();
+            _mockSourcePropertyMetadata = _fixture.Create<Mock<IMemberMetadata>>();
         }
 
         [Fact]

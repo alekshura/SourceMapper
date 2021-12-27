@@ -8,13 +8,13 @@ namespace Compentio.SourceMapper.Matchers
     internal static class MembersMatchers
     {
         /// <summary>
-        /// Method searches for source member that matches <see cref="MappingAttribute.Source"/> value. This <see cref="MappingAttribute"/> also should match the target property.
+        /// Method searches for source member that matches <see cref="MappingAttribute.Source"/> value. This <see cref="MappingAttribute"/> also should match the target member.
         /// </summary>
-        /// <param name="sourceMembers">Collection of source properties</param>
+        /// <param name="sourceMembers">Collection of source members</param>
         /// <param name="mappingAttributes">Collection of all defined mapping attributes</param>
         /// <param name="targetMember">Target member</param>
         /// <returns>Matched source member</returns>
-        internal static IMetadata MatchSourceMember(this IEnumerable<IMetadata> sourceMembers, IEnumerable<MappingAttribute> mappingAttributes, IMetadata targetMember)
+        internal static IMemberMetadata MatchSourceMember(this IEnumerable<IMemberMetadata> sourceMembers, IEnumerable<MappingAttribute> mappingAttributes, IMemberMetadata targetMember)
         {
             var matchedAttribute = mappingAttributes.MatchTargetAttribute(targetMember);
             var matchedSourceMember = sourceMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Source);
@@ -27,21 +27,21 @@ namespace Compentio.SourceMapper.Matchers
         /// <summary>
         /// Method searches for source member that name matches target member.
         /// </summary>
-        /// <param name="members">Collection of source properties</param>
+        /// <param name="members">Collection of source members</param>
         /// <param name="targetMember">Target member</param>
         /// <returns>Matched source member</returns>
-        internal static IMetadata MatchSourceMember(this IEnumerable<IMetadata> members, IMetadata targetMember)
+        internal static IMemberMetadata MatchSourceMember(this IEnumerable<IMemberMetadata> members, IMemberMetadata targetMember)
         {
             return members.FirstOrDefault(member => member?.Name == targetMember?.Name);
         }
         /// <summary>
-        /// Method searches for target member that matches <see cref="MappingAttribute.Target"/> value. This <see cref="MappingAttribute"/> also should match the target property.
+        /// Method searches for target member that matches <see cref="MappingAttribute.Target"/> value. This <see cref="MappingAttribute"/> also should match the target member.
         /// </summary>
-        /// <param name="targetMembers">Collection of target properties</param>
+        /// <param name="targetMembers">Collection of target members</param>
         /// <param name="mappingAttributes">Collection of all defined mapping attributes</param>
         /// <param name="targetMember">Target member</param>
         /// <returns>Matched target member</returns>
-        internal static IMetadata MatchTargetMember(this IEnumerable<IMetadata> targetMembers, IEnumerable<MappingAttribute> mappingAttributes, IMetadata targetMember)
+        internal static IMemberMetadata MatchTargetMember(this IEnumerable<IMemberMetadata> targetMembers, IEnumerable<MappingAttribute> mappingAttributes, IMemberMetadata targetMember)
         {
             var matchedAttribute = mappingAttributes.MatchTargetAttribute(targetMember);
             var matchedTargetMember = targetMembers.FirstOrDefault(member => member?.Name == matchedAttribute?.Target);

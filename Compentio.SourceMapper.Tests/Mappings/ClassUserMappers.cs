@@ -12,6 +12,8 @@ namespace Compentio.SourceMapper.Tests.Mappings
     [Mapper(ClassName = "ClassUserDaoMapper")]
     public abstract partial class UserMapper
     {
+        [Mapping(Source = nameof(UserDao.StringStaticValueDao), Target = nameof(UserInfo.StringStaticValueInfo))]
+        [Mapping(Source = nameof(UserDao.StringFieldValueDao), Target = nameof(UserInfo.StringFieldValueInfo))]
         [Mapping(Source = nameof(UserDao.UserId), Target = nameof(UserInfo.Id), Expression = nameof(ConvertUserId))]
         [Mapping(Source = nameof(UserDao.UserGender), Target = nameof(UserInfo.Sex), Expression = nameof(ConvertUserGender))]
         [Mapping(Source = nameof(UserDao), Target = nameof(UserInfo.Name), Expression = nameof(ConvertUserName))]

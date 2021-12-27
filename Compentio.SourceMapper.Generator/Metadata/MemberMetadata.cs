@@ -11,14 +11,9 @@ namespace Compentio.SourceMapper.Metadata
     internal interface IMemberMetadata : IMetadata
     {
         /// <summary>
-        /// Indicate that class is a field and implements field symbol <see cref="IFieldSymbol">
+        /// Indicate that member is field or property (or unknown)
         /// </summary>
-        bool IsField { get; }
-
-        /// <summary>
-        /// Indicate that class is a property and implements property symbol <see cref="IPropertySymbol">
-        /// </summary>
-        bool IsProperty { get; }
+        MemberType MemberType { get; }
 
         /// <summary>
         /// Full name with namespace of the member
@@ -57,9 +52,16 @@ namespace Compentio.SourceMapper.Metadata
             _symbol = symbol;
         }
 
-        public bool IsField => _symbol is IFieldSymbol;
+        public MemberType MemberType
+        {
+            get
+            {
+                if (_symbol is IFieldSymbol) return MemberType.Field;
+                if (_symbol is IPropertySymbol) return MemberType.Property;
 
-        public bool IsProperty => _symbol is IPropertySymbol;
+                return MemberType.Unknown;
+            }
+        }
 
         public string FullName => TypeMetadata.FullName;
 
@@ -80,7 +82,7 @@ namespace Compentio.SourceMapper.Metadata
         {
             get
             {
-                if (!IsClass || !IsProperty)
+                if (!IsClass || MemberType != MemberType.Property)
                     return Enumerable.Empty<IMemberMetadata>();
 
                 return Type.GetMembers()
@@ -97,11 +99,21 @@ namespace Compentio.SourceMapper.Metadata
         {
             get
             {
-                if (IsField) return ((IFieldSymbol)_symbol).Type;
+                if (MemberType == MemberType.Field) return ((IFieldSymbol)_symbol).Type;
                 else return ((IPropertySymbol)_symbol).Type;
             }
         }
 
         private ITypeMetadata TypeMetadata => new TypeMetadata(Type);
+    }
+
+    /// <summary>
+    /// Types of member
+    /// </summary>
+    internal enum MemberType
+    {
+        Field,
+        Property,
+        Unknown
     }
 }
