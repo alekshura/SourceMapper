@@ -102,13 +102,6 @@ namespace Compentio.SourceMapper.Metadata
             }
         }
 
-        private ITypeMetadata TypeMetadata
-        {
-            get
-            {
-                if (IsField) return new TypeMetadata(Type);
-                else return new TypeMetadata(Type);
-            }
-        }
+        private ITypeMetadata TypeMetadata => new TypeMetadata(Type);
     }
 }
