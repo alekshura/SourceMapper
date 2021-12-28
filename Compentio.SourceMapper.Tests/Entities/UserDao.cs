@@ -6,8 +6,8 @@ namespace Compentio.SourceMapper.Tests.Entities
 {
     public class UserDao
     {
-        public static string StringStaticValueDao = "StringStaticValueDao";
-        public string StringFieldValueDao = "StringFieldValueDao";
+        public static string UserCodeStatic = "UserCodeStaticDao";
+        public string UserCode = "UserCodeDao";
 
         public long UserId { get; set; }
         public string FirstName { get; set; }

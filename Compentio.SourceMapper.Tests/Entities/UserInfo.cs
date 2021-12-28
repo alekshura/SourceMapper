@@ -6,8 +6,8 @@ namespace Compentio.SourceMapper.Tests.Entities
 {
     public class UserInfo
     {
-        public static string StringStaticValueInfo = "StringStaticValueInfo";
-        public string StringFieldValueInfo = "StringFieldValueInfo";
+        public static string UserCodeStatic = "UserCodeStaticInfo";
+        public string UserCode = "UserCodeInfo";
 
         public int Id { get; set; }
         public string Name { get; set; }
