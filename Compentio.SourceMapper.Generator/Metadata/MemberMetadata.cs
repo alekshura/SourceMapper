@@ -12,6 +12,7 @@ namespace Compentio.SourceMapper.Metadata
     {
         /// <summary>
         /// Indicate that member is field or property (or unknown)
+        /// Based od <see cref="IPropertySymbol" /> and <see cref="IFieldSymbol" />
         /// </summary>
         MemberType MemberType { get; }
 

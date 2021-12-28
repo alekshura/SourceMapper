@@ -12,6 +12,8 @@ namespace Compentio.SourceMapper.Processors
     {
         protected override string Modifier => "override";
 
+        protected override ProcessorType ProcessorType => ProcessorType.Class;
+
         protected override string GenerateMapperCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />

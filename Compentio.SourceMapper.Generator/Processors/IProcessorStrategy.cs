@@ -56,6 +56,11 @@ namespace Compentio.SourceMapper.Processors
         /// </summary>
         protected abstract string Modifier { get; }
 
+        /// <summary>
+        /// Determine processor strategy type
+        /// </summary>
+        protected abstract ProcessorType ProcessorType { get; }
+
         protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
 
         protected string GenerateMethods(IMapperMetadata sourceMetadata)
@@ -120,7 +125,7 @@ namespace Compentio.SourceMapper.Processors
 
                 if (IgnoreMapping(matchedSourceMember, matchedTargetMember)) continue;
 
-                if (memberType == MemberType.Property)
+                if (ProcessorType == ProcessorType.Class && memberType == MemberType.Property)
                 {
                     var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
                     var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
@@ -292,5 +297,14 @@ namespace Compentio.SourceMapper.Processors
                     return Enumerable.Empty<IMemberMetadata>();
             }
         }
+    }
+
+    /// <summary>
+    /// Encapsulate processor strategy types
+    /// </summary>
+    internal enum ProcessorType
+    {
+        Class,
+        Interface
     }
 }
