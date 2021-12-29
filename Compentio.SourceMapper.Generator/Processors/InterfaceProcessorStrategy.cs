@@ -12,6 +12,8 @@ namespace Compentio.SourceMapper.Processors
     {
         protected override string Modifier => "virtual";
 
+        protected override ProcessorType ProcessorType => ProcessorType.Interface;
+
         protected override string GenerateMapperCode(IMapperMetadata mapperMetadata)
         {
             var result = @$"// <mapper-source-generated />
@@ -66,25 +68,6 @@ namespace Compentio.SourceMapper.Processors
         private string GenerateInterfaceMethod(IMethodMetadata methodMetadata)
         {
             return $"{methodMetadata.InverseMethodFullName};";
-        }
-
-        protected override string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false)
-        {
-            var mappingsStringBuilder = new StringBuilder();
-            var sourceMembers = methodMetadata.Parameters.First().Properties;
-            var targetMemebers = methodMetadata.ReturnType.Properties;
-
-            foreach (var targetMember in targetMemebers)
-            {
-                var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
-                var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
-
-                if (IgnorePropertyMapping(matchedSourceMember, matchedTargetMember)) continue;
-
-                mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember, inverseMapping));
-            }
-
-            return mappingsStringBuilder.ToString();
         }
     }
 }

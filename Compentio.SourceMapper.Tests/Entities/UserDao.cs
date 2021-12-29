@@ -6,6 +6,11 @@ namespace Compentio.SourceMapper.Tests.Entities
 {
     public class UserDao
     {
+        public static string UserCodeStatic = "UserCodeStaticDao";
+        public string UserCode = "UserCodeDao";
+        [IgnoreMapping]
+        public int IgnoredField;
+
         public long UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -20,6 +25,8 @@ namespace Compentio.SourceMapper.Tests.Entities
 
     public class UserDataDao
     {
+        public AddressDao AddressField;
+
         public long UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

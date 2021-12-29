@@ -90,7 +90,7 @@ namespace Compentio.SourceMapper.Tests.Processors
         {
             // Arrange
             var methodMetadata = GetValidMethodWithAttributes(_mockMappingAttribute);
-            methodMetadata.Setup(m => m.ReturnType.Properties).Returns(_fixture.Create<IEnumerable<IPropertyMetadata>>());
+            methodMetadata.Setup(m => m.ReturnType.Properties).Returns(_fixture.Create<IEnumerable<IMemberMetadata>>());
             methodMetadata.Setup(m => m.Parameters).Returns(_fixture.Create<IEnumerable<ITypeMetadata>>());
             _sourceMetadataMock.Setup(sourceMetadata => sourceMetadata.MethodsMetadata).Returns(new List<IMethodMetadata> { methodMetadata.Object });
 
@@ -98,7 +98,8 @@ namespace Compentio.SourceMapper.Tests.Processors
             var result = _processorStrategy.GenerateCode(_sourceMetadataMock.Object);
 
             // Assert
-            result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped);
+            result.Diagnostics.Should().Contain(d => d.DiagnosticDescriptor == SourceMapperDescriptors.PropertyIsNotMapped ||
+                d.DiagnosticDescriptor == SourceMapperDescriptors.FieldIsNotMapped);
         }
 
         [Fact]
@@ -135,13 +136,13 @@ namespace Compentio.SourceMapper.Tests.Processors
             var mockMethodMetadata = _fixture.Create<Mock<IMethodMetadata>>();
 
             // Create new method property
-            var mockProperty = _fixture.Create<Mock<IPropertyMetadata>>();
+            var mockProperty = _fixture.Create<Mock<IMemberMetadata>>();
             mockProperty.Setup(p => p.IsClass).Returns(false);
             mockProperty.Setup(p => p.IgnoreInMapping).Returns(ignoreInMapping);
 
             // Inject property
             var mockTypeMetadata = _fixture.Create<Mock<ITypeMetadata>>();
-            mockTypeMetadata.Setup(t => t.Properties).Returns(new List<IPropertyMetadata> { mockProperty.Object });
+            mockTypeMetadata.Setup(t => t.Properties).Returns(new List<IMemberMetadata> { mockProperty.Object });
 
             var sourceParameters = mockTypeMetadata.Object;
             var mockParameters = GetValidMethodParameters(sourceParameters);
@@ -161,7 +162,7 @@ namespace Compentio.SourceMapper.Tests.Processors
             mockParameters.Setup(p => p.Name).Returns(sourceTypeMetadata.Name);
             mockParameters.Setup(p => p.FullName).Returns(sourceTypeMetadata.FullName);
             mockParameters.Setup(p => p.Location).Returns(sourceTypeMetadata.Location);
-            mockParameters.Setup(p => p.Properties).Returns(new List<IPropertyMetadata> { sourceTypeMetadata.Properties.First() });
+            mockParameters.Setup(p => p.Properties).Returns(new List<IMemberMetadata> { sourceTypeMetadata.Properties.First() });
 
             return mockParameters;
         }

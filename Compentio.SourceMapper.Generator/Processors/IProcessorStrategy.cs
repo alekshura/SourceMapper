@@ -1,4 +1,5 @@
-﻿using Compentio.SourceMapper.Diagnostics;
+﻿using Compentio.SourceMapper.Attributes;
+using Compentio.SourceMapper.Diagnostics;
 using Compentio.SourceMapper.Helpers;
 using Compentio.SourceMapper.Matchers;
 using Compentio.SourceMapper.Metadata;
@@ -55,9 +56,12 @@ namespace Compentio.SourceMapper.Processors
         /// </summary>
         protected abstract string Modifier { get; }
 
-        protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
+        /// <summary>
+        /// Determine processor strategy type
+        /// </summary>
+        protected abstract ProcessorType ProcessorType { get; }
 
-        protected abstract string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, bool inverseMapping = false);
+        protected abstract string GenerateMapperCode(IMapperMetadata mapperMetadata);
 
         protected string GenerateMethods(IMapperMetadata sourceMetadata)
         {
@@ -85,7 +89,8 @@ namespace Compentio.SourceMapper.Processors
 
                 var target = new {methodMetadata.ReturnType.FullName}();
 
-                {GenerateMappings(sourceMetadata, methodMetadata)}
+                {GenerateMappings(sourceMetadata, methodMetadata, MemberType.Field)}
+                {GenerateMappings(sourceMetadata, methodMetadata, MemberType.Property)}
 
                 return target;
             }}";
@@ -100,47 +105,88 @@ namespace Compentio.SourceMapper.Processors
 
                 var target = new {methodMetadata.Parameters.First().FullName}();
 
-                {GenerateMappings(sourceMetadata, methodMetadata, true)}
+                {GenerateMappings(sourceMetadata, methodMetadata, MemberType.Field, true)}
+                {GenerateMappings(sourceMetadata, methodMetadata, MemberType.Property, true)}
 
                 return target;
             }}";
         }
 
-        protected string GenerateMapping(IMapperMetadata sourceMetadata, ITypeMetadata parameter, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping = false)
+        protected string GenerateMappings(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, MemberType memberType, bool inverseMapping = false)
+        {
+            var mappingsStringBuilder = new StringBuilder();
+            var sourceMembers = GetSourceMembers(methodMetadata, memberType);
+            var targetMemebers = GetTargetMembers(methodMetadata, memberType);
+
+            foreach (var targetMember in targetMemebers)
+            {
+                var matchedSourceMember = sourceMembers.MatchSourceMember(methodMetadata.MappingAttributes, targetMember);
+                var matchedTargetMember = targetMemebers.MatchTargetMember(methodMetadata.MappingAttributes, targetMember);
+
+                if (IgnoreMapping(matchedSourceMember, matchedTargetMember)) continue;
+
+                if (ProcessorType == ProcessorType.Class && memberType == MemberType.Property)
+                {
+                    var expressionAttribute = methodMetadata.MappingAttributes.MatchExpressionAttribute(targetMember, matchedSourceMember);
+                    var expressionMapping = MapExpression(expressionAttribute, methodMetadata.Parameters.First(), matchedSourceMember, matchedTargetMember);
+
+                    if (!string.IsNullOrEmpty(expressionMapping))
+                    {
+                        if (inverseMapping) continue;
+
+                        mappingsStringBuilder.Append(expressionMapping);
+                        continue;
+                    }
+                }
+
+                mappingsStringBuilder.Append(GenerateMapping(sourceMetadata, methodMetadata, matchedSourceMember, matchedTargetMember, memberType, inverseMapping));
+            }
+
+            return mappingsStringBuilder.ToString();
+        }
+
+        protected string GenerateMapping(IMapperMetadata sourceMetadata, IMethodMetadata methodMetadata, IMemberMetadata matchedSourceMember, IMemberMetadata matchedTargetMember, MemberType memberType, bool inverseMapping = false)
         {
             if (inverseMapping) ObjectHelper.Swap(ref matchedSourceMember, ref matchedTargetMember);
 
             if (matchedTargetMember is null && matchedSourceMember is not null)
             {
-                PropertyMappingWarning(matchedSourceMember);
+                MemberMappingWarning(matchedSourceMember);
             }
 
             if (matchedSourceMember is null || matchedTargetMember is null)
             {
-                PropertyMappingWarning(matchedSourceMember ?? matchedTargetMember);
+                MemberMappingWarning(matchedSourceMember ?? matchedTargetMember);
                 return string.Empty;
             }
 
             var mapping = new StringBuilder();
 
+            if (matchedSourceMember.IsStatic && matchedTargetMember.IsStatic && memberType == MemberType.Field)
+            {
+                mapping.AppendLine(MapStaticProperty(matchedSourceMember, matchedTargetMember, methodMetadata, inverseMapping));
+                return mapping.ToString();
+            }
+
             if (!matchedSourceMember.IsClass && !matchedTargetMember.IsClass)
             {
-                mapping.AppendLine(MapProperty(matchedSourceMember, matchedTargetMember, parameter));
+                mapping.AppendLine(MapProperty(matchedSourceMember, matchedTargetMember, methodMetadata.Parameters.First()));
             }
 
             if (matchedSourceMember.IsClass && matchedTargetMember.IsClass)
             {
-                mapping.AppendLine(MapClass(sourceMetadata, matchedSourceMember, matchedTargetMember, parameter, inverseMapping));
+                mapping.AppendLine(MapClass(sourceMetadata, matchedSourceMember, matchedTargetMember, methodMetadata.Parameters.First(), inverseMapping));
             }
+
             return mapping.ToString();
         }
 
-        protected string MapProperty(IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter)
+        protected string MapProperty(IMetadata matchedSourceMember, IMetadata matchedTargetMember, ITypeMetadata parameter)
         {
             return $"target.{matchedTargetMember?.Name} = {parameter.Name}.{matchedSourceMember?.Name};";
         }
 
-        protected string MapClass(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, ITypeMetadata parameter, bool inverseMapping)
+        protected string MapClass(IMapperMetadata sourceMetadata, IMemberMetadata matchedSourceMember, IMemberMetadata matchedTargetMember, ITypeMetadata parameter, bool inverseMapping)
         {
             var method = GetDefinedMethod(sourceMetadata, matchedSourceMember, matchedTargetMember, inverseMapping);
 
@@ -153,13 +199,40 @@ namespace Compentio.SourceMapper.Processors
             }
             else
             {
-                PropertyMappingWarning(matchedTargetMember);
+                MemberMappingWarning(matchedTargetMember);
             }
 
             return string.Empty;
         }
 
-        protected IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IPropertyMetadata matchedSourceMember, IPropertyMetadata matchedTargetMember, bool inverseMapping)
+        protected string MapStaticProperty(IMemberMetadata matchedSourceMember, IMemberMetadata matchedTargetMember, IMethodMetadata methodMetadata, bool inverseMapping)
+        {
+            if (inverseMapping)
+                return $"{methodMetadata.Parameters.First().FullName}.{matchedTargetMember?.Name} = {methodMetadata.ReturnType.FullName}.{matchedSourceMember?.Name};";
+            else
+                return $"{methodMetadata.ReturnType.FullName}.{matchedTargetMember?.Name} = {methodMetadata.Parameters.First().FullName}.{matchedSourceMember?.Name};";
+        }
+
+        protected string MapExpression(MappingAttribute expressionAttribute, ITypeMetadata parameter, IMemberMetadata matchedSourceMember, IMemberMetadata matchedTargetMember)
+        {
+            var mapping = new StringBuilder();
+
+            if (expressionAttribute is not null && matchedSourceMember is not null)
+            {
+                mapping.AppendLine($"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}({parameter.Name}.{matchedSourceMember.Name});");
+                return mapping.ToString();
+            }
+
+            if (expressionAttribute is not null && matchedTargetMember is not null && matchedSourceMember is null)
+            {
+                mapping.AppendLine($"target.{expressionAttribute?.Target} = {expressionAttribute?.Expression}({parameter.Name});");
+                return mapping.ToString();
+            }
+
+            return mapping.ToString();
+        }
+
+        protected IMethodMetadata? GetDefinedMethod(IMapperMetadata sourceMetadata, IMemberMetadata matchedSourceMember, IMemberMetadata matchedTargetMember, bool inverseMapping)
         {
             if (inverseMapping)
             {
@@ -172,23 +245,66 @@ namespace Compentio.SourceMapper.Processors
         }
 
         /// <summary>
-        /// Metchod checks that property metadata should be ignored during mapping due to <see cref="IgnoreMappingAttribute"/>
+        /// Metchod checks that member metadata should be ignored during mapping due to <see cref="IgnoreMappingAttribute"/>
         /// </summary>
-        /// <param name="sourcePropertyMetadata"></param>
-        /// <param name="targetPropertyMetadata"></param>
+        /// <param name="sourceFieldMetadata"></param>
+        /// <param name="targetFieldMetadata"></param>
         /// <returns></returns>
-        protected bool IgnorePropertyMapping(IPropertyMetadata? sourcePropertyMetadata, IPropertyMetadata? targetPropertyMetadata)
+        protected bool IgnoreMapping(IMemberMetadata? sourceFieldMetadata, IMemberMetadata? targetFieldMetadata)
         {
-            return (sourcePropertyMetadata?.IgnoreInMapping is true || targetPropertyMetadata?.IgnoreInMapping is true);
+            return (sourceFieldMetadata?.IgnoreInMapping is true || targetFieldMetadata?.IgnoreInMapping is true);
         }
 
-        protected void PropertyMappingWarning(IPropertyMetadata metadata)
+        protected void MemberMappingWarning(IMemberMetadata metadata)
         {
             _diagnostics.Add(new DiagnosticsInfo
             {
-                DiagnosticDescriptor = SourceMapperDescriptors.PropertyIsNotMapped,
+                DiagnosticDescriptor = metadata.MemberType == MemberType.Field ? SourceMapperDescriptors.FieldIsNotMapped : SourceMapperDescriptors.PropertyIsNotMapped,
                 Metadata = metadata
             });
         }
+
+        protected IEnumerable<IMemberMetadata> GetSourceMembers(IMethodMetadata methodMetadata, MemberType memberType)
+        {
+            var typeMetadata = methodMetadata.Parameters.First();
+
+            switch (memberType)
+            {
+                case MemberType.Field:
+                    return typeMetadata.Fields;
+
+                case MemberType.Property:
+                    return typeMetadata.Properties;
+
+                default:
+                    return Enumerable.Empty<IMemberMetadata>();
+            }
+        }
+
+        protected IEnumerable<IMemberMetadata> GetTargetMembers(IMethodMetadata methodMetadata, MemberType memberType)
+        {
+            var typeMetadata = methodMetadata.ReturnType;
+
+            switch (memberType)
+            {
+                case MemberType.Field:
+                    return typeMetadata.Fields;
+
+                case MemberType.Property:
+                    return typeMetadata.Properties;
+
+                default:
+                    return Enumerable.Empty<IMemberMetadata>();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Encapsulate processor strategy types
+    /// </summary>
+    internal enum ProcessorType
+    {
+        Class,
+        Interface
     }
 }

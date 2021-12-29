@@ -15,8 +15,8 @@ namespace Compentio.SourceMapper.Tests.Matchers
         private readonly IFixture _fixture;
         private readonly Mock<IMethodMetadata> _mockMethodMetadata;
         private readonly Mock<MappingAttribute> _mockMappingAttribute;
-        private readonly Mock<IPropertyMetadata> _mockTargetPropertyMetadata;
-        private readonly Mock<IPropertyMetadata> _mockSourcePropertyMetadata;
+        private readonly Mock<IMemberMetadata> _mockTargetMemberMetadata;
+        private readonly Mock<IMemberMetadata> _mockSourceMemberMetadata;
 
         public AttributesMatchersTests()
         {
@@ -25,8 +25,8 @@ namespace Compentio.SourceMapper.Tests.Matchers
                            .Customize(new SupportMutableValueTypesCustomization());
             _mockMethodMetadata = _fixture.Create<Mock<IMethodMetadata>>();
             _mockMappingAttribute = _fixture.Create<Mock<MappingAttribute>>();
-            _mockTargetPropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
-            _mockSourcePropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
+            _mockTargetMemberMetadata = _fixture.Create<Mock<IMemberMetadata>>();
+            _mockSourceMemberMetadata = _fixture.Create<Mock<IMemberMetadata>>();
         }
 
         [Fact]
@@ -67,10 +67,10 @@ namespace Compentio.SourceMapper.Tests.Matchers
         {
             // Arrange
             IEnumerable<MappingAttribute> mappingAttributes = new List<MappingAttribute> { _mockMappingAttribute.Object };
-            _mockMappingAttribute.Setup(m => m.Target).Returns(_mockTargetPropertyMetadata.Object.Name);
+            _mockMappingAttribute.Setup(m => m.Target).Returns(_mockTargetMemberMetadata.Object.Name);
 
             // Act
-            var result = mappingAttributes.MatchTargetAttribute(_mockTargetPropertyMetadata.Object);
+            var result = mappingAttributes.MatchTargetAttribute(_mockTargetMemberMetadata.Object);
 
             // Assert
             result.Should().NotBeNull();
@@ -84,7 +84,7 @@ namespace Compentio.SourceMapper.Tests.Matchers
             _mockMappingAttribute.Setup(m => m.Target).Returns(string.Empty);
 
             // Act
-            var result = mappingAttributes.MatchTargetAttribute(_mockTargetPropertyMetadata.Object);
+            var result = mappingAttributes.MatchTargetAttribute(_mockTargetMemberMetadata.Object);
 
             // Assert
             result.Should().BeNull();
@@ -95,11 +95,11 @@ namespace Compentio.SourceMapper.Tests.Matchers
         {
             // Arrange
             IEnumerable<MappingAttribute> mappingAttributes = new List<MappingAttribute> { _mockMappingAttribute.Object };
-            _mockMappingAttribute.Setup(m => m.Target).Returns(_mockTargetPropertyMetadata.Object.Name);
-            _mockMappingAttribute.Setup(m => m.Source).Returns(_mockSourcePropertyMetadata.Object.Name);
+            _mockMappingAttribute.Setup(m => m.Target).Returns(_mockTargetMemberMetadata.Object.Name);
+            _mockMappingAttribute.Setup(m => m.Source).Returns(_mockSourceMemberMetadata.Object.Name);
 
             // Act
-            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetPropertyMetadata.Object, _mockSourcePropertyMetadata.Object);
+            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetMemberMetadata.Object, _mockSourceMemberMetadata.Object);
 
             // Assert
             result.Should().NotBeNull();
@@ -110,10 +110,10 @@ namespace Compentio.SourceMapper.Tests.Matchers
         {
             // Arrange
             IEnumerable<MappingAttribute> mappingAttributes = new List<MappingAttribute> { _mockMappingAttribute.Object };
-            _mockMappingAttribute.Setup(m => m.Target).Returns(_mockTargetPropertyMetadata.Object.Name);
+            _mockMappingAttribute.Setup(m => m.Target).Returns(_mockTargetMemberMetadata.Object.Name);
 
             // Act
-            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetPropertyMetadata.Object, _mockSourcePropertyMetadata.Object);
+            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetMemberMetadata.Object, _mockSourceMemberMetadata.Object);
 
             // Assert
             result.Should().NotBeNull();
@@ -128,7 +128,7 @@ namespace Compentio.SourceMapper.Tests.Matchers
             _mockMappingAttribute.Setup(m => m.Source).Returns(string.Empty);
 
             // Act
-            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetPropertyMetadata.Object, _mockSourcePropertyMetadata.Object);
+            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetMemberMetadata.Object, _mockSourceMemberMetadata.Object);
 
             // Assert
             result.Should().BeNull();
@@ -140,10 +140,10 @@ namespace Compentio.SourceMapper.Tests.Matchers
             // Arrange
             IEnumerable<MappingAttribute> mappingAttributes = new List<MappingAttribute> { _mockMappingAttribute.Object };
             _mockMappingAttribute.Setup(m => m.Target).Returns(string.Empty);
-            _mockMappingAttribute.Setup(m => m.Source).Returns(_mockSourcePropertyMetadata.Object.Name);
+            _mockMappingAttribute.Setup(m => m.Source).Returns(_mockSourceMemberMetadata.Object.Name);
 
             // Act
-            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetPropertyMetadata.Object, _mockSourcePropertyMetadata.Object);
+            var result = mappingAttributes.MatchExpressionAttribute(_mockTargetMemberMetadata.Object, _mockSourceMemberMetadata.Object);
 
             // Assert
             result.Should().BeNull();

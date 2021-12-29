@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Compentio.SourceMapper.Tests.Metadata
 {
-    public abstract class PropertyMetadataTestBase
+    public abstract class MemberMetadataTestBase
     {
         protected abstract string MockNamespace { get; }
         protected abstract string MockClassName { get; }
@@ -27,7 +27,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
 
         protected Compilation GetCompilationMock(string sourceCode)
         {
-            return CSharpCompilation.Create("PropertyMetadataTestBase",
+            return CSharpCompilation.Create("MemberMetadataTestBase",
                 new[] { CSharpSyntaxTree.ParseText(sourceCode) },
                 new[] { MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location) },
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
@@ -41,13 +41,15 @@ namespace {MockNamespace}
 
     public abstract class {MockClassName}
     {{
-        public abstract MockTypeDto {MockMethodName}(MockTypeDao fake);
+        public abstract MockTypeDto {MockMethodName}(MockTypeDao mock);
     }}
 
     public class MockTypeDao
     {{
         [IgnoreMapping]
         public virtual string PropertyToIgnore {{ get; set; }}
+        public static string StaticFieldProperty;
+        public string FieldProperty;
     }}
 
     {IgnoreMappingAttributeSourceCode}

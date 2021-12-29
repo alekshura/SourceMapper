@@ -16,7 +16,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
         private readonly Mock<ITypeSymbol> _mockTypeSymbol;
         private readonly Mock<Location> _mockLocation;
         private readonly Mock<ISymbol> _mockSymbol;
-        private readonly Mock<IPropertyMetadata> _mockPropertyMetadata;
+        private readonly Mock<IMemberMetadata> _mockMemberMetadata;
 
         public TypeMetadataTests()
         {
@@ -26,7 +26,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
             _mockTypeSymbol = _fixture.Create<Mock<ITypeSymbol>>();
             _mockLocation = _fixture.Create<Mock<Location>>();
             _mockSymbol = _fixture.Create<Mock<ISymbol>>();
-            _mockPropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
+            _mockMemberMetadata = _fixture.Create<Mock<IMemberMetadata>>();
         }
 
         [Fact]
@@ -96,6 +96,23 @@ namespace Compentio.SourceMapper.Tests.Metadata
         }
 
         [Fact]
+        public void Instanc_NotEmptyFields()
+        {
+            // Arrange            
+            var mockFieldSymbol = _fixture.Create<Mock<IFieldSymbol>>();
+            mockFieldSymbol.Setup(s => s.Kind).Returns(SymbolKind.Field);
+            mockFieldSymbol.Setup(s => s.CanBeReferencedByName).Returns(true);
+            mockFieldSymbol.Setup(s => s.IsConst).Returns(false);
+            _mockTypeSymbol.Setup(t => t.GetMembers()).Returns(ImmutableArray.Create(mockFieldSymbol.Object as ISymbol));
+
+            // Act
+            var typeMetadata = new TypeMetadata(_mockTypeSymbol.Object);
+
+            // Assert
+            typeMetadata.Fields.Should().NotBeEmpty();
+        }
+
+        [Fact]
         public void Instanc_EmptyProperties()
         {
             // Arrange
@@ -111,14 +128,28 @@ namespace Compentio.SourceMapper.Tests.Metadata
         }
 
         [Fact]
+        public void Instanc_EmptyFields()
+        {
+            // Arrange
+            _mockTypeSymbol.Setup(t => t.GetMembers()).Returns(ImmutableArray.Create(_mockSymbol.Object));
+            _mockSymbol.Setup(s => s.Kind).Returns(SymbolKind.ErrorType);
+
+            // Act
+            var typeMetadata = new TypeMetadata(_mockTypeSymbol.Object);
+
+            // Assert
+            typeMetadata.Fields.Should().BeEmpty();
+        }
+
+        [Fact]
         public void FlattenProperties_ValidFlatten()
         {
             // Arrange
-            var limitedPropertyMetadata = _fixture.Create<Mock<IPropertyMetadata>>();
-            limitedPropertyMetadata.Setup(l => l.Properties).Returns(new List<IPropertyMetadata>());
+            var limitedPropertyMetadata = _fixture.Create<Mock<IMemberMetadata>>();
+            limitedPropertyMetadata.Setup(l => l.Properties).Returns(new List<IMemberMetadata>());
 
-            _mockPropertyMetadata.Setup(p => p.Properties).Returns(
-                new List<IPropertyMetadata> 
+            _mockMemberMetadata.Setup(p => p.Properties).Returns(
+                new List<IMemberMetadata> 
                 { 
                     limitedPropertyMetadata.Object, 
                     limitedPropertyMetadata.Object, 
@@ -129,7 +160,7 @@ namespace Compentio.SourceMapper.Tests.Metadata
 
             // Act
             var typeMetadata = new TypeMetadata(_mockTypeSymbol.Object);
-            var result = typeMetadata.FlattenProperties(new List<IPropertyMetadata> { _mockPropertyMetadata.Object });
+            var result = typeMetadata.FlattenProperties(new List<IMemberMetadata> { _mockMemberMetadata.Object });
 
             // Assert
             result.Should().NotBeEmpty();

@@ -31,6 +31,8 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Assert
             mappingResult.Name.Should().Be(userDao.FirstName);
             mappingResult.BirthDate.Should().Be(userDao.BirthDate);
+            mappingResult.UserCode.Should().Be(userDao.UserCode);
+            UserInfo.UserCodeStatic.Should().Be(UserDao.UserCodeStatic);
             // Not mapped
             mappingResult.Id.Should().NotBe((int)userDao.UserId);
             mappingResult.Address.Should().BeNull();
@@ -49,6 +51,8 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Assert
             mappingResult.FirstName.Should().Be(userInfo.Name);
             mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
+            mappingResult.UserCode.Should().Be(userInfo.UserCode);
+            UserDao.UserCodeStatic.Should().Be(UserInfo.UserCodeStatic);
             //// Not mapped
             mappingResult.UserId.Should().NotBe(userInfo.Id);
             mappingResult.City.Should().BeNull();
@@ -87,7 +91,7 @@ namespace Compentio.SourceMapper.Tests.Processors
 
             mappingResult.Name.Should().Be(userDataDao.FirstName);
             mappingResult.BirthDate.Should().Be(userDataDao.BirthDate);
-            
+            // Property
             mappingResult.Address.Should().NotBeNull();
             mappingResult.Address.City.Should().Be(userDataDao.UserAddress.City);
             mappingResult.Address.House.Should().Be(userDataDao.UserAddress.House);
@@ -96,6 +100,15 @@ namespace Compentio.SourceMapper.Tests.Processors
             mappingResult.Address.Region.Should().NotBeNull();
             mappingResult.Address.Region.State.Should().Be(userDataDao.UserAddress.Region.State);
             mappingResult.Address.Region.District.Should().Be(userDataDao.UserAddress.Region.District);
+            // Field
+            mappingResult.AddressField.Should().NotBeNull();
+            mappingResult.AddressField.City.Should().Be(userDataDao.AddressField.City);
+            mappingResult.AddressField.House.Should().Be(userDataDao.AddressField.House);
+            mappingResult.AddressField.Street.Should().Be(userDataDao.AddressField.Street);
+
+            mappingResult.AddressField.Region.Should().NotBeNull();
+            mappingResult.AddressField.Region.State.Should().Be(userDataDao.AddressField.Region.State);
+            mappingResult.AddressField.Region.District.Should().Be(userDataDao.AddressField.Region.District);
         }
 
         [Fact]
@@ -113,7 +126,7 @@ namespace Compentio.SourceMapper.Tests.Processors
 
             mappingResult.FirstName.Should().Be(userInfo.Name);
             mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
-
+            // Property
             mappingResult.UserAddress.Should().NotBeNull();
             mappingResult.UserAddress.City.Should().Be(userInfo.Address.City);
             mappingResult.UserAddress.House.Should().Be(userInfo.Address.House);
@@ -122,6 +135,15 @@ namespace Compentio.SourceMapper.Tests.Processors
             mappingResult.UserAddress.Region.Should().NotBeNull();
             mappingResult.UserAddress.Region.State.Should().Be(userInfo.Address.Region.State);
             mappingResult.UserAddress.Region.District.Should().Be(userInfo.Address.Region.District);
+            // Field
+            mappingResult.AddressField.Should().NotBeNull();
+            mappingResult.AddressField.City.Should().Be(userInfo.AddressField.City);
+            mappingResult.AddressField.House.Should().Be(userInfo.AddressField.House);
+            mappingResult.AddressField.Street.Should().Be(userInfo.AddressField.Street);
+
+            mappingResult.AddressField.Region.Should().NotBeNull();
+            mappingResult.AddressField.Region.State.Should().Be(userInfo.AddressField.Region.State);
+            mappingResult.AddressField.Region.District.Should().Be(userInfo.AddressField.Region.District);
         }
 
         [Fact]

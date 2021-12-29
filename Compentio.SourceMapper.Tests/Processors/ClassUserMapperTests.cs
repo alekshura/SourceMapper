@@ -36,7 +36,9 @@ namespace Compentio.SourceMapper.Tests.Processors
             mappingResult.Name.Should().Be($"{userDao.FirstName} {userDao.LastName}");
             mappingResult.BirthDate.Should().Be(userDao.BirthDate);
             mappingResult.Id.Should().Be((int)userDao.UserId);
-            mappingResult.Sex.Should().Be(Sex.W);            
+            mappingResult.Sex.Should().Be(Sex.W);
+            mappingResult.UserCode.Should().Be(userDao.UserCode);
+            UserInfo.UserCodeStatic.Should().Be(UserDao.UserCodeStatic);
         }
 
         [Fact]
@@ -54,6 +56,8 @@ namespace Compentio.SourceMapper.Tests.Processors
             // Assert
             mappingResult.BirthDate.Should().Be(userInfo.BirthDate);
             mappingResult.UserGender.Should().Be(UserGender.Female);
+            mappingResult.UserCode.Should().Be(userInfo.UserCode);
+            UserDao.UserCodeStatic.Should().Be(UserInfo.UserCodeStatic);
 
             // Not mapped
             mappingResult.UserId.Should().NotBe(userInfo.Id);

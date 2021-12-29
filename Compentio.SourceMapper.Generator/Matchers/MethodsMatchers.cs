@@ -12,10 +12,10 @@ namespace Compentio.SourceMapper.Matchers
         /// Returns method data that defined in mapping corresponds to source and target types.
         /// This method can be used in mappings of nested types.
         /// </summary>
-        /// <param name="source">Source property metadata</param>
-        /// <param name="target">Target property metadata</param>
+        /// <param name="source">Source member metadata</param>
+        /// <param name="target">Target member metadata</param>
         /// <returns>Matched method <see cref="IMethodMetadata"/></returns>
-        internal static IMethodMetadata MatchDefinedMethod(this IMapperMetadata mapperMetadata, IPropertyMetadata source, IPropertyMetadata target)
+        internal static IMethodMetadata MatchDefinedMethod(this IMapperMetadata mapperMetadata, IMemberMetadata source, IMemberMetadata target)
         {
             var method = mapperMetadata.MethodsMetadata.FirstOrDefault(m =>
                 m.ReturnType.FullName == target.FullName && m.Parameters.FirstOrDefault().FullName == source.FullName);
