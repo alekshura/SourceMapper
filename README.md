@@ -42,11 +42,11 @@ public interface INotesMapper
     NoteDto MapToDto(NoteDao source);
 }
 ```
-This will generate mapping class with default class name `NotesMapper` for properties that names are the same for `NoteDto` and `NoteDao` classes.
+This will generate mapping class with default class name `NotesMapper` for properties and fields that names are the same for `NoteDto` and `NoteDao` classes.
 The generated class is in the same namespace as its base abstract class of interface. It can be found in project in Visual Studio: 
 > Dependencies -> Analyzers -> Compentio.SourceMapper.Generators.MainSourceGenerator.
 
-When the names are different than we can use `Source` and `Target` names of the properties:
+When the names are different than we can use `Source` and `Target` names of the properties or fields:
 
 ```csharp
 [Mapper(ClassName = "InterfaceUserMapper")]
@@ -149,13 +149,13 @@ public abstract class NotesClassMapper
 
 ```
 
-`Expression` - it is a name of mapping function, that can be used for additional properties mapping. 
+`Expression` - it is a name of mapping function, that can be used for additional properties/fields mapping. 
 > It must be `public` or `protected`, since it is used in generated mapper class that implements abstract mapping class.
 
 ## Ignore mapping
 
-If for any reason part of the class/interface properties should not be mapped, `IgnoreMapping` attribute should be used for that.
-Added `IgnoreMapping` causes that both source and target property during mapping generation will be omitted, not generating any linked map and not reporting any warning in diagnostics.
+If for any reason part of the class/interface properties or fields should not be mapped, `IgnoreMapping` attribute should be used for that.
+Added `IgnoreMapping` causes that both source and target property/field during mapping generation will be omitted, not generating any linked map and not reporting any warning in diagnostics.
 If we have two classes `NoteDao` and `NoteDto` 
 
 ```csharp
