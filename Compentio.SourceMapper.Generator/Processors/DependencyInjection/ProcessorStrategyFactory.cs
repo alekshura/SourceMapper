@@ -9,7 +9,8 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
         {
             { DependencyInjectionType.DotNetCore, new DotnetCoreProcessorStrategy() },
             { DependencyInjectionType.Autofac, new AutofacProcessorStrategy() },
-            { DependencyInjectionType.StructureMap, new StructureMapProcessorStrategy()}
+            { DependencyInjectionType.StructureMap, new StructureMapProcessorStrategy() },
+            { DependencyInjectionType.Ninject, new NinjectProcessorStrategy() }
         };
 
         internal static IDependencyInjectionStrategy? GetStrategy(ISourcesMetadata sourcesMetadata)
@@ -25,6 +26,6 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 
     internal enum DependencyInjectionType
     {
-        DotNetCore, Autofac, StructureMap, None
+        DotNetCore, Autofac, StructureMap, Ninject, None
     }
 }
