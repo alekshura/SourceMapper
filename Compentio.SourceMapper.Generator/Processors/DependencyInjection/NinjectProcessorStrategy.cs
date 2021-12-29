@@ -1,11 +1,13 @@
 ﻿using Compentio.SourceMapper.Metadata;
-using System.Text;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
-    internal class NinjectProcessorStrategy : IDependencyInjectionStrategy
+    /// <summary>
+    /// Implementation of Ninject dependency injection strategy
+    /// </summary>
+    internal class NinjectProcessorStrategy : AbstractDependencyInjectionStrategy
     {
-        public IResult GenerateCode(ISourcesMetadata sourcesMetadata)
+        public override IResult GenerateCode(ISourcesMetadata sourcesMetadata)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
@@ -19,7 +21,7 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
                {{
                    public static IKernel AddMappers(this IKernel kernel)
                    {{
-                        { GenerateBuilder(sourcesMetadata) }
+                        { GenerateDependencyInjectionLines(sourcesMetadata) }
                         return kernel;
                    }}
                }}
@@ -29,18 +31,9 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
             return Result.Ok(result);
         }
 
-        private string GenerateBuilder(ISourcesMetadata sourcesMetadata)
+        protected override string GenerateMappeLine(IMapperMetadata mapper)
         {
-            if (sourcesMetadata.Mappers == null) return string.Empty;
-
-            var builder = new StringBuilder();
-
-            foreach (var mapper in sourcesMetadata.Mappers)
-            {
-                builder.AppendLine($"kernel.Bind<{mapper.Namespace}.{mapper.Name}>().To<{mapper.Namespace}.{mapper.TargetClassName}>().InSingletonScope();");
-            }
-
-            return builder.ToString();
+            return $"kernel.Bind<{mapper.Namespace}.{mapper.Name}>().To<{mapper.Namespace}.{mapper.TargetClassName}>().InSingletonScope();";
         }
     }
 }

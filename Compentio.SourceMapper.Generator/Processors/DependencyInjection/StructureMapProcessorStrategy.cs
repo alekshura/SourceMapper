@@ -1,11 +1,10 @@
 ﻿using Compentio.SourceMapper.Metadata;
-using System.Text;
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
-    internal class StructureMapProcessorStrategy : IDependencyInjectionStrategy
+    internal class StructureMapProcessorStrategy : AbstractDependencyInjectionStrategy
     {
-        public IResult GenerateCode(ISourcesMetadata sourcesMetadata)
+        public override IResult GenerateCode(ISourcesMetadata sourcesMetadata)
         {
             var result = @$"// <mapper-source-generated />
                             // <generated-at '{System.DateTime.UtcNow}' />
@@ -19,7 +18,7 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
                {{
                    public static ConfigurationExpression AddMappers(this ConfigurationExpression builder)
                    {{
-                        { GenerateBuilder(sourcesMetadata) }
+                        { GenerateDependencyInjectionLines(sourcesMetadata) }
                         return builder;
                    }}
                }}
@@ -29,18 +28,9 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
             return Result.Ok(result);
         }
 
-        private string GenerateBuilder(ISourcesMetadata sourcesMetadata)
+        protected override string GenerateMappeLine(IMapperMetadata mapper)
         {
-            if (sourcesMetadata.Mappers == null) return string.Empty;
-
-            var builder = new StringBuilder();
-
-            foreach (var mapper in sourcesMetadata.Mappers)
-            {
-                builder.AppendLine($"builder.For<{mapper.Namespace}.{mapper.Name}>().Singleton().Use<{mapper.Namespace}.{mapper.TargetClassName}>();");
-            }
-
-            return builder.ToString();
+            return $"builder.For<{mapper.Namespace}.{mapper.Name}>().Singleton().Use<{mapper.Namespace}.{mapper.TargetClassName}>();";
         }
     }
 }
