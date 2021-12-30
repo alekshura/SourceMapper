@@ -1,6 +1,7 @@
 ﻿using Compentio.SourceMapper.Processors.DependencyInjection;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Resources;
@@ -64,6 +65,46 @@ namespace Compentio.SourceMapper.Tests.DependencyInjections
 
             // Assert
             result.Should().Be(DependencyInjectionType.StructureMap);
+        }
+
+        [Fact]
+        public void GetType_SupportedNinjectAssembly_ReturnNinjectType()
+        {
+            // Arrange
+            var fakeAssembly = new FakeAssembly("Ninject.Web.AspNetCore");
+            var fakeBaseAssembly = new FakeAssembly("Ninject", new Version("3.0.0.0"));
+            var assemblyCollection = new List<AssemblyIdentity> 
+            { 
+                AssemblyIdentity.FromAssemblyDefinition(fakeAssembly),
+                AssemblyIdentity.FromAssemblyDefinition(fakeBaseAssembly)
+            };
+
+            // Act
+            var dependencyInjection = new SourceMapper.Processors.DependencyInjection.DependencyInjection(assemblyCollection);
+            var result = dependencyInjection.DependencyInjectionType;
+
+            // Assert
+            result.Should().Be(DependencyInjectionType.Ninject);
+        }
+
+        [Fact]
+        public void GetType_NotSupportedNinjectAssembly_ReturnNoneType()
+        {
+            // Arrange
+            var fakeAssembly = new FakeAssembly("Ninject.Web.AspNetCore");
+            var fakeBaseAssembly = new FakeAssembly("Ninject", new Version("4.0.0.0"));
+            var assemblyCollection = new List<AssemblyIdentity>
+            {
+                AssemblyIdentity.FromAssemblyDefinition(fakeAssembly),
+                AssemblyIdentity.FromAssemblyDefinition(fakeBaseAssembly)
+            };
+
+            // Act
+            var dependencyInjection = new SourceMapper.Processors.DependencyInjection.DependencyInjection(assemblyCollection);
+            var result = dependencyInjection.DependencyInjectionType;
+
+            // Assert
+            result.Should().Be(DependencyInjectionType.None);
         }
 
         [Fact]
