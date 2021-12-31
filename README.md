@@ -362,6 +362,43 @@ public class StructureMapContainerBuilderFactory : IServiceProviderFactory<Conta
 }
 ```
 
+### Ninject Dependency Injection
+
+SourceMapper allow also, in limited way, to use Ninject dependency injection. Solution is compatible with Ninject in version < 4 and work with Asp.Net Core projects.
+Integration with Ninject dependency injection is allowed by adding to project `Ninject.Web.AspNetCore` package. Ninject based on `IKernel`, so the SourceMapper generate mappers, which can be added by using `AddMappers()` method in `Kernel` declaration place in project. In our example, we created 'NinjectKernel' class with `CreateKernel` methods - it is place, where SourceMapper inject `MapperDependencyInjectionExtension` class, with all mappings generated from declared mappers.
+
+```csharp
+/// Ninject Dependency Injection mechanism : kernel
+public class NinjectKernel
+{
+	/// Method create kernel with all user defined dependency injections
+	public static IKernel CreateKernel()
+	{
+		var settings = new NinjectSettings();
+		settings.LoadExtensions = false;
+
+		var kernel = new AspNetCoreKernel(settings);
+
+		kernel.Load(typeof(AspNetCoreHostConfiguration).Assembly);
+		// User Dependency Injections
+		kernel.Bind<IInvoiceService>().To<InvoiceService>().InSingletonScope();
+		kernel.Bind<IInvoiceRepository>().To<InvoiceRepository>().InSingletonScope();
+		// Using mappers from SourceMapper
+		kernel.AddMappers();
+
+		return kernel;
+	}
+}
+```
+
+Next, `CreateKernel` is used in `Program` starting class, in host generating section:
+
+```csharp
+var host = new NinjectSelfHostBootstrapper(NinjectKernel.CreateKernel, hostConfiguration);
+host.Start();
+```
+
+
 ## Inverse Mapping Mechanism
 
 Inverse mapping allow to create about half of the mapper code by automate. The main goal is to define only one way mapping methods in mapper class, the second one - inverse mapping - can be created by internal mechanism.
