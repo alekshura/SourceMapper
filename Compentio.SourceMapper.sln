@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{AC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compentio.Example.StructureMap.App", "Compentio.Example.StructureMap.App\Compentio.Example.StructureMap.App.csproj", "{85FA713D-8A57-40FC-84F0-0E38E7FD8BB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compentio.Example.Ninject.App", "Compentio.Example.Ninject.App\Compentio.Example.Ninject.App.csproj", "{DD54C1BE-2002-4085-9796-F58378EDC7F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{85FA713D-8A57-40FC-84F0-0E38E7FD8BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85FA713D-8A57-40FC-84F0-0E38E7FD8BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85FA713D-8A57-40FC-84F0-0E38E7FD8BB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD54C1BE-2002-4085-9796-F58378EDC7F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD54C1BE-2002-4085-9796-F58378EDC7F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD54C1BE-2002-4085-9796-F58378EDC7F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD54C1BE-2002-4085-9796-F58378EDC7F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 		{792D18D8-5E2C-4DEC-95C9-44B8F8AF2FAA} = {ACA5F063-6504-41B4-8106-9F48E4B5D315}
 		{043B1040-8796-4448-BD00-83C2692716A5} = {ACA5F063-6504-41B4-8106-9F48E4B5D315}
 		{85FA713D-8A57-40FC-84F0-0E38E7FD8BB3} = {ACA5F063-6504-41B4-8106-9F48E4B5D315}
+		{DD54C1BE-2002-4085-9796-F58378EDC7F8} = {ACA5F063-6504-41B4-8106-9F48E4B5D315}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D42B86EF-D955-44EA-873D-8C7784836F81}
