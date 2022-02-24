@@ -11,6 +11,7 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
         private const string AutofacAssemblyName = "Autofac.Extensions.DependencyInjection";
         private const string DotNetCoreAssemblyName = "Microsoft.Extensions.DependencyInjection";
         private const string StructureMapAssemblyName = "StructureMap.Microsoft.DependencyInjection";
+        private const string NinjectAssemblyName = "Ninject.Web.AspNetCore";
 
         internal virtual DependencyInjectionType DependencyInjectionType { get; set; }
         internal string DependencyInjectionClassName { get; }  = AppStrings.DependencyInjectionClassName;
@@ -38,6 +39,23 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
             {
                 DependencyInjectionType = DependencyInjectionType.StructureMap;
             }
+
+            if (assemblies.Any(ai => ai.Name.Equals(NinjectAssemblyName, StringComparison.OrdinalIgnoreCase)) && SupportNinjectVersion(assemblies))
+            {
+                DependencyInjectionType = DependencyInjectionType.Ninject;
+            }
+        }
+
+        /// <summary>
+        /// Method checks that Ninject assemby is in supported version
+        /// </summary>
+        /// <param name="assemblies"></param>
+        /// <returns></returns>
+        private bool SupportNinjectVersion(IEnumerable<AssemblyIdentity> assemblies)
+        {
+            int notSupportedMajorVersion = 4;
+
+            return assemblies.Any(ai => ai.Name.Equals("Ninject", StringComparison.OrdinalIgnoreCase) && ai.Version.Major < notSupportedMajorVersion);
         }
     }
 }

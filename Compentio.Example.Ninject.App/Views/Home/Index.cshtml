@@ -1,0 +1,34 @@
+﻿@model Compentio.Example.Ninject.App.Entities.InvoiceDto
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<table>
+    <tr>
+        <th>InvoiceId</th>
+        <th>InvoiceNumber</th>
+        <th>InvoiceDate</th>
+        <th>ShipDate</th>
+        <th>TaxDate</th>
+        <th>NetAmount</th>
+        <th>TaxAmount</th>
+        <th>GrossAmount</th>
+        <th>Customer</th>
+    </tr>
+    <tr>
+        <td>@Model.InvoiceId</td>
+        <td>@Model.InvoiceNumber</td>
+        <td>@Model.InvoiceDate</td>
+        <td>@Model.ShipDate</td>
+        <td>@Model.TaxDate</td>
+        <td>@Model.NetAmount</td>
+        <td>@Model.TaxAmount</td>
+        <td>@Model.GrossAmount</td>
+        <td>@Model.Customer</td>
+    </tr>
+</table>

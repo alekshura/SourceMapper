@@ -2,7 +2,10 @@
 
 namespace Compentio.SourceMapper.Processors.DependencyInjection
 {
-    internal class StructureMapProcessorStrategy : AbstractDependencyInjectionStrategy
+    /// <summary>
+    /// Implementation of Ninject dependency injection strategy
+    /// </summary>
+    internal class NinjectProcessorStrategy : AbstractDependencyInjectionStrategy
     {
         public override IResult GenerateCode(ISourcesMetadata sourcesMetadata)
         {
@@ -10,16 +13,16 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
                             // <generated-at '{System.DateTime.UtcNow}' />
 
             using System;
-            using StructureMap;
+            using Ninject;
 
             { $"namespace Compentio.SourceMapper.DependencyInjection"}
             {{
                public static class {sourcesMetadata.DependencyInjection.DependencyInjectionClassName}
                {{
-                   public static ConfigurationExpression AddMappers(this ConfigurationExpression builder)
+                   public static IKernel AddMappers(this IKernel kernel)
                    {{
                         { GenerateDependencyInjectionLines(sourcesMetadata) }
-                        return builder;
+                        return kernel;
                    }}
                }}
             }}
@@ -30,7 +33,7 @@ namespace Compentio.SourceMapper.Processors.DependencyInjection
 
         protected override string GenerateMappeLine(IMapperMetadata mapper)
         {
-            return $"builder.For<{mapper.Namespace}.{mapper.Name}>().Singleton().Use<{mapper.Namespace}.{mapper.TargetClassName}>();";
+            return $"kernel.Bind<{mapper.Namespace}.{mapper.Name}>().To<{mapper.Namespace}.{mapper.TargetClassName}>().InSingletonScope();";
         }
     }
 }
