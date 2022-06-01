@@ -44,15 +44,18 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"alekshura_SourceMapper" /o:"alekshura" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=Compentio.SourceMapper.Tests\coverage.opencover.xml
       - name: Project build
+        shell: powershell	  
         run: |	  
           dotnet build Compentio.SourceMapper.sln		
       - name: Project tests		  
+        shell: powershell	  
         run: |	  	  
           dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover		
-      - name: Sonar Scanner End
+      - name: Sonar Scanner Ending
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}	  
-        run: |	  	  	  
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"	
+        shell: powershell	  
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 		  
